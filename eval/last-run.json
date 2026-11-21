@@ -1,0 +1,34 @@
+[
+  {
+    "id": "T01",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T02",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T03",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T04",
+    "pass": false,
+    "problems": [
+      "course_type:missing"
+    ],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T05",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
