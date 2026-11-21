@@ -6,7 +6,7 @@ import { useLang } from "@/components/LangProvider";
 import { t } from "@/lib/i18n/strings";
 import { clearAll } from "@/lib/storage";
 
-const TAP = "min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 text-base";
+const TAP = "min-h-[44px] min-w-[44px] px-3 text-base";
 
 export default function Header() {
   const { lang, setLang } = useLang();
@@ -47,7 +47,7 @@ export default function Header() {
                 type="button"
                 aria-pressed={lang === "ta"}
                 onClick={() => setLang("ta")}
-                className={`${TAP} btn-outline cursor-pointer rounded-full ${lang === "ta" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
+                className={`min-h-[44px] min-w-[44px] px-2 text-base inline-flex items-center justify-center btn-outline cursor-pointer rounded-full ${lang === "ta" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
               >
                 தமிழ்
               </button>
@@ -55,13 +55,13 @@ export default function Header() {
                 type="button"
                 aria-pressed={lang === "en"}
                 onClick={() => setLang("en")}
-                className={`${TAP} btn-outline cursor-pointer rounded-full ${lang === "en" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
+                className={`min-h-[44px] min-w-[44px] px-2 text-base inline-flex items-center justify-center btn-outline cursor-pointer rounded-full ${lang === "en" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
               >
                 EN
               </button>
             </div>
 
-            <Link href="/applications" className={`${TAP} hidden shrink-0 link cursor-pointer text-accent-teal sm:inline-flex`}>
+            <Link href="/applications" className={`${TAP} max-sm:hidden shrink-0 link cursor-pointer text-accent-teal sm:inline-flex items-center justify-center`}>
               {t("myApplications", lang)}
             </Link>
 
@@ -71,7 +71,7 @@ export default function Header() {
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
                 onClick={() => setMenuOpen((open) => !open)}
-                className={`${TAP} btn-outline cursor-pointer text-accent-teal`}
+                className={`${TAP} btn-outline cursor-pointer text-accent-teal inline-flex items-center justify-center`}
               >
                 {t("menu", lang)}
               </button>
@@ -81,7 +81,7 @@ export default function Header() {
                     href="/applications"
                     role="menuitem"
                     onClick={() => setMenuOpen(false)}
-                    className={`${TAP} w-full justify-start text-left link cursor-pointer text-accent-teal sm:hidden`}
+                    className={`${TAP} w-full text-left link cursor-pointer text-accent-teal inline-flex sm:hidden items-center justify-start`}
                   >
                     {t("myApplications", lang)}
                   </Link>
@@ -92,7 +92,7 @@ export default function Header() {
                       setMenuOpen(false);
                       setConfirmOpen(true);
                     }}
-                    className={`${TAP} w-full cursor-pointer justify-start text-left text-red-700`}
+                    className={`${TAP} w-full cursor-pointer inline-flex items-center justify-start text-left text-red-700`}
                   >
                     {t("forgetMe", lang)}
                   </button>
@@ -113,14 +113,14 @@ export default function Header() {
               <button
                 type="button"
                 onClick={forgetMe}
-                className={`${TAP} w-full cursor-pointer rounded-lg bg-red-700 text-white`}
+                className={`${TAP} w-full cursor-pointer inline-flex items-center justify-center rounded-lg bg-red-700 text-white`}
               >
                 {t("forgetConfirmYes", lang)}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmOpen(false)}
-                className={`${TAP} btn-outline w-full cursor-pointer rounded-lg`}
+                className={`${TAP} btn-outline w-full cursor-pointer inline-flex items-center justify-center rounded-lg`}
               >
                 {t("cancel", lang)}
               </button>

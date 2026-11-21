@@ -93,6 +93,26 @@ export const STRINGS = {
     ta: "இறுதி முடிவு அலுவலகத்தால் எடுக்கப்படும். விண்ணப்பிப்பதற்கு முன் அதிகாரப்பூர்வ பக்கத்தைச் சரிபார்க்கவும்.",
   },
   lowConfidence: { en: "Details may have changed; please verify.", ta: "விவரங்கள் மாறியிருக்கலாம்; தயவுசெய்து சரிபார்க்கவும்." },
+  loadingApplications: { en: "Loading your applications…", ta: "உங்கள் விண்ணப்பங்கள் ஏற்றப்படுகின்றன…" },
+  applicationsEmpty: { en: "You are not tracking any scheme yet.", ta: "நீங்கள் இன்னும் எந்த திட்டத்தையும் கண்காணிக்கவில்லை." },
+  trackFromResults: { en: "Track a scheme from the results page", ta: "முடிவுகள் பக்கத்திலிருந்து ஒரு திட்டத்தைக் கண்காணிக்கவும்" },
+  reminderCloses: { en: "Closes in {n} days", ta: "{n} நாட்களில் முடிவடைகிறது" },
+  reminderClosesToday: { en: "Closes today", ta: "இன்று முடிவடைகிறது" },
+  reminderDue: { en: "Reminder", ta: "நினைவூட்டல்" },
+  reminderViewAll: { en: "View my applications", ta: "என் விண்ணப்பங்களைப் பார்" },
+  docsProgress: { en: "{done} of {total} documents ready", ta: "{total} ஆவணங்களில் {done} தயாராக உள்ளன" },
+  statusLabel: { en: "Status", ta: "நிலை" },
+  statusNotStarted: { en: "Not started", ta: "தொடங்கவில்லை" },
+  statusDocsReady: { en: "Documents ready", ta: "ஆவணங்கள் தயார்" },
+  statusApplied: { en: "Applied", ta: "விண்ணப்பித்தாயிற்று" },
+  statusApproved: { en: "Approved", ta: "அங்கீகரிக்கப்பட்டது" },
+  statusRejected: { en: "Rejected", ta: "நிராகரிக்கப்பட்டது" },
+  reminderDateLabel: { en: "Reminder date", ta: "நினைவூட்டல் தேதி" },
+  clearDate: { en: "Clear date", ta: "தேதியை அழி" },
+  openScheme: { en: "Open scheme", ta: "திட்டத்தைத் திற" },
+  removeApp: { en: "Remove", ta: "நீக்கு" },
+  removeConfirm: { en: "Remove this scheme from your applications?", ta: "இந்த திட்டத்தை உங்கள் விண்ணப்பங்களிலிருந்து நீக்கவா?" },
+
 } as const satisfies Record<string, { en: string; ta: string }>;
 
 export const FIELD_NAMES: Record<ProfileField, { en: string; ta: string }> = {

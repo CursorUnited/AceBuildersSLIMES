@@ -311,6 +311,30 @@ DeadlineChip: open → green "Closes 25 Nov" (orange if ≤ 7 days); closed → 
 Run: npm run build until it builds.
 Reply: files changed + build result, max 5 lines.
 
+prompt-p6b[2:43]: /caveman ultra
+STEP P6b: scheme detail page + wording fix.
+
+Read only: lib/engine/schemas.ts (SchemeSchema), lib/engine/documents.ts, lib/storage.ts, lib/i18n/strings.ts, components/SchemeCard.tsx, components/DeadlineChip.tsx, app/results/page.tsx.
+Create only: app/scheme/[id]/page.tsx, components/ReasonList.tsx, components/DocChecklist.tsx.
+Modify only: lib/i18n/strings.ts (add keys, and the wording fix below).
+No installs. No `export const runtime/dynamic`, no "use cache".
+
+Wording fix (strings.ts only): sectionNotEligible → en "Doesn't match your answers", ta "உங்கள் பதில்களுக்குப் பொருந்தவில்லை"; showNotEligible → en "Show these", ta "காட்டு"; hideNotEligible → en "Hide these", ta "மறை". Keep every other string.
+
+Detail page (/scheme/[id], client component; params is a Promise in Next 16: use React `use(params)`):
+1. Load profile from storage, lang from storage. Fetch /api/schemes/{id} and validate with SchemeSchema. 404 or invalid → friendly message + link back to /results. Loading state in both languages.
+2. Header: back link to /results, scheme name (current language), level badge (same labels as SchemeCard), DeadlineChip, benefit line.
+3. Status banner from evaluate(profile, scheme) (use the engine's single-scheme function if it exists, else evaluateAll(...).find): likely_eligible → "Likely eligible: the rules match what you told us."; needs_info → "One detail away"; not_eligible → "Doesn't match your answers". Never say "you are eligible".
+4. ReasonList: every reason with a symbol: pass ✓, fail ✗, check "?" (label + "(please confirm)"), unknown "?" (label only). Labels from reason.label[lang].
+5. DocChecklist: filterDocuments(scheme, profile); each as a checkbox (min 44px tap target). if_applicable items get a small "(if it applies to you)" suffix. Checked state is stored in the matching entry of urimai.applications under docs_checked (store the English text as the key); if no entry exists, create one with status "not_started", reminder_on null, updated_at now. Update updated_at on every change.
+6. "How to apply": apply.mode as a plain sentence (online / at the school or college office / automatic), apply.steps as a numbered list, and if portal_url is set an "Open official portal" link (target _blank, rel noopener noreferrer).
+7. Track button: same behaviour as SchemeCard (add to urimai.applications if absent; show "Tracked ★").
+8. Footer: sources as links (hostname as link text), "Last checked: <last_verified>", and the line "The office makes the final decision. Check the official page before applying." in both languages. If confidence is "low" show a small note "Details may have changed; please verify."
+All text via t(key, lang) from strings.ts, both en and ta. Mobile first, one column, text ≥16px, tap targets ≥44px, Tailwind only.
+
+Run: npm run build until it builds.
+Reply: files changed + build result, max 5 lines.
+
 prompt-p6c[2:42]: /caveman ultra
 STEP P6c: bug fix + UI consistency pass. No new features, no new packages.
 
@@ -337,3 +361,51 @@ Fixes, in order:
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
 Reply: files changed + the three results, max 6 lines.
+
+prompt-p6d[3:29]: /caveman ultra
+STEP P6d: header must fit a 360px phone. No horizontal scroll anywhere.
+
+Read only: components/Header.tsx, lib/i18n/strings.ts.
+Modify only: components/Header.tsx (and strings.ts only if a key is needed).
+
+1. Below the `sm` breakpoint (<640px): show only the logo, the language toggle, and a Menu button. Move the "My applications" link INTO the menu dropdown (first item, above "Forget me"; same tap size, closes the menu on click). At `sm` and up, keep the link inline as now (hidden in the dropdown there).
+2. Make the toggle compact on phones: px-3 instead of the wide padding, text-sm for the logo subtitle. Logo text must not wrap onto three lines.
+3. The row must never exceed the viewport: container `flex items-center justify-between gap-2`, children `shrink-0` except the logo, which may `min-w-0 truncate`.
+4. Menu dropdown: `right-0`, `max-w-[calc(100vw-1.5rem)]`, closes on outside click and on Escape.
+5. Keep the btn-*/focus classes from P6c.
+
+Check with the build only: npx tsc --noEmit; npm run build.
+Reply: files changed + results, max 3 lines.
+
+prompt-p8[3:40]: /caveman ultra
+STEP P8: My applications page + reminders. Client-only, localStorage, no new packages.
+
+Read only: lib/storage.ts, lib/engine/index.ts (exports), components/DeadlineChip.tsx, components/SchemeCard.tsx, components/Header.tsx, app/results/page.tsx, app/globals.css, lib/i18n/strings.ts.
+Create only: app/applications/page.tsx, components/ApplicationCard.tsx.
+Modify only: lib/i18n/strings.ts (add keys, en + ta), components/Header.tsx (only if the "My applications" link target is wrong), app/results/page.tsx (only to add the reminder banner in point 3).
+Do NOT touch lib/engine/*, lib/llm/*, app/api/*, tests/*. No `export const runtime/dynamic`, no "use cache".
+
+/applications (client page, max-w-xl like the other pages):
+1. Load urimai.applications, urimai.profile and lang from storage; fetch /api/schemes and validate with SchemeSchema (same pattern as app/results/page.tsx). Join each application to its scheme by scheme_id; skip any whose scheme no longer exists.
+2. Empty state: a friendly sentence + a button to /results ("Track a scheme from the results page"), both languages.
+3. Reminder banner at the top: for each tracked application whose scheme deadline.status is "open" and closes_on is within 7 days (IST date, compare YYYY-MM-DD strings), or whose reminder_on is today or earlier and whose status is not applied/approved/rejected, show "Closes in N days: <name>" or "Reminder: <name>" in turmeric (bg accent-turmeric/20). Sorted by soonest. Nothing is sent anywhere: it only shows when the page opens. Add the same one-line banner at the top of the results page ONLY when there is at least one reminder, with a link to /applications.
+4. ApplicationCard: scheme name (lang), DeadlineChip, docs progress "3 of 5 documents ready" (docs_checked.length vs the number of documents returned by filterDocuments(scheme, profile)), a status <select> with the 5 statuses (not_started, docs_ready, applied, approved, rejected) in plain words in both languages, a date input for reminder_on (clearable), a link "Open scheme" to /scheme/{id}, and a "Remove" button with a confirm (window.confirm is fine). Every change writes back with setApplications and updates updated_at.
+5. Sort: unfinished first by nearest deadline, then applied/approved/rejected at the bottom.
+6. Use the shared btn-primary / btn-outline / link classes and accent-teal colours from globals.css. Tap targets ≥44px, text ≥16px, no horizontal scroll at 360px.
+7. Never say "eligible" without "likely". No Aadhaar or personal data is stored.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.
+
+prompt-p6e[3:51]: /caveman ultra
+STEP P6e: header responsive classes are overridden. One-file fix.
+
+Modify only: components/Header.tsx.
+Bug: the TAP constant contains "inline-flex", which beats `hidden` and `sm:hidden` on the same element, so "My applications" shows on phones and overflows.
+Fix: remove "inline-flex" and "items-center justify-center" from TAP. Instead give every element that uses TAP its display explicitly:
+- the inline "My applications" link: `max-sm:hidden sm:inline-flex items-center justify-center`
+- the dropdown "My applications" item: `inline-flex sm:hidden items-center justify-start`
+- all other TAP users (language buttons, Menu, Forget me, dialog buttons): `inline-flex items-center justify-center`
+Never put two display utilities (hidden/inline-flex/flex/block) on one element at the same breakpoint.
+Then check the logo: at 360px the logo text must be visible (not truncated to nothing): reduce the toggle's px so logo + toggle + Menu fit in 336px.
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.

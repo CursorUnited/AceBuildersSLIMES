@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import SchemeCard from "@/components/SchemeCard";
+import { buildReminders } from "@/components/ApplicationCard";
 import { evaluateAll, SchemeSchema, type ProfileField, type Scheme, type SchemeResult } from "@/lib/engine";
 import { t } from "@/lib/i18n/strings";
-import { getLang, getProfile, setProfile, type Lang, type Profile } from "@/lib/storage";
+import { getApplications, getLang, getProfile, setProfile, type Application, type Lang, type Profile } from "@/lib/storage";
 
 const SchemesSchema = z.array(SchemeSchema);
 
@@ -20,6 +21,7 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [showNotEligible, setShowNotEligible] = useState(false);
+  const [apps, setApps] = useState<Application[]>([]);
 
   useEffect(() => {
     const saved = getProfile();
@@ -29,6 +31,7 @@ export default function ResultsPage() {
     }
     setLang(getLang());
     setProfileState(saved);
+    setApps(getApplications());
 
     let cancelled = false;
     fetch("/api/schemes")
@@ -62,6 +65,7 @@ export default function ResultsPage() {
   const ready = profile !== null && !loading && !failed;
   const results: SchemeResult[] = profile !== null ? evaluateAll(profile, schemes) : [];
   const byId = new Map(schemes.map((s) => [s.id, s]));
+  const reminders = buildReminders(apps, schemes);
 
   const likely = results.filter((r) => r.status === "likely_eligible");
   const oneAway = results.filter((r) => r.status === "needs_info");
@@ -88,6 +92,19 @@ export default function ResultsPage() {
           {t("editAnswers", lang)}
         </Link>
       </header>
+
+      {reminders.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-accent-turmeric/20 p-3 text-base text-foreground">
+          <span>
+            {reminders[0].kind === "closing"
+              ? `${reminders[0].days === 0 ? t("reminderClosesToday", lang) : t("reminderCloses", lang).replace("{n}", String(reminders[0].days))}: ${reminders[0].scheme.name[lang]}`
+              : `${t("reminderDue", lang)}: ${reminders[0].scheme.name[lang]}`}
+          </span>
+          <Link href="/applications" className="link inline-flex min-h-[44px] cursor-pointer items-center font-medium">
+            {t("reminderViewAll", lang)}
+          </Link>
+        </div>
+      )}
 
       {!ready && !failed && <p className="text-base text-gray-700">{t("loadingResults", lang)}</p>}
       {failed && <p className="text-base text-red-700">{t("loadFailed", lang)}</p>}
