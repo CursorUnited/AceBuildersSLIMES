@@ -183,3 +183,61 @@ Modify only those two files.
 3. run-eval.ts: after each case finishes, print one line immediately: "<id> PASS" or "<id> FAIL <problems joined by ;>". Never print the message body.
 4. run-eval.ts: at the end of main(), after the summary, call process.exit(0) if field accuracy >= 90% and never-guess violations is 0, otherwise process.exit(1).
 Run npx tsc --noEmit and npx vitest run. Reply in 3 lines.
+
+prompt-P3b[22:20]: /caveman ultra STEP P3b: improve extraction of course/institution/level words.
+
+Read only: lib/llm/prompts.ts, and `lib/engine/fields.ts` lines 30-50 (enum values).
+Modify only lib/llm/prompts.ts. Do not change any other file.
+
+Add a rule to the system prompt, plus one more few-shot example, covering these mappings (use only enum values that exist in fields.ts):
+- "diploma", "polytechnic", "poly" → education_level "diploma" AND course_type "polytechnic".
+- "engineering", "BE", "B.E", "BTech", "பொறியியல்" → education_level "ug" AND course_type "engineering".
+- "ITI", "electrician/fitter/welder trade" → education_level "iti" AND course_type "iti_trade".
+- "MSc", "MA", "MCom", "PG" at a university → education_level "pg"; BSc/BA/BCom/"arts college" → education_level "ug" AND course_type "arts_science".
+- "central university", "IIT", "NIT", "IISER" → institution_type "central_institute".
+- "private", "self financing", "pvt" college/ITI → institution_type "private_self_financing". "govt college/ITI" → "govt". "aided" → "govt_aided".
+- When the course word is stated, always set education_level AND course_type together; never set one without the other.
+Keep every existing rule. Keep the prompt compact. Do not add examples that copy test messages from eval/slang_testset.json (write new ones).
+Run: npx vitest run tests/extract.test.ts. Reply in 3 lines.
+
+prompt-p4[22:51]: /caveman ultra STEP P4: /api/chat and question templates.
+
+Read only: docs/CONTRACTS.md sections 3.1 and 4 (errors); lib/engine/index.ts exports; lib/llm/extract.ts exports; lib/data/schemesRepo.ts exports; lib/engine/fields.ts.
+Create only: lib/i18n/questions.ts, app/api/chat/route.ts, tests/questions.test.ts.
+No installs.
+
+1. lib/i18n/questions.ts exports QUESTIONS: Record<ProfileField, { ta: string; en: string; tanglish: string; chips: { label: { en: string; ta: string }; value: unknown }[] }>, one entry for EVERY field in FIELD_ASK_ORDER.
+   - Friendly, short, Class-9 reading level. Tanglish example for income: "Unga family-oda varusha varumanam evlo? (approx podhum)". Tamil example: "உங்க குடும்பத்தோட வருஷ வருமானம் எவ்வளவு? (தோராயமா சொன்னா போதும்)".
+   - Chips: every enum value (labels in en + ta); income uses INCOME_BANDS; booleans use Yes/No (ஆமா/இல்ல); numbers (year_of_study 1-5, disability "None"=0 / "40% or more"=40 / "Below 40%"=20) .
+   - Also export ANYWAY = { ta: "சரி, ", en: "Anyway, ", tanglish: "Sari, " } and UNLOCK_LINE(n) in 3 registers ("Idhu sonna innum {n} schemes theriyum").
+   - Export questionFor(field, register, unlock_count) → { text, chips }.
+2. app/api/chat/route.ts POST (do NOT export runtime/dynamic/any segment config):
+   - Validate body with zod: { message: string max 1000, profile: unknown, asked_field: ProfileField | null optional, ui_lang: "ta" | "en" }.
+   - profile = ProfileSchema.parse-lenient (drop bad keys) of body.profile.
+   - If message is non-empty: extractFacts({ message, profile, asked_field, today: IST date "YYYY-MM-DD, Weekday" }). On AiError → 503 { error: { code: "AI_UNAVAILABLE", ... } }.
+   - mergeProfile → { profile, changed_fields }.
+   - schemes = await getPublished() (it is async); results = evaluateAll(profile, schemes); nq = nextQuestion(results).
+   - register = extraction register, else ui_lang.
+   - next_question = nq ? { field, ...questionFor(field, register, unlock_count), unlock_count } : null.
+   - summary = counts per status.
+   - Respond exactly per CONTRACTS 3.1. Never log the message text.
+3. tests/questions.test.ts: every field in FIELD_ASK_ORDER has non-empty ta/en/tanglish; every enum field's chips cover all its enum values; income chips equal INCOME_BANDS values.
+
+Run: npx vitest run tests/questions.test.ts until green. Then run `npm run build` and fix only errors in the files you created.
+Then start nothing; I will test the route myself.
+Reply: files changed + test summary, max 5 lines.
+
+prompt-P5a[23:10]: /caveman ultra STEP P5a: storage, UI strings, language provider, layout, header.
+
+Read only: docs/CONTRACTS.md section 5; exports of lib/engine/index.ts and lib/engine/fields.ts.
+Create only: lib/storage.ts, lib/i18n/strings.ts, components/LangProvider.tsx, components/Header.tsx. Modify only: app/layout.tsx, app/globals.css. Do not touch app/page.tsx.
+No installs. Tailwind only. Mobile first (360 px). Client components where needed ("use client").
+
+- layout.tsx: load Noto Sans Tamil + Inter via next/font/google; <html lang="en"> (LangProvider updates document.documentElement.lang after mount); body bg #FAF7F2, text #1F2937; accent teal #0F4C5C and turmeric #E9A23B (define as CSS variables in globals.css and use them). Wrap children in LangProvider, render Header above them. Metadata title "Urimai: scholarships you can claim".
+- lib/storage.ts: get/set for urimai.profile, urimai.lang, urimai.chat (keep last 30), urimai.applications; every access in try/catch; on failure keep an in-memory fallback. Validate reads with zod (ProfileSchema for profile; bad data → reset that key). Export clearAll() that removes every key starting with "urimai.".
+- lib/i18n/strings.ts: t(key, lang) for all fixed UI text: welcome, input placeholder, send, "See my schemes now", "Looks right → show schemes", "Here's what I understood", "My applications", "Forget me on this phone", confirm-dialog text, "AI is busy right now. Tap your answer below.", typing, and the phrase "likely eligible" = "தகுதி இருக்க வாய்ப்பு உள்ளது". Keys typed so a missing key is a compile error.
+- components/LangProvider.tsx: context with { lang: "ta" | "en", setLang } and a useLang() hook. Default "ta"; read urimai.lang after mount; setLang saves it and updates document.documentElement.lang.
+- components/Header.tsx: "உரிமை Urimai" title, தமிழ்/EN toggle, link "My applications" (/applications), menu item "Forget me on this phone" (confirm dialog → clearAll() → reload). Sticky, small, 44 px tap targets.
+
+Run: npm run build. Fix type errors until it builds.
+Reply: files changed + build result, max 5 lines.
