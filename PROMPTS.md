@@ -34,7 +34,7 @@ Requirements:
 Run: npx vitest run tests/schemas.test.ts until green.
 Done when: tests pass. Reply: files changed + test summary, max 5 lines.
 
-prompt-p1b[6:57]:STEP P1b: rule engine evaluation.
+prompt-p1b[6:57]:/caveman ultra STEP P1b: rule engine evaluation.
 
 Read only: docs/CONTRACTS.md sections 2.1 and 2.2, lib/engine/types.ts, lib/engine/fields.ts.
 Create only: lib/engine/evaluate.ts, tests/engine.test.ts.
@@ -68,6 +68,32 @@ Reply: files changed + test summary, max 5 lines.
 prompt-fix-1[20:13]: /caveman ultra Fix only tests/documents.test.ts so `npx tsc --noEmit` is clean. Type communityDoc and plainDoc as Scheme["documents"][number]. Change nothing else. Run tsc and vitest run, reply in 2 lines.
 
 prompt-p2[20:15]: STEP P2: schemes repository, public scheme API, seed validation, seed script.
+
+Read only: docs/CONTRACTS.md sections 2 (shape only), 4 and 6; lib/engine/schemas.ts; the first 60 lines of data/schemes.seed.json.
+Create only:
+- lib/data/schemesRepo.ts
+- app/api/schemes/route.ts
+- app/api/schemes/[id]/route.ts
+- lib/http.ts
+- tests/schemes.seed.test.ts
+- scripts/seed-supabase.ts
+Packages already installed: @supabase/supabase-js, zod, tsx. No installs.
+
+1. lib/http.ts: jsonError(status, code, message) → Response with body { error: { code, message } }; codes from CONTRACTS section 4.
+2. schemesRepo.ts (server only):
+   - If process.env.SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set: createClient(url, key, { auth: { persistSession: false } }) and use table "schemes" (id, status, data, updated_at).
+   - Else: read data/schemes.seed.json with fs (all treated as published).
+   - getPublished(): Scheme[] (validate each row's data with SchemeSchema; skip and console.warn invalid ones). Cache in memory for 60 s.
+   - getPublishedById(id), getAllForAdmin(): { status, data, updated_at }[], upsertScheme(id, status, data) (validates; clears cache).
+3. app/api/schemes/route.ts GET → getPublished(). app/api/schemes/[id]/route.ts GET → one or 404 NOT_FOUND.
+   Next.js App Router: dynamic params are a Promise: export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) { const { id } = await params; ... }. Add export const runtime = "nodejs".
+4. tests/schemes.seed.test.ts: S1 every seed item parses with SchemeSchema; S2 every top-level condition has label.en and label.ta; S3 ids unique; S4 each has ≥1 https source and a last_verified date.
+5. scripts/seed-supabase.ts: reads data/schemes.seed.json, validates, upserts each as status "published". Run with: npx tsx --env-file=.env.local scripts/seed-supabase.ts. Print count.
+
+Run: npx vitest run tests/schemes.seed.test.ts until green. Then run the seed script once and show its output.
+Reply: files changed + test summary + seed count, max 5 lines.
+
+prompt-p2[20:21][failed once]:STEP P2: schemes repository, public scheme API, seed validation, seed script.
 
 Read only: docs/CONTRACTS.md sections 2 (shape only), 4 and 6; lib/engine/schemas.ts; the first 60 lines of data/schemes.seed.json.
 Create only:

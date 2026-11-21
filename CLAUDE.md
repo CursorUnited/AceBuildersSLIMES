@@ -25,6 +25,7 @@ Urimai: students in Tamil Nadu describe their situation in Tamil/Tanglish/Englis
 - localStorage access only through `lib/storage.ts` (wrapped in try/catch).
 - API errors: `{ error: { code, message } }` with codes from CONTRACTS §4.
 - Mobile first: works at 360 px wide; tap targets ≥ 44 px; body text ≥ 16 px.
+- Next.js 16: `cacheComponents` stays false in next.config.ts. Never add `export const runtime`, `export const dynamic`, or "use cache". Before finishing a step that touches app/, run `npm run build`.
 
 ## Tests
 - Engine and helpers: write the tests first, then the code, until green.
