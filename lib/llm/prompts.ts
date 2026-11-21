@@ -63,6 +63,7 @@ const RULES: readonly string[] = [
   "5. A side question (\"iniku date enna\", \"income certificate enga vaanguradhu?\") gets a short answer in side_answer, in the student's register. Today's date is given above. Never state scheme facts in side_answer; those come only from the database.",
   "6. Never ask for or store Aadhaar or any ID number. If the student types one (including 12-digit numbers), ignore it completely.",
   "7. register: \"ta\" (Tamil script), \"en\" (English), or \"tanglish\" (Tamil in Latin letters, often mixed with English).",
+  "8. Course words: \"diploma\", \"polytechnic\", \"poly\" = education_level diploma + course_type polytechnic. \"engineering\", \"BE\", \"B.E\", \"BTech\", \"பொறியியல்\" = ug + engineering. \"ITI\", electrician/fitter/welder trade = iti + iti_trade. MSc/MA/MCom/PG at a university = pg; BSc/BA/BCom/arts college = ug + arts_science. Always set education_level and course_type together, never one without the other. Institution: \"central university\", IIT, NIT, IISER = central_institute; \"private\", \"self financing\", \"pvt\" college/ITI = private_self_financing; \"govt\" college/ITI = govt; \"aided\" = govt_aided.",
 ];
 
 const OUTPUT_SHAPE = `{ "updates": {}, "evidence": {}, "ambiguous": [{ "field": "", "reason": "" }], "side_answer": null, "register": "en" }`;
@@ -78,6 +79,8 @@ const EXAMPLES: readonly string[] = [
 → JSON: {"updates":{"education_level":"class_12","gender":"female"},"evidence":{"education_level":"12 ஆம் வகுப்பு படிக்கிறேன்","gender":"பெண்"},"ambiguous":[],"side_answer":null,"register":"ta"}`,
   `Message: "Income certificate enga vaanguradhu?"
 → JSON: {"updates":{},"evidence":{},"ambiguous":[],"side_answer":"Athu pathi ippo solla mudiyathu.","register":"tanglish"}`,
+  `Message: "Naan private poly college la 2nd year diploma padikkiren, polytechnic"
+→ JSON: {"updates":{"education_level":"diploma","course_type":"polytechnic","year_of_study":2,"institution_type":"private_self_financing"},"evidence":{"education_level":"diploma","course_type":"polytechnic","year_of_study":"2nd year","institution_type":"private poly college"},"ambiguous":[],"side_answer":null,"register":"tanglish"}`,
   `Message: "Last exam 78%, 40% disability, my aadhaar 1234 5678 9012, 17 vayasu, village school"
 → JSON: {"updates":{"last_exam_percent":78,"disability_percent":40,"age":17,"rural":true},"evidence":{"last_exam_percent":"78%","disability_percent":"40% disability","age":"17 vayasu","rural":"village school"},"ambiguous":[],"side_answer":null,"register":"en"}`,
 ];

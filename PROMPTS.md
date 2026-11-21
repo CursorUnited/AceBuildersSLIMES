@@ -173,3 +173,13 @@ Package @google/genai is installed. No installs.
 
 Run: npx vitest run tests/extract.test.ts until green. Then run the eval with --only=T01,T02,T03,T04,T05 as a smoke test (not the full 50; I will run the full eval myself in a terminal to save tokens) and show the totals.
 Reply: files changed + unit test summary + smoke totals, max 6 lines.
+
+prompt-fix-3[21:35]: /caveman ultra STEP P3-fix: timeouts and eval output.
+
+Read only: lib/llm/gemini.ts, eval/run-eval.ts.
+Modify only those two files.
+1. gemini.ts: replace the hard-coded TIMEOUT_MS = 8000 with a value read from process.env.GEMINI_TIMEOUT_MS (number, default 10000). Nothing else changes in that file.
+2. run-eval.ts, runCase: retry ONCE on TIMEOUT as well as on UNAVAILABLE. For TIMEOUT wait 3 seconds before the retry; for UNAVAILABLE keep the 60 s wait.
+3. run-eval.ts: after each case finishes, print one line immediately: "<id> PASS" or "<id> FAIL <problems joined by ;>". Never print the message body.
+4. run-eval.ts: at the end of main(), after the summary, call process.exit(0) if field accuracy >= 90% and never-guess violations is 0, otherwise process.exit(1).
+Run npx tsc --noEmit and npx vitest run. Reply in 3 lines.
