@@ -241,3 +241,54 @@ No installs. Tailwind only. Mobile first (360 px). Client components where neede
 
 Run: npm run build. Fix type errors until it builds.
 Reply: files changed + build result, max 5 lines.
+
+prompt-P5B[23:23]: /caveman ultra STEP P5b: chat screen and confirm card.
+
+Read only: docs/CONTRACTS.md section 3.1; the UI spec below; exports of lib/engine/index.ts, lib/i18n/questions.ts, lib/i18n/strings.ts, lib/storage.ts, components/LangProvider.tsx.
+Create only: components/ChatBubble.tsx, components/ChipRow.tsx, components/ConfirmCard.tsx, app/page.tsx (replace the scaffold page). Do not modify other files.
+No installs. Tailwind only. Mobile first (360 px). "use client" where needed. No raw enum codes ever shown to the student.
+
+UI spec:
+- app/page.tsx (chat):
+  - Bubbles: bot left (white card), student right (teal, white text). Auto-scroll to bottom.
+  - First visit: welcome bubble ("Vanakkam! Unga situation-a unga style-la sollunga…" in the chosen language) + 3 example chips that send a message.
+  - Send: POST /api/chat with { message, profile, asked_field, ui_lang }. While waiting: typing dots, input disabled.
+  - On success: save profile; if changed_fields non-empty show a small "Purinjudhu ✔ …" line listing the changed facts in human words; if side_answer show it as its own bubble; then question bubble = (side_answer ? ANYWAY + text : text); chips under it. (The API text already includes the unlock line.)
+  - Chip tap: set that field locally (mergeProfile), re-evaluate in the browser with evaluateAll + nextQuestion using schemes fetched once from /api/schemes, show the next question from questionFor. No network call to /api/chat.
+  - 503 AI_UNAVAILABLE: bubble "AI is busy right now. Tap your answer below." and show chips for the browser-computed next question.
+  - When next_question is null: open ConfirmCard.
+  - Sticky bar above input: "See my schemes now (N likely) →" once any field is known → opens ConfirmCard.
+  - Input: textarea (1-4 rows) + send button; leave a placeholder <button> for the mic (wired in P7).
+  - Persist chat (last 30) with lib/storage; restore on load.
+- ConfirmCard (bottom sheet): "Here's what I understood" rows for every known field, human labels in the current language (reuse chip labels from QUESTIONS to turn values into words), fields changed by the last message marked with a dot; tapping a row opens ChipRow for that field; button "Looks right → show schemes" navigates to /results (page comes in P6; a 404 for now is fine).
+
+Run: npm run build. Fix type errors until it builds.
+Reply: files changed + build result, max 5 lines.
+
+prompt-P5c[23:46]: /caveman ultra STEP P5c: natural side answers, correct language, capitalisation.
+
+Read only: lib/llm/prompts.ts and app/page.tsx.
+Modify only those two files.
+1. prompts.ts: add a rule: "side_answer must be in the same register as the student's message (ta = Tamil script, en = English, tanglish = Tamil in Latin letters). Write it in your own words, one or two short sentences. If the question needs live data (weather, news, sports, prices, anything after today's date) or is unrelated to scholarships, say briefly and politely that you can't help with that here. Never invent facts. Never reuse a fixed phrase."
+2. prompts.ts: in the existing few-shot example that shows a declined side question, replace the literal side_answer sentence with a different natural phrasing, and do not add any new decline example sentences. Do not copy test messages from eval/slang_testset.json.
+3. app/page.tsx: when the question bubble is built as ANYWAY + text and the register is "en", lowercase the first character of text ("Anyway, what are you studying…"). Do not change tanglish or ta.
+Run npx vitest run tests/extract.test.ts and npm run build. Reply in 3 lines.
+prompt-P5D[23:52]: /caveman ultra STEP P5d: the "understood" note must list the facts, in the right language.
+
+Read only: app/page.tsx (the addChangedNote function and where it is called), lib/i18n/questions.ts exports, lib/i18n/strings.ts, lib/engine/fields.ts.
+Create only: lib/i18n/describe.ts. Modify only: app/page.tsx and lib/i18n/strings.ts.
+No installs.
+1. describe.ts exports describeFact(field, value, lang: "ta" | "en"): string, giving a short human phrase such as "Year: 1st year", "Community: SC", "Gender: Female", "Income: ₹1–2 lakh". Field names come from a map you add to strings.ts (en + ta for EVERY ProfileField). Values come from the chip labels in QUESTIONS (match by deep equality of value); numbers and booleans get sensible phrases (year_of_study 1 → "1st year", true → Yes/ஆமா). Never show raw enum codes.
+2. page.tsx addChangedNote: build the note as the lead word + the described facts joined by " · ". Lead word by register: tanglish "Purinjudhu ✔", ta "புரிந்தது ✔", en "Got it ✔". Use the register returned by /api/chat for server replies; for chip taps use the current UI language (ta → Tamil lead, en → English lead). Facts are described in Tamil when the register is ta or tanglish, in English when en. If changed_fields is empty, show no note.
+3. The language of the note must follow the student's message, not the header toggle.
+Run npm run build. Reply in 3 lines.
+
+prompt-P5e[00:00]: /caveman ultra STEP P5e: chat scroll, focus, and bad-parse handling.
+
+Read only: app/page.tsx, lib/llm/prompts.ts.
+Modify only those two files.
+1. page.tsx auto-scroll: keep a sentinel element at the end of the message list and call scrollIntoView({ behavior: "smooth", block: "end" }) in an effect that runs whenever the messages, the loading state or the chips change. It must also scroll after chips render.
+2. page.tsx focus: keep a ref to the textarea. When loading goes from true to false, focus the textarea (preventScroll: true). Also focus it after a chip tap.
+3. page.tsx no-understanding case: if /api/chat succeeds but changed_fields is empty AND there is no side_answer, show a short bot line before the repeated question, in the reply's register: en "Sorry, I didn't catch that. Please tap one of these.", tanglish "Sorry, puriyala. Keela ulla option-la onna tap pannunga.", ta "மன்னிக்கவும், புரியவில்லை. கீழே உள்ளவற்றில் ஒன்றைத் தட்டுங்கள்." Show no "Got it ✔" note in that case.
+4. prompts.ts: add rules: (a) current_school_type and medium describe the CURRENT school; set them only when education_level is class_8 to class_12 (or becomes class_8..class_12 in the same message). A college, diploma or ITI student never gets current_school_type. (b) When asked_field is given and the reply does not clearly match that field's options, return empty updates and set nothing else from a guess; for example "govt school" answering a question about how the college seat was obtained must not set anything. Keep all existing rules. Do not copy test messages from eval/slang_testset.json.
+Run npx vitest run tests/extract.test.ts and npm run build. Reply in 3 lines.

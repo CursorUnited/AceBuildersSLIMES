@@ -2,16 +2,22 @@
 
 import type { ReactNode } from "react";
 
-export type Chip = { value: string; label: string };
+export type ChipLabel = string | { en: string; ta: string };
+export type Chip = { value: string; label: ChipLabel };
 
 type Props = {
   chips: Chip[];
   onPick: (value: string) => void;
   disabled?: boolean;
   selectedValue?: string;
+  lang?: "en" | "ta";
 };
 
-export default function ChipRow({ chips, onPick, disabled = false, selectedValue }: Props): ReactNode {
+function resolveLabel(label: ChipLabel, lang: "en" | "ta" | undefined): string {
+  return typeof label === "string" ? label : label[lang ?? "en"];
+}
+
+export default function ChipRow({ chips, onPick, disabled = false, selectedValue, lang }: Props): ReactNode {
   return (
     <div className="flex flex-wrap gap-2">
       {chips.map((chip) => (
@@ -27,7 +33,7 @@ export default function ChipRow({ chips, onPick, disabled = false, selectedValue
               : "border-teal-600 bg-white text-teal-800"
           }`}
         >
-          {chip.label}
+          {resolveLabel(chip.label, lang)}
         </button>
       ))}
     </div>

@@ -1,5 +1,6 @@
 // Fixed UI text. Every entry is { en, ta }. Add a key here before using it; t() rejects unknown keys at compile time.
 import type { Lang } from "@/lib/storage";
+import type { ProfileField } from "@/lib/engine/types";
 
 export const STRINGS = {
   appTitle: { en: "உரிமை Urimai", ta: "உரிமை Urimai" },
@@ -31,6 +32,30 @@ export const STRINGS = {
   typing: { en: "Typing…", ta: "தட்டச்சு ஆகிறது…" },
   likelyEligible: { en: "likely eligible", ta: "தகுதி இருக்க வாய்ப்பு உள்ளது" },
 } as const satisfies Record<string, { en: string; ta: string }>;
+
+export const FIELD_NAMES: Record<ProfileField, { en: string; ta: string }> = {
+  education_level: { en: "Education level", ta: "கல்வி நிலை" },
+  state: { en: "State", ta: "மாநிலம்" },
+  income: { en: "Annual family income", ta: "ஆண்டு குடும்ப வருமானம்" },
+  community: { en: "Community", ta: "சமூகம்" },
+  gender: { en: "Gender", ta: "பாலினம்" },
+  school_6_to_12: { en: "School type (6–12)", ta: "பள்ளி வகை (6–12)" },
+  religion: { en: "Religion", ta: "மதம்" },
+  first_graduate: { en: "First graduate in family", ta: "குடும்பத்தில் முதல் பட்டதாரி" },
+  institution_type: { en: "Institution type", ta: "கல்வி நிறுவன வகை" },
+  course_type: { en: "Course type", ta: "படிப்பு வகை" },
+  year_of_study: { en: "Year of study", ta: "படிப்பு ஆண்டு" },
+  current_school_type: { en: "Current school type", ta: "தற்போதைய பள்ளி வகை" },
+  medium: { en: "Medium of instruction", ta: "பயிற்று மொழி" },
+  disability_percent: { en: "Disability percentage", ta: "ஊனமுற்ற சதவீதம்" },
+  last_exam_percent: { en: "Last exam percentage", ta: "கடைசி தேர்வு சதவீதம்" },
+  admission_route: { en: "Admission route", ta: "சேர்க்கை வழி" },
+  aicte_approved: { en: "AICTE approved college", ta: "AICTE அங்கீகரிக்கப்பட்ட கல்லூரி" },
+  central_obc_certificate: { en: "Central OBC certificate", ta: "மத்திய OBC சான்றிதழ்" },
+  lateral_entry: { en: "Lateral entry", ta: "நேரடி இரண்டாம் ஆண்டு சேர்க்கை" },
+  rural: { en: "Rural area", ta: "கிராமப்புறம்" },
+  age: { en: "Age", ta: "வயது" },
+};
 
 export type StringKey = keyof typeof STRINGS;
 

@@ -1,69 +1,367 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { FormEvent, KeyboardEvent } from "react";
+import { evaluateAll, nextQuestion, mergeProfile } from "@/lib/engine";
+import { questionFor, ANYWAY } from "@/lib/i18n/questions";
+import { describeFact } from "@/lib/i18n/describe";
+import type { ProfileField } from "@/lib/engine/types";
+import {
+  getProfile,
+  setProfile,
+  getChat,
+  setChat,
+  CHAT_KEEP_LAST,
+  type Profile,
+} from "@/lib/storage";
+import { useLang } from "@/components/LangProvider";
+import ChatBubble from "@/components/ChatBubble";
+import ChipRow from "@/components/ChipRow";
+import ConfirmCard from "@/components/ConfirmCard";
+
+type Txt = { en: string; ta: string };
+type Chip = { value: string; label: string | Txt };
+type Schemes = Parameters<typeof evaluateAll>[1];
+type Register = Parameters<typeof questionFor>[1];
+type MergeUpdates = Parameters<typeof mergeProfile>[1];
+type LocalQ = { text: Txt; chips: Chip[] };
+
+type ChatMsg = {
+  id: string;
+  from: "bot" | "student";
+  text: string;
+  kind?: "question";
+  field?: string;
+  unlock_count?: number;
+  chips?: Chip[];
+};
+
+type ChatOk = {
+  profile: Profile;
+  changed_fields: string[];
+  side_answer: string | null;
+  register: Register;
+  next_question: { field: string; text: string; chips: Chip[]; unlock_count: number } | null;
+};
+type ChatErr = { error: { code: string; message: string } };
+
+const WELCOME =
+  "Vanakkam! Unga situation-a unga style-la sollunga, naan unga-ku scholarships kaatuven.";
+const EXAMPLES: Chip[] = [
+  { value: "Naan 12th padichen", label: "Naan 12th padichen" },
+  { value: "Naan first-year college student", label: "Naan first-year college student" },
+  { value: "Naan kudumbam vivasayam", label: "Naan kudumbam vivasayam" },
+];
+const DEFAULT_REGISTER = "casual" as Register;
+const NOT_UNDERSTOOD: Record<"tanglish" | "ta" | "en", string> = {
+  en: "Sorry, I didn't catch that. Please tap one of these.",
+  tanglish: "Sorry, puriyala. Keela ulla option-la onna tap pannunga.",
+  ta: "மன்னிக்கவும், புரியவில்லை. கீழே உள்ளவற்றில் ஒன்றைத் தட்டுங்கள்.",
+};
+
+let seq = 0;
+function mk(from: "bot" | "student", text: string, extra?: Partial<ChatMsg>): ChatMsg {
+  seq += 1;
+  return { id: `${Date.now()}-${seq}`, from, text, ...extra };
+}
+
+function isKnown(profile: Profile): boolean {
+  const rec = profile as unknown as Record<string, unknown>;
+  return Object.values(rec).some(
+    (v) => v !== null && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0),
+  );
+}
 
 export default function Home() {
+  const { lang } = useLang();
+  const pick = (t: Txt) => (lang === "ta" ? t.ta : t.en);
+
+  const [profile, setProfileState] = useState<Profile>({} as Profile);
+  const [schemes, setSchemes] = useState<Schemes | null>(null);
+  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [register, setRegister] = useState<Register>(DEFAULT_REGISTER);
+  const [lastChanged, setLastChanged] = useState<string[]>([]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const prevBusyRef = useRef(busy);
+
+  // Restore profile + chat, fetch schemes once.
+  useEffect(() => {
+    setProfileState((getProfile() ?? {}) as Profile);
+    const saved = getChat() as unknown as ChatMsg[] | null;
+    setMsgs(Array.isArray(saved) ? saved.slice(-CHAT_KEEP_LAST) : []);
+    setHydrated(true);
+    fetch("/api/schemes")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: Schemes | null) => {
+        if (d) setSchemes(d);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Persist last N messages.
+  useEffect(() => {
+    if (!hydrated) return;
+    setChat(msgs.slice(-CHAT_KEEP_LAST) as unknown as Parameters<typeof setChat>[0]);
+  }, [msgs, hydrated]);
+
+
+  const results = useMemo(
+    () => (schemes ? evaluateAll(profile, schemes) : []),
+    [profile, schemes],
+  );
+  const likelyCount = results.filter((r) => r.status === "likely_eligible").length;
+  const known = isKnown(profile);
+  const lastQ = useMemo(() => [...msgs].reverse().find((m) => m.kind === "question"), [msgs]);
+  const lastChips = lastQ?.chips;
+
+  // Auto-scroll to the sentinel at the end of the list.
+  useEffect(() => {
+    sentinelRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [msgs, busy, lastChips]);
+
+  // Refocus the input once a reply has finished loading.
+  useEffect(() => {
+    if (prevBusyRef.current && !busy) inputRef.current?.focus({ preventScroll: true });
+    prevBusyRef.current = busy;
+  }, [busy]);
+
+  function focusInput() {
+    inputRef.current?.focus({ preventScroll: true });
+  }
+
+  function addChangedNote(
+    changed: string[],
+    profileAfter: Profile,
+    register: "tanglish" | "ta" | "en",
+  ) {
+    if (changed.length === 0) return;
+    setLastChanged(changed);
+    const factLang = register === "en" ? "en" : "ta";
+    const rec = profileAfter as unknown as Record<string, unknown>;
+    const facts = changed
+      .map((f) => describeFact(f as ProfileField, rec[f], factLang))
+      .join(" · ");
+    const lead = register === "ta" ? "புரிந்தது ✔" : register === "en" ? "Got it ✔" : "Purinjudhu ✔";
+    setMsgs((m) => [...m, mk("bot", `${lead} ${facts}`)]);
+  }
+
+  // Browser-only next step, used for chip taps and the AI-unavailable fallback.
+  function advanceLocal(np: Profile) {
+    const next = nextQuestion(schemes ? evaluateAll(np, schemes) : []);
+    if (!next) {
+      setConfirmOpen(true);
+      return;
+    }
+    const q = questionFor(next.field, register, next.unlock_count) as unknown as LocalQ;
+    setMsgs((m) => [
+      ...m,
+      mk("bot", pick(q.text), {
+        kind: "question",
+        field: next.field,
+        unlock_count: next.unlock_count,
+        chips: q.chips,
+      }),
+    ]);
+  }
+
+  function handleChip(value: string) {
+    if (busy || !lastQ?.field) return;
+    const chip = lastQ.chips?.find((c) => c.value === value);
+    const label = chip ? (typeof chip.label === "string" ? chip.label : pick(chip.label)) : value;
+    const field = lastQ.field;
+    const { profile: np, changed_fields } = mergeProfile(
+      profile,
+      { [field]: value } as MergeUpdates,
+    );
+    setProfileState(np);
+    setProfile(np);
+    setMsgs((m) => [...m, mk("student", label)]);
+    addChangedNote(
+      changed_fields as string[],
+      np as Profile,
+      lang === "ta" ? "ta" : "en",
+    );
+    focusInput();
+    advanceLocal(np as Profile);
+  }
+
+  function fallback() {
+    setMsgs((m) => [...m, mk("bot", "AI is busy right now. Tap your answer below.")]);
+    advanceLocal(profile);
+  }
+
+  async function send(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed || busy) return;
+    setInput("");
+    setMsgs((m) => [...m, mk("student", trimmed)]);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: trimmed,
+          profile,
+          asked_field: lastQ?.field ?? null,
+          ui_lang: lang,
+        }),
+      });
+      const data = (await res.json().catch(() => null)) as unknown as ChatOk | ChatErr | null;
+      if (!res.ok || !data || "error" in data) {
+        const code = data && "error" in data ? data.error.code : "";
+        if (code === "AI_UNAVAILABLE") fallback();
+        else setMsgs((m) => [...m, mk("bot", "Something went wrong. Please try again.")]);
+        return;
+      }
+      setProfileState(data.profile);
+      setProfile(data.profile);
+      if (data.register) setRegister(data.register);
+      const reg = (data.register ?? (lang === "ta" ? "ta" : "en")) as "tanglish" | "ta" | "en";
+      const changed = data.changed_fields ?? [];
+      addChangedNote(changed, data.profile, reg);
+      if (changed.length === 0 && !data.side_answer) {
+        setMsgs((m) => [...m, mk("bot", NOT_UNDERSTOOD[reg])]);
+      }
+      if (data.side_answer) setMsgs((m) => [...m, mk("bot", data.side_answer as string)]);
+      const nq = data.next_question;
+      if (nq) {
+        const lowerFirst = data.register === "en" ? nq.text.charAt(0).toLowerCase() + nq.text.slice(1) : nq.text;
+        const body = data.side_answer ? `${pick(ANYWAY)} ${lowerFirst}` : nq.text;
+        setMsgs((m) => [
+          ...m,
+          mk("bot", body, {
+            kind: "question",
+            field: nq.field,
+            unlock_count: nq.unlock_count,
+            chips: nq.chips,
+          }),
+        ]);
+      } else {
+        setConfirmOpen(true);
+      }
+    } catch {
+      fallback();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    void send(input);
+  }
+
+  function onKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      void send(input);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <main className="flex min-h-dvh w-full max-w-[360px] mx-auto flex-col bg-white text-base sm:max-w-xl">
+      <div className="flex-1 space-y-3 overflow-y-auto p-3">
+        {msgs.length === 0 && (
+          <div className="flex flex-col gap-2">
+            <ChatBubble from="bot">{WELCOME}</ChatBubble>
+            <ChipRow
+              chips={EXAMPLES}
+              onPick={(v) => {
+                focusInput();
+                void send(v);
+              }}
+              disabled={busy}
+              lang={lang}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+        )}
+
+        {msgs.map((m) => (
+          <div key={m.id} className="flex flex-col gap-2">
+            <ChatBubble from={m.from}>{m.text}</ChatBubble>
+            {m.kind === "question" && m.id === lastQ?.id && m.chips && m.chips.length > 0 && (
+              <ChipRow
+                chips={m.chips}
+                onPick={(v) => handleChip(v)}
+                disabled={busy}
+                lang={lang}
+              />
+            )}
+          </div>
+        ))}
+
+        {busy && (
+          <ChatBubble from="bot">
+            <span className="inline-flex gap-1" aria-label="Typing">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="h-2 w-2 animate-bounce rounded-full bg-current"
+                  style={{ animationDelay: `${i * 150}ms` }}
+                />
+              ))}
+            </span>
+          </ChatBubble>
+        )}
+        <div ref={sentinelRef} />
+      </div>
+
+      {confirmOpen && (
+        <ConfirmCard
+          profile={profile}
+          changedFields={lastChanged}
+          onProfileChange={(p) => {
+            setProfileState(p);
+            setProfile(p);
+          }}
+          onClose={() => setConfirmOpen(false)}
+        />
+      )}
+
+      <div className="sticky bottom-0 border-t bg-white p-2">
+        {known && (
+          <button
+            type="button"
+            onClick={() => setConfirmOpen(true)}
+            className="mb-2 min-h-11 w-full rounded-lg bg-emerald-600 px-3 py-2 font-medium text-white"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            See my schemes now ({likelyCount} likely) -&gt;
+          </button>
+        )}
+        <form onSubmit={onSubmit} className="flex items-end gap-2">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKeyDown}
+            rows={1}
+            disabled={busy}
+            placeholder="Type here..."
+            className="max-h-32 min-h-11 flex-1 resize-none rounded-lg border px-3 py-2 text-base disabled:opacity-60"
+          />
+          <button
+            type="button"
+            aria-label="Mic"
+            disabled
+            className="min-h-11 min-w-11 rounded-lg border px-3 py-2 opacity-50"
+          >
+            🎤
+          </button>
+          <button
+            type="submit"
+            disabled={busy || !input.trim()}
+            className="min-h-11 min-w-11 rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white disabled:opacity-50"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }

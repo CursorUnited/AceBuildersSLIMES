@@ -60,10 +60,12 @@ const RULES: readonly string[] = [
   "2. Only facts the student stated or clearly implied. \"appa coolie\" says nothing about income, so no income. Never guess.",
   "3. Ambiguous: leave the field out of updates and add it to ambiguous. A bare \"BC\" is still community BC, but central_obc_certificate stays unknown.",
   "4. A correction (\"class 10 not 9\", \"actually I'm in 2nd year\") overrides the old value, in updates and evidence.",
-  "5. A side question (\"iniku date enna\", \"income certificate enga vaanguradhu?\") gets a short answer in side_answer, in the student's register. Today's date is given above. Never state scheme facts in side_answer; those come only from the database.",
+  "5. A side question (\"iniku date enna\", \"income certificate enga vaanguradhu?\") gets a short answer in side_answer, in the student's register. Today's date is given above. Never state scheme facts in side_answer; those come only from the database. side_answer must be in the same register as the student's message (ta = Tamil script, en = English, tanglish = Tamil in Latin letters). Write it in your own words, one or two short sentences. If the question needs live data (weather, news, sports, prices, anything after today's date) or is unrelated to scholarships, say briefly and politely that you can't help with that here. Never invent facts. Never reuse a fixed phrase.",
   "6. Never ask for or store Aadhaar or any ID number. If the student types one (including 12-digit numbers), ignore it completely.",
   "7. register: \"ta\" (Tamil script), \"en\" (English), or \"tanglish\" (Tamil in Latin letters, often mixed with English).",
   "8. Course words: \"diploma\", \"polytechnic\", \"poly\" = education_level diploma + course_type polytechnic. \"engineering\", \"BE\", \"B.E\", \"BTech\", \"பொறியியல்\" = ug + engineering. \"ITI\", electrician/fitter/welder trade = iti + iti_trade. MSc/MA/MCom/PG at a university = pg; BSc/BA/BCom/arts college = ug + arts_science. Always set education_level and course_type together, never one without the other. Institution: \"central university\", IIT, NIT, IISER = central_institute; \"private\", \"self financing\", \"pvt\" college/ITI = private_self_financing; \"govt\" college/ITI = govt; \"aided\" = govt_aided.",
+  "9. current_school_type and medium describe the CURRENT school. Set them only when education_level is class_8 to class_12, or becomes class_8 to class_12 in the same message. A college, diploma or ITI student never gets current_school_type.",
+  "10. When asked_field is given and the reply does not clearly match that field's options, return empty updates and set nothing else from a guess. Example: \"govt school\" answering a question about how the college seat was obtained must not set anything.",
 ];
 
 const OUTPUT_SHAPE = `{ "updates": {}, "evidence": {}, "ambiguous": [{ "field": "", "reason": "" }], "side_answer": null, "register": "en" }`;
@@ -78,7 +80,7 @@ const EXAMPLES: readonly string[] = [
   `Message: "நான் 12 ஆம் வகுப்பு படிக்கிறேன், பெண்"
 → JSON: {"updates":{"education_level":"class_12","gender":"female"},"evidence":{"education_level":"12 ஆம் வகுப்பு படிக்கிறேன்","gender":"பெண்"},"ambiguous":[],"side_answer":null,"register":"ta"}`,
   `Message: "Income certificate enga vaanguradhu?"
-→ JSON: {"updates":{},"evidence":{},"ambiguous":[],"side_answer":"Athu pathi ippo solla mudiyathu.","register":"tanglish"}`,
+→ JSON: {"updates":{},"evidence":{},"ambiguous":[],"side_answer":"Athu pathi ippo enakku solla theriyaadhu.","register":"tanglish"}`,
   `Message: "Naan private poly college la 2nd year diploma padikkiren, polytechnic"
 → JSON: {"updates":{"education_level":"diploma","course_type":"polytechnic","year_of_study":2,"institution_type":"private_self_financing"},"evidence":{"education_level":"diploma","course_type":"polytechnic","year_of_study":"2nd year","institution_type":"private poly college"},"ambiguous":[],"side_answer":null,"register":"tanglish"}`,
   `Message: "Last exam 78%, 40% disability, my aadhaar 1234 5678 9012, 17 vayasu, village school"
