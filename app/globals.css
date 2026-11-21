@@ -22,3 +22,77 @@ body {
   font-size: 1rem;
   line-height: 1.5;
 }
+
+@layer base {
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-turmeric);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--accent-teal);
+    color: #fff;
+    border-radius: 9999px;
+    min-height: 44px;
+    padding-inline: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: filter 150ms ease, transform 150ms ease, opacity 150ms ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-outline,
+  .chip {
+    border: 1px solid var(--accent-teal);
+    color: var(--accent-teal);
+    background-color: #fff;
+    border-radius: 9999px;
+    min-height: 44px;
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  .btn-outline:hover,
+  .chip:hover {
+    background-color: color-mix(in srgb, var(--accent-teal) 10%, transparent);
+  }
+
+  .btn-outline:active,
+  .chip:active {
+    transform: scale(0.98);
+  }
+
+  .chip[aria-pressed="true"] {
+    background-color: var(--accent-teal);
+    color: #fff;
+  }
+
+  .link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--accent-teal);
+  }
+
+  .link:hover {
+    opacity: 0.8;
+  }
+}

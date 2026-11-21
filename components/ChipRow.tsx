@@ -20,22 +20,25 @@ function resolveLabel(label: ChipLabel, lang: "en" | "ta" | undefined): string {
 export default function ChipRow({ chips, onPick, disabled = false, selectedValue, lang }: Props): ReactNode {
   return (
     <div className="flex flex-wrap gap-2">
-      {chips.map((chip) => (
-        <button
-          key={chip.value}
-          type="button"
-          disabled={disabled}
-          onClick={() => onPick(chip.value)}
-          aria-pressed={selectedValue === chip.value}
-          className={`min-h-[44px] rounded-full border px-4 py-2 text-base disabled:opacity-50 ${
-            selectedValue === chip.value
-              ? "border-teal-700 bg-teal-700 text-white"
-              : "border-teal-600 bg-white text-teal-800"
-          }`}
-        >
-          {resolveLabel(chip.label, lang)}
-        </button>
-      ))}
+      {chips.map((chip, index) => {
+        const selected = JSON.stringify(chip.value) === JSON.stringify(selectedValue);
+        return (
+          <button
+            key={index}
+            type="button"
+            disabled={disabled}
+            onClick={() => onPick(chip.value)}
+            aria-pressed={selected}
+            className={`chip min-h-[44px] cursor-pointer rounded-full border px-4 py-2 text-base disabled:cursor-not-allowed disabled:opacity-50 ${
+              selected
+                ? "border-accent-teal bg-accent-teal text-white"
+                : "border-accent-teal/60 bg-white text-accent-teal"
+            }`}
+          >
+            {resolveLabel(chip.label, lang)}
+          </button>
+        );
+      })}
     </div>
   );
 }

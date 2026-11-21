@@ -292,3 +292,48 @@ Modify only those two files.
 3. page.tsx no-understanding case: if /api/chat succeeds but changed_fields is empty AND there is no side_answer, show a short bot line before the repeated question, in the reply's register: en "Sorry, I didn't catch that. Please tap one of these.", tanglish "Sorry, puriyala. Keela ulla option-la onna tap pannunga.", ta "மன்னிக்கவும், புரியவில்லை. கீழே உள்ளவற்றில் ஒன்றைத் தட்டுங்கள்." Show no "Got it ✔" note in that case.
 4. prompts.ts: add rules: (a) current_school_type and medium describe the CURRENT school; set them only when education_level is class_8 to class_12 (or becomes class_8..class_12 in the same message). A college, diploma or ITI student never gets current_school_type. (b) When asked_field is given and the reply does not clearly match that field's options, return empty updates and set nothing else from a guess; for example "govt school" answering a question about how the college seat was obtained must not set anything. Keep all existing rules. Do not copy test messages from eval/slang_testset.json.
 Run npx vitest run tests/extract.test.ts and npm run build. Reply in 3 lines.
+
+prompt-P6a[00:09]: /caveman ultra STEP P6a: results page.
+
+Read only: docs/CONTRACTS.md section 2 (result statuses, deadline, apply); exports of lib/engine/index.ts, lib/storage.ts, lib/i18n/strings.ts, lib/i18n/questions.ts, lib/i18n/describe.ts, components/ChipRow.tsx.
+Create only: app/results/page.tsx, components/SchemeCard.tsx, components/DeadlineChip.tsx. Modify only: lib/i18n/strings.ts (add keys).
+No installs. Tailwind only, mobile first (360 px), "use client" where needed. Never show raw enum codes.
+
+Results (/results, client): load profile from storage, schemes from /api/schemes, evaluateAll.
+- Sections: "Likely eligible (n)", "One detail away (n)", "Not eligible (n)" (collapsed by default).
+- SchemeCard: name (current language), level badge (CENTRAL / STATE / CENTRAL + STATE for shared), benefit line, up to 3 reason ticks (reuse labels from the engine results), DeadlineChip, "Track ☆" (adds { scheme_id, status: "not_started", docs_checked: [], reminder_on: null } to urimai.applications if absent; the star fills once tracked), and the whole card links to /scheme/<id> (page comes in P6b).
+- needs_info cards show the first missing field's question with its chips inline; tapping a chip merges it into the profile, saves it and re-evaluates in place.
+- not_eligible cards show the first failing reason with ✗.
+- Footer note: "'Likely eligible' means the rules match what you told us. The office makes the final decision." (both languages, in strings.ts).
+- Empty profile → redirect to /. A "← Edit my answers" link back to /.
+DeadlineChip: open → green "Closes 25 Nov" (orange if ≤ 7 days); closed → grey "Closed for this year" + note; rolling → grey "Apply any time"; unknown → grey "Check official page".
+
+Run: npm run build until it builds.
+Reply: files changed + build result, max 5 lines.
+
+prompt-p6c[2:42]: /caveman ultra
+STEP P6c: bug fix + UI consistency pass. No new features, no new packages.
+
+Read only: components/*.tsx, app/page.tsx, app/results/page.tsx, app/scheme/[id]/page.tsx, app/globals.css, app/layout.tsx, lib/i18n/describe.ts, lib/i18n/questions.ts, lib/i18n/strings.ts.
+Modify only: components/ChipRow.tsx, components/ConfirmCard.tsx, components/Header.tsx, components/SchemeCard.tsx, components/DocChecklist.tsx, components/ChatBubble.tsx, app/page.tsx, app/results/page.tsx, app/scheme/[id]/page.tsx, app/globals.css, lib/i18n/questions.ts.
+Do NOT touch lib/engine/*, lib/llm/*, app/api/*, tests/*.
+
+Fixes, in order:
+1. ChipRow: key={index}, not chip.value (values can be objects, so keys collided). Selected check: compare chip.value with selectedValue using JSON.stringify so object values work. Keep the Props API unchanged.
+2. ConfirmCard value text: when the stored value matches no chip, use the value part of describeFact(field, value, lang) (the text after "Name: "). Never show a blank value. Every row shows its value.
+3. ConfirmCard layout: wrap in a backdrop (fixed inset-0 z-50 bg-black/40, click closes) and make the sheet centred: mx-auto w-full max-w-xl rounded-t-2xl, bottom-aligned, safe-area bottom padding. Esc closes it. Move focus to the sheet when it opens.
+4. Layout width: use ONE content width everywhere: `mx-auto w-full max-w-xl`. Header inner container, chat main (remove max-w-[360px]), results and detail pages all use it.
+5. Header: the "forget me" confirmation must not be inside the element that has backdrop-blur. Render the dialog as a sibling after </header> (wrap both in a fragment), or drop backdrop-blur. Verify it covers the whole viewport.
+6. Colours: one teal. Use the theme token accent-teal (#0F4C5C) for primary buttons, selected chips, headings and links. Replace teal-700/800/900/600/200/50 usages with accent-teal or accent-teal/<opacity> variants. Turmeric (accent-turmeric) only for small highlights: the "changed" dot and warning chips. Keep green/orange/grey for deadline status chips.
+7. Interaction states, in globals.css under @layer components, define and then use these classes instead of repeating utilities:
+   - .btn-primary: bg accent-teal, white text, rounded-full, min-h-[44px], px-4, font-medium, hover:brightness-110, active:scale-[0.98], transition, disabled:opacity-50 disabled:cursor-not-allowed
+   - .btn-outline: border accent-teal, text accent-teal, bg white, rounded-full, min-h-[44px], hover:bg-accent-teal/10, active:scale-[0.98], transition
+   - .chip: like btn-outline, plus [aria-pressed=true] selected style (bg accent-teal, white text)
+   - .link: underline underline-offset-4 text-accent-teal hover:opacity-80
+   And one global rule: :focus-visible { outline: 2px solid var(--accent-turmeric); outline-offset: 2px }. cursor-pointer on all buttons.
+   Apply them to every button and link in the components and pages listed above (chips, Looks right, Track, language toggle, menu, links).
+8. questions.ts questionFor: when unlock_count > 0 join with a newline ("\n") instead of a space. ChatBubble must render newlines (whitespace-pre-line). Then update tests/questions.test.ts expectation only if it asserts the space-join: allowed exception, change just that assertion.
+9. Chat page: when the ConfirmCard is open, the input bar stays hidden behind the backdrop (fine); when it closes, focus returns to the text input.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 6 lines.

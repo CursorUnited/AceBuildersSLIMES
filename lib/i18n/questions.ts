@@ -251,6 +251,6 @@ export function questionFor(
 ): { text: string; chips: Chip[] } {
   const q = QUESTIONS[field];
   const base = q[register];
-  const text = unlock_count > 0 ? `${base} ${UNLOCK_LINE(unlock_count)[register]}` : base;
+  const text = unlock_count > 0 ? [base, UNLOCK_LINE(unlock_count)[register]].join("\n") : base;
   return { text, chips: q.chips };
 }

@@ -140,5 +140,109 @@
       "never_guess:community"
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T24",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T25",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T26",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T27",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T28",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T29",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T30",
+    "pass": false,
+    "problems": [
+      "register:got_en_want_tanglish"
+    ],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T31",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T32",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T33",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T34",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T35",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T36",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T37",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T38",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T39",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "T40",
+    "pass": true,
+    "problems": [],
+    "model": "gemini-3.5-flash-lite"
   }
 ]

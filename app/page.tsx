@@ -265,7 +265,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-dvh w-full max-w-[360px] mx-auto flex-col bg-white text-base sm:max-w-xl">
+    <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col bg-white text-base">
       <div className="flex-1 space-y-3 overflow-y-auto p-3">
         {msgs.length === 0 && (
           <div className="flex flex-col gap-2">
@@ -320,7 +320,10 @@ export default function Home() {
             setProfileState(p);
             setProfile(p);
           }}
-          onClose={() => setConfirmOpen(false)}
+          onClose={() => {
+            setConfirmOpen(false);
+            focusInput();
+          }}
         />
       )}
 
@@ -329,7 +332,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setConfirmOpen(true)}
-            className="mb-2 min-h-11 w-full rounded-lg bg-emerald-600 px-3 py-2 font-medium text-white"
+            className="btn-primary mb-2 min-h-11 w-full cursor-pointer rounded-lg px-3 py-2 font-medium"
           >
             See my schemes now ({likelyCount} likely) -&gt;
           </button>
@@ -349,14 +352,14 @@ export default function Home() {
             type="button"
             aria-label="Mic"
             disabled
-            className="min-h-11 min-w-11 rounded-lg border px-3 py-2 opacity-50"
+            className="btn-outline min-h-11 min-w-11 cursor-pointer rounded-lg px-3 py-2 opacity-50"
           >
             🎤
           </button>
           <button
             type="submit"
             disabled={busy || !input.trim()}
-            className="min-h-11 min-w-11 rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="btn-primary min-h-11 min-w-11 cursor-pointer rounded-lg px-4 py-2 font-medium disabled:opacity-50"
           >
             Send
           </button>

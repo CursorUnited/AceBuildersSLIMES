@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/components/LangProvider";
 import { t } from "@/lib/i18n/strings";
 import { clearAll } from "@/lib/storage";
@@ -12,6 +12,23 @@ export default function Header() {
   const { lang, setLang } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onPointerDown(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
 
   function forgetMe() {
     clearAll();
@@ -19,62 +36,72 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/10 bg-background/95 backdrop-blur">
-      <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-3 py-1">
-        <span className="text-base font-semibold text-accent-teal">{t("appTitle", lang)}</span>
+    <>
+      <header className="sticky top-0 z-40 border-b border-black/10 bg-background/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-xl items-center justify-between gap-2 px-3 py-1">
+          <span className="min-w-0 truncate text-sm font-semibold text-accent-teal sm:text-base">{t("appTitle", lang)}</span>
 
-        <div className="flex items-center gap-1">
-          <div role="group" aria-label="Language" className="flex rounded-full border border-accent-teal/30">
-            <button
-              type="button"
-              aria-pressed={lang === "ta"}
-              onClick={() => setLang("ta")}
-              className={`${TAP} rounded-full ${lang === "ta" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
-            >
-              தமிழ்
-            </button>
-            <button
-              type="button"
-              aria-pressed={lang === "en"}
-              onClick={() => setLang("en")}
-              className={`${TAP} rounded-full ${lang === "en" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
-            >
-              EN
-            </button>
-          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <div role="group" aria-label="Language" className="flex shrink-0 rounded-full border border-accent-teal/30">
+              <button
+                type="button"
+                aria-pressed={lang === "ta"}
+                onClick={() => setLang("ta")}
+                className={`${TAP} btn-outline cursor-pointer rounded-full ${lang === "ta" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
+              >
+                தமிழ்
+              </button>
+              <button
+                type="button"
+                aria-pressed={lang === "en"}
+                onClick={() => setLang("en")}
+                className={`${TAP} btn-outline cursor-pointer rounded-full ${lang === "en" ? "bg-accent-teal text-white" : "text-accent-teal"}`}
+              >
+                EN
+              </button>
+            </div>
 
-          <Link href="/applications" className={`${TAP} text-accent-teal underline underline-offset-4`}>
-            {t("myApplications", lang)}
-          </Link>
+            <Link href="/applications" className={`${TAP} hidden shrink-0 link cursor-pointer text-accent-teal sm:inline-flex`}>
+              {t("myApplications", lang)}
+            </Link>
 
-          <div className="relative">
-            <button
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
-              className={`${TAP} text-accent-teal`}
-            >
-              {t("menu", lang)}
-            </button>
-            {menuOpen && (
-              <div role="menu" className="absolute right-0 top-full mt-1 w-max rounded-lg border border-black/10 bg-white shadow-md">
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    setConfirmOpen(true);
-                  }}
-                  className={`${TAP} w-full justify-start text-left text-red-700`}
-                >
-                  {t("forgetMe", lang)}
-                </button>
-              </div>
-            )}
+            <div ref={menuRef} className="relative shrink-0">
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((open) => !open)}
+                className={`${TAP} btn-outline cursor-pointer text-accent-teal`}
+              >
+                {t("menu", lang)}
+              </button>
+              {menuOpen && (
+                <div role="menu" className="absolute right-0 top-full mt-1 w-max max-w-[calc(100vw-1.5rem)] rounded-lg border border-black/10 bg-white shadow-md">
+                  <Link
+                    href="/applications"
+                    role="menuitem"
+                    onClick={() => setMenuOpen(false)}
+                    className={`${TAP} w-full justify-start text-left link cursor-pointer text-accent-teal sm:hidden`}
+                  >
+                    {t("myApplications", lang)}
+                  </Link>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setConfirmOpen(true);
+                    }}
+                    className={`${TAP} w-full cursor-pointer justify-start text-left text-red-700`}
+                  >
+                    {t("forgetMe", lang)}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {confirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -86,14 +113,14 @@ export default function Header() {
               <button
                 type="button"
                 onClick={forgetMe}
-                className={`${TAP} w-full rounded-lg bg-red-700 text-white`}
+                className={`${TAP} w-full cursor-pointer rounded-lg bg-red-700 text-white`}
               >
                 {t("forgetConfirmYes", lang)}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmOpen(false)}
-                className={`${TAP} w-full rounded-lg border border-accent-teal text-accent-teal`}
+                className={`${TAP} btn-outline w-full cursor-pointer rounded-lg`}
               >
                 {t("cancel", lang)}
               </button>
@@ -101,6 +128,6 @@ export default function Header() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
