@@ -37,10 +37,8 @@
   },
   {
     "id": "T07",
-    "pass": false,
-    "problems": [
-      "community:missing"
-    ],
+    "pass": true,
+    "problems": [],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -135,10 +133,8 @@
   },
   {
     "id": "T23",
-    "pass": false,
-    "problems": [
-      "never_guess:community"
-    ],
+    "pass": true,
+    "problems": [],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -179,10 +175,8 @@
   },
   {
     "id": "T30",
-    "pass": false,
-    "problems": [
-      "register:got_en_want_tanglish"
-    ],
+    "pass": true,
+    "problems": [],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -241,8 +235,10 @@
   },
   {
     "id": "T40",
-    "pass": true,
-    "problems": [],
+    "pass": false,
+    "problems": [
+      "register:got_tanglish_want_en"
+    ],
     "model": "gemini-3.5-flash-lite"
   }
 ]

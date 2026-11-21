@@ -25,7 +25,7 @@ const FIELD_HINTS: Record<ExtractableField, string> = {
   income:
     'rupees per YEAR as {"min": number, "max": number or null}. "lakh" / "L" / "லட்சம்" / "oru lakh" = 100000; "k" = 1000 ("80k" = {"min":80000,"max":80000}); monthly figure x12 ("maasam 10k" = {"min":120000,"max":120000}); "1 lakh ku kammi" = {"min":0,"max":100000}; "8 lakh ku mela" = {"min":800001,"max":null}. Occupation alone ("appa coolie") gives no income.',
   community:
-    "one of SC, SCC, ST, BC, BCM, MBC, DNC, FC. SCC = SC converted to Christianity; BCM = BC Muslim. A bare \"BC\" stays BC.",
+    "one of SC, SCC, ST, BC, BCM, MBC, DNC, FC. SCC = SC converted to Christianity; BCM = BC Muslim. A bare \"BC\" stays BC. OBC / \"other backward class\" is NOT one of these values. Never turn OBC into BC or MBC.",
   gender:
     "one of female (ponnu, பொண்ணு, girl, penn, பெண்), male (paiyan, பையன், boy), transgender.",
   school_6_to_12:
@@ -49,7 +49,7 @@ const FIELD_HINTS: Record<ExtractableField, string> = {
     "one of govt_counselling, govt_school_7_5_quota, management. How they got the college seat.",
   aicte_approved: "boolean. Only if they say the college course is AICTE approved.",
   central_obc_certificate:
-    'boolean. Only if they say "central OBC certificate". Never inferred from BC / MBC.',
+    "boolean. true when they say they hold a central / Government of India OBC certificate. This is a separate fact: it NEVER sets community, in either direction.",
   lateral_entry: "boolean. Diploma holder joining UG year 2 (\"diploma mudichu 2nd year BE\").",
   rural: "boolean. School is in a village / rural non-municipal area (\"gramam\", \"village\").",
   age: 'integer. "naan 17 vayasu" = 17.',
@@ -66,6 +66,8 @@ const RULES: readonly string[] = [
   "8. Course words: \"diploma\", \"polytechnic\", \"poly\" = education_level diploma + course_type polytechnic. \"engineering\", \"BE\", \"B.E\", \"BTech\", \"பொறியியல்\" = ug + engineering. \"ITI\", electrician/fitter/welder trade = iti + iti_trade. MSc/MA/MCom/PG at a university = pg; BSc/BA/BCom/arts college = ug + arts_science. Always set education_level and course_type together, never one without the other. Institution: \"central university\", IIT, NIT, IISER = central_institute; \"private\", \"self financing\", \"pvt\" college/ITI = private_self_financing; \"govt\" college/ITI = govt; \"aided\" = govt_aided.",
   "9. current_school_type and medium describe the CURRENT school. Set them only when education_level is class_8 to class_12, or becomes class_8 to class_12 in the same message. A college, diploma or ITI student never gets current_school_type.",
   "10. When asked_field is given and the reply does not clearly match that field's options, return empty updates and set nothing else from a guess. Example: \"govt school\" answering a question about how the college seat was obtained must not set anything.",
+  "11. community is set only when the student names one of SC, SCC, ST, BC, BCM, MBC, DNC, FC (or its Tamil / Tanglish name). A caste-certificate type, a reservation word or a scheme name alone does not give a community. When the student mentions a central OBC certificate, set central_obc_certificate and leave community out.",
+  "12. register: a message that mixes Tamil words written in Latin letters (illa, aama, ponnu, padikkiren, naan ...) with English or community codes is tanglish even when it is very short. Use en only when the whole message is plain English.",
 ];
 
 const OUTPUT_SHAPE = `{ "updates": {}, "evidence": {}, "ambiguous": [{ "field": "", "reason": "" }], "side_answer": null, "register": "en" }`;
