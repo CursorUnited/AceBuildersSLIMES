@@ -1,0 +1,672 @@
+[
+  {
+    "id": "T01",
+    "category": "tanglish",
+    "message": "naan 9th padikren, SC, appa coolie",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_9", "community": "SC" },
+      "must_not_set": ["income"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Father's job (coolie) says nothing about income: never guess income from occupation."
+  },
+  {
+    "id": "T02",
+    "category": "tanglish",
+    "message": "naan 1st yr BE ponnu, 6th la irundhu 12th varaikkum govt school la dhaan padichen, SC",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 1,
+        "course_type": "engineering",
+        "gender": "female",
+        "school_6_to_12": "govt_all",
+        "community": "SC"
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "The demo sentence: 'ponnu' = girl, BE = engineering UG, and the 6th-to-12th span is stated, so govt_all is safe."
+  },
+  {
+    "id": "T03",
+    "category": "tanglish",
+    "message": "anna naan 12th padikren, BC dhaan, veetla varumanam oru lakh dhaan varushathuku",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "class_12",
+        "community": "BC",
+        "income": { "min": 100000, "max": 100000 }
+      },
+      "must_not_set": ["central_obc_certificate"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "'oru lakh' in words = 100000 per year. TN BC is not a central OBC certificate, so that stays unknown."
+  },
+  {
+    "id": "T04",
+    "category": "tanglish",
+    "message": "polytechnic 2nd year mechanical, MBC, family la yarum degree mudikkala",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "diploma",
+        "year_of_study": 2,
+        "course_type": "polytechnic",
+        "community": "MBC",
+        "first_graduate": true
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "'Nobody in the family finished a degree' clearly means first graduate."
+  },
+  {
+    "id": "T05",
+    "category": "tanglish",
+    "message": "naan B.Sc maths 3rd year, govt arts college, amma appa rendu perum padikkala",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 3,
+        "course_type": "arts_science",
+        "institution_type": "govt"
+      },
+      "must_not_set": ["first_graduate"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Parents not educated does not rule out an elder sibling with a degree, so first_graduate must be asked, not guessed."
+  },
+  {
+    "id": "T06",
+    "category": "tanglish",
+    "message": "naan ponnu, 11th padikren, Chennai la Tamil medium govt school",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "gender": "female",
+        "education_level": "class_11",
+        "medium": "tamil",
+        "current_school_type": "govt",
+        "state": "TN"
+      },
+      "must_not_set": ["school_6_to_12"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Chennai clearly implies TN. The current school is govt, but Class 6-12 history was not stated."
+  },
+  {
+    "id": "T07",
+    "category": "tanglish",
+    "message": "bro naan Muslim, BCM, 10th padikren, last exam la 78% vandhuchu",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "religion": "muslim",
+        "community": "BCM",
+        "education_level": "class_10",
+        "last_exam_percent": 78
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Religion and community are separate fields; both are stated."
+  },
+  {
+    "id": "T08",
+    "category": "tanglish",
+    "message": "naan transgender, BA English 1st year, aided college la padikren",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "gender": "transgender",
+        "education_level": "ug",
+        "year_of_study": 1,
+        "course_type": "arts_science",
+        "institution_type": "govt_aided"
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Transgender is a valid gender value, and 'aided college' maps to govt_aided."
+  },
+  {
+    "id": "T09",
+    "category": "tanglish",
+    "message": "naan BE 1st year ponnu, govt school la padichen",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 1,
+        "course_type": "engineering",
+        "gender": "female"
+      },
+      "must_not_set": ["school_6_to_12"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Trap: 'studied in govt school' does not say ALL of Class 6-12. That span is what unlocks Pudhumai Penn, so it must be asked, not assumed."
+  },
+  {
+    "id": "T10",
+    "category": "tanglish",
+    "message": "veetla 4 per, appa auto ottraru, maasam 10k varum",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "income": { "min": 120000, "max": 120000 } },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Monthly 10k must become yearly 120000; profile income is always per year."
+  },
+  {
+    "id": "T11",
+    "category": "tamil",
+    "message": "நான் 10ஆம் வகுப்பு படிக்கிறேன், SC, அப்பா கூலி வேலை",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_10", "community": "SC" },
+      "must_not_set": ["income"],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "Same never-guess income trap as T01, in Tamil script."
+  },
+  {
+    "id": "T12",
+    "category": "tamil",
+    "message": "நான் மாணவி, அரசுப் பள்ளியில் 6 முதல் 12 வரை படித்தேன், இப்போது B.Com முதல் ஆண்டு",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "gender": "female",
+        "school_6_to_12": "govt_all",
+        "education_level": "ug",
+        "year_of_study": 1,
+        "course_type": "arts_science"
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "மாணவி = girl student, the 6-12 span is explicit, and B.Com counts as arts and science."
+  },
+  {
+    "id": "T13",
+    "category": "tamil",
+    "message": "எங்கள் குடும்ப வருமானம் வருஷத்துக்கு ஐம்பதாயிரம் தான்",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "income": { "min": 50000, "max": 50000 } },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "A Tamil number word (ஐம்பதாயிரம் = 50,000) must be parsed as a number."
+  },
+  {
+    "id": "T14",
+    "category": "tamil",
+    "message": "நான் MBC, பொறியியல் இரண்டாம் ஆண்டு, எங்க வீட்டுல நான் தான் முதல் பட்டதாரி",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "community": "MBC",
+        "education_level": "ug",
+        "year_of_study": 2,
+        "course_type": "engineering",
+        "first_graduate": true
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "பொறியியல் = engineering, and முதல் பட்டதாரி = first graduate, stated directly."
+  },
+  {
+    "id": "T15",
+    "category": "tamil",
+    "message": "எனக்கு 60 சதவீதம் ஊனம் இருக்கு, டிப்ளமோ முதல் ஆண்டு",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "disability_percent": 60,
+        "education_level": "diploma",
+        "year_of_study": 1
+      },
+      "must_not_set": ["last_exam_percent"],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "Here 60% is a disability percentage, not marks; do not confuse the two percentages."
+  },
+  {
+    "id": "T16",
+    "category": "tamil",
+    "message": "நான் கிறிஸ்தவர், 9ஆம் வகுப்பு, போன வருஷம் 82 சதவீதம் மார்க்",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "religion": "christian",
+        "education_level": "class_9",
+        "last_exam_percent": 82
+      },
+      "must_not_set": ["community"],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "Christian is a religion, not a community; SCC must not be inferred from religion alone."
+  },
+  {
+    "id": "T17",
+    "category": "tamil",
+    "message": "கிராமத்து அரசுப் பள்ளி, 8ஆம் வகுப்பு, வருமானம் ஒரு லட்சத்துக்கு கீழ்",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "rural": true,
+        "current_school_type": "govt",
+        "education_level": "class_8",
+        "income": { "min": 0, "max": 100000 }
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "'Below one lakh' maps to the band {0, 100000}, and a village govt school means rural plus govt."
+  },
+  {
+    "id": "T18",
+    "category": "tamil",
+    "message": "நான் BC, ஆனா central OBC certificate இல்ல",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "community": "BC", "central_obc_certificate": false },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "ta"
+    },
+    "why": "An explicit 'no' must be stored as false, not left unknown."
+  },
+  {
+    "id": "T19",
+    "category": "english_slang",
+    "message": "bro im in 2nd yr BE, 1st in fam to go clg",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 2,
+        "course_type": "engineering",
+        "first_graduate": true
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "Abbreviations (yr, fam, clg) must be decoded; 'first in the family to go to college' means first graduate."
+  },
+  {
+    "id": "T20",
+    "category": "english_slang",
+    "message": "gurl here, 12th std, govt aided skool, tamil med",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "gender": "female",
+        "education_level": "class_12",
+        "current_school_type": "govt_aided",
+        "medium": "tamil"
+      },
+      "must_not_set": ["school_6_to_12"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "Typos and slang (gurl, skool, med); the current school is not the Class 6-12 history."
+  },
+  {
+    "id": "T21",
+    "category": "english_slang",
+    "message": "doing mbbs 1st yr, SC, fam income around 3L",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 1,
+        "course_type": "medical",
+        "community": "SC",
+        "income": { "min": 300000, "max": 300000 }
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "'3L' means 3 lakh = 300000; MBBS counts as medical UG."
+  },
+  {
+    "id": "T22",
+    "category": "english_slang",
+    "message": "my aadhar is 1234 5678 9012 pls check what i get, im in 11th",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_11" },
+      "must_not_set": ["age", "last_exam_percent", "disability_percent"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "The Aadhaar-like number must be ignored completely: not stored, not echoed, and not misread as age or marks."
+  },
+  {
+    "id": "T23",
+    "category": "english_slang",
+    "message": "pursuing msc physics at a central univ, i have a central OBC cert",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "pg",
+        "course_type": "arts_science",
+        "institution_type": "central_institute",
+        "central_obc_certificate": true
+      },
+      "must_not_set": ["community"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "A central OBC certificate does not tell us the TN community (BC, MBC or DNC), so community stays unknown."
+  },
+  {
+    "id": "T24",
+    "category": "english_slang",
+    "message": "iti electrician 1st yr, pvt iti, fc, income abv 8L lol",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "iti",
+        "year_of_study": 1,
+        "course_type": "iti_trade",
+        "institution_type": "private_self_financing",
+        "community": "FC",
+        "income": { "min": 800001, "max": null }
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "'Above 8L' is an open-ended band, so max must be null; this case has many fields at once."
+  },
+  {
+    "id": "T25",
+    "category": "voice_ramble",
+    "message": "hmm so actually... en peru... I mean I'm in 12th, uh, science group, and um govt school",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_12", "current_school_type": "govt" },
+      "must_not_set": ["school_6_to_12", "age"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Fillers and a started-then-dropped name; extract only the facts, and the current school only."
+  },
+  {
+    "id": "T26",
+    "category": "voice_ramble",
+    "message": "aaa vandhu... naan... BE padikren, second year, illa illa third year, mechanical",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "ug",
+        "year_of_study": 3,
+        "course_type": "engineering"
+      },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Self-correction mid-sentence ('no no, third year'): the last stated value wins."
+  },
+  {
+    "id": "T27",
+    "category": "voice_ramble",
+    "message": "okay so like my dad is a farmer and we have like two acres and I'm doing diploma in civil first year",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "education_level": "diploma",
+        "year_of_study": 1,
+        "course_type": "polytechnic"
+      },
+      "must_not_set": ["income", "rural"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "Farmer with two acres is not an income figure, and the family's land says nothing about whether the school is rural."
+  },
+  {
+    "id": "T28",
+    "category": "voice_ramble",
+    "message": "ennanu theriyala... amma vandhu tailoring pannuranga, naan ponnu, ninth standard, aided school, tamil medium",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": {
+        "gender": "female",
+        "education_level": "class_9",
+        "current_school_type": "govt_aided",
+        "medium": "tamil"
+      },
+      "must_not_set": ["income"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "A rambling opener plus the mother's job: no income can be inferred."
+  },
+  {
+    "id": "T29",
+    "category": "correction",
+    "message": "also i am from class 10 not 9",
+    "profile_before": { "education_level": "class_9", "community": "SC" },
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_10" },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "A correction overrides the old value, and education_level must appear in changed_fields."
+  },
+  {
+    "id": "T30",
+    "category": "correction",
+    "message": "illa illa MBC",
+    "profile_before": { "community": "BC", "education_level": "class_12" },
+    "asked_field": null,
+    "expect": {
+      "updates": { "community": "MBC" },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "A two-word correction with no field named; it must be linked to community from the value alone."
+  },
+  {
+    "id": "T31",
+    "category": "correction",
+    "message": "sorry 2nd year actually",
+    "profile_before": { "education_level": "ug", "year_of_study": 1, "course_type": "engineering" },
+    "asked_field": null,
+    "expect": {
+      "updates": { "year_of_study": 2 },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "Only year_of_study changes; education_level stays ug."
+  },
+  {
+    "id": "T32",
+    "category": "correction",
+    "message": "wait income 1 lakh illa, 2 lakh irukum",
+    "profile_before": { "income": { "min": 0, "max": 100000 } },
+    "asked_field": null,
+    "expect": {
+      "updates": { "income": { "min": 200000, "max": 200000 } },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Income correction: 'not 1 lakh, it'll be 2 lakh' replaces the whole range."
+  },
+  {
+    "id": "T33",
+    "category": "correction",
+    "message": "naan boy illa, ponnu. typo",
+    "profile_before": { "gender": "male", "education_level": "class_11" },
+    "asked_field": null,
+    "expect": {
+      "updates": { "gender": "female" },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "The gender correction has a negation first ('not a boy, a girl'); the final value must be female."
+  },
+  {
+    "id": "T34",
+    "category": "short_answer",
+    "message": "80k thaan",
+    "profile_before": { "education_level": "class_12" },
+    "asked_field": "income",
+    "expect": {
+      "updates": { "income": { "min": 80000, "max": 80000 } },
+      "must_not_set": ["last_exam_percent", "age"],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "A bare amount makes sense only because asked_field = income."
+  },
+  {
+    "id": "T35",
+    "category": "short_answer",
+    "message": "1 lakh ku kammi",
+    "profile_before": { "education_level": "ug" },
+    "asked_field": "income",
+    "expect": {
+      "updates": { "income": { "min": 0, "max": 100000 } },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "'Less than 1 lakh' maps to the band {0, 100000}, not to an exact 100000."
+  },
+  {
+    "id": "T36",
+    "category": "short_answer",
+    "message": "aama",
+    "profile_before": { "education_level": "ug", "year_of_study": 1 },
+    "asked_field": "first_graduate",
+    "expect": {
+      "updates": { "first_graduate": true },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "A one-word yes ('aama') applies to whatever field was just asked."
+  },
+  {
+    "id": "T37",
+    "category": "short_answer",
+    "message": "govt school dhaan, 6th la irundhu",
+    "profile_before": { "gender": "female", "education_level": "ug" },
+    "asked_field": "school_6_to_12",
+    "expect": {
+      "updates": { "school_6_to_12": "govt_all" },
+      "must_not_set": [],
+      "side_answer": false,
+      "register": "tanglish"
+    },
+    "why": "Contrast with T09: the bot asked specifically about Class 6-12 and the student confirms govt from 6th, so govt_all is clearly implied."
+  },
+  {
+    "id": "T38",
+    "category": "side_question",
+    "message": "iniku date enna?",
+    "profile_before": { "education_level": "class_10" },
+    "asked_field": "income",
+    "expect": {
+      "updates": {},
+      "must_not_set": ["income"],
+      "side_answer": true,
+      "register": "tanglish"
+    },
+    "why": "Off-topic question: answer briefly using the date passed in the prompt, extract nothing, and let the bot return to income."
+  },
+  {
+    "id": "T39",
+    "category": "side_question",
+    "message": "income certificate enga vaanguradhu? btw naan 12th",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "updates": { "education_level": "class_12" },
+      "must_not_set": ["income"],
+      "side_answer": true,
+      "register": "tanglish"
+    },
+    "why": "A side question plus a fact in one message: answer the side question and still extract the fact."
+  },
+  {
+    "id": "T40",
+    "category": "side_question",
+    "message": "what is first graduate certificate",
+    "profile_before": { "education_level": "ug" },
+    "asked_field": "first_graduate",
+    "expect": {
+      "updates": {},
+      "must_not_set": ["first_graduate"],
+      "side_answer": true,
+      "register": "en"
+    },
+    "why": "Asking what the term means is not answering yes, even though asked_field = first_graduate."
+  }
+]

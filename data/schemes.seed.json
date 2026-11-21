@@ -1,0 +1,1871 @@
+[
+  {
+    "id": "nmmss",
+    "name": {
+      "en": "National Means-cum-Merit Scholarship (NMMSS)",
+      "ta": "தேசிய வருவாய்வழி மற்றும் திறன் படிப்பு உதவித்தொகை (NMMS)"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "school",
+    "department": "Ministry of Education (Dept of School Education & Literacy); exam in Tamil Nadu run by the Directorate of Government Examinations (DGE)",
+    "benefit": {
+      "en": "₹12,000 a year (₹1,000 a month) from Class 9 to Class 12, if you pass the NMMS test in Class 8",
+      "ta": "8ஆம் வகுப்பில் NMMS தேர்வில் தேர்ச்சி பெற்றால், 9 முதல் 12ஆம் வகுப்பு வரை ஆண்டுக்கு ₹12,000 (மாதம் ₹1,000)"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Class 8 student (sits the test)",
+          "ta": "8ஆம் வகுப்பு மாணவர் (தேர்வு எழுத)"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_8"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹3.5 lakh",
+          "ta": "குடும்ப வருமானம் ₹3.5 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 350000
+      },
+      {
+        "label": {
+          "en": "Govt, aided or local-body school",
+          "ta": "அரசு / உதவி பெறும் / உள்ளாட்சிப் பள்ளி"
+        },
+        "field": "current_school_type",
+        "op": "in",
+        "value": [
+          "govt",
+          "govt_aided",
+          "local_body"
+        ]
+      },
+      {
+        "label": {
+          "en": "Class 7 marks 55% (SC/ST 50%)",
+          "ta": "7ஆம் வகுப்பு மதிப்பெண் 55% (SC/ST 50%)"
+        },
+        "any": [
+          {
+            "field": "last_exam_percent",
+            "op": "gte",
+            "value": 55
+          },
+          {
+            "all": [
+              {
+                "field": "community",
+                "op": "in",
+                "value": [
+                  "SC",
+                  "ST"
+                ]
+              },
+              {
+                "field": "last_exam_percent",
+                "op": "gte",
+                "value": 50
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": {
+          "en": "Not in KV, JNV or residential school",
+          "ta": "KV, JNV, உறைவிடப் பள்ளியில் இல்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்",
+        "only_if": {
+          "field": "community",
+          "op": "in",
+          "value": [
+            "SC",
+            "ST"
+          ]
+        }
+      },
+      {
+        "en": "Class 7 and Class 8 mark sheets",
+        "ta": "7, 8ஆம் வகுப்பு மதிப்பெண் சான்றிதழ்கள்"
+      },
+      {
+        "en": "School bonafide certificate",
+        "ta": "பள்ளி படிப்புச் சான்றிதழ் (Bonafide)"
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account linked to Aadhaar",
+        "ta": "ஆதாருடன் இணைந்த வங்கிக் கணக்கு"
+      }
+    ],
+    "apply": {
+      "mode": "offline",
+      "portal_url": "https://dge.tn.gov.in",
+      "steps": [
+        {
+          "en": "Ask your school headmaster to register you for the NMMS exam (the school applies online to DGE).",
+          "ta": "NMMS தேர்வுக்கு உங்களைப் பதிவு செய்யச் சொல்லி தலைமை ஆசிரியரிடம் கேளுங்கள் (பள்ளியே DGE-க்கு ஆன்லைனில் விண்ணப்பிக்கும்)."
+        },
+        {
+          "en": "Write the NMMS exam.",
+          "ta": "NMMS தேர்வை எழுதுங்கள்."
+        },
+        {
+          "en": "If selected, register on the National Scholarship Portal (scholarships.gov.in) to get the money.",
+          "ta": "தேர்வானால், பணம் பெற தேசிய உதவித்தொகை இணையதளத்தில் (scholarships.gov.in) பதிவு செய்யுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "open",
+      "closes_on": "2026-11-25",
+      "note": {
+        "en": "Tamil Nadu NMMS exam applications for 2026-27 extended to 25 Nov 2026 (news report). Apply through your school.",
+        "ta": "2026-27 NMMS தேர்வு விண்ணப்பம் 25 நவம்பர் 2026 வரை நீட்டிக்கப்பட்டுள்ளது (செய்தி). பள்ளி மூலம் விண்ணப்பிக்கவும்."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/nmmss",
+      "https://dsel.education.gov.in/sites/default/files/NMMSS_Guidelines_22.pdf",
+      "https://www.dtnext.in/news/tamilnadu/nmms-scholarship-exam-application-deadline-extended-to-nov-25",
+      "https://dge.tn.gov.in"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "Rules from myscheme + guidelines (OFFICIAL). The 25 Nov 2026 deadline is from news (DT Next, 13 Nov 2026). Exam date (12 Dec 2026) UNVERIFIED. Only the fresh Class 8 test is modelled; Class 9-12 renewal for existing awardees is not. The marks rule uses last_exam_percent as Class 7 marks for a Class 8 student. One central scholarship at a time. Tamil name is common usage, not confirmed official."
+  },
+  {
+    "id": "pre-matric-sc",
+    "name": {
+      "en": "Pre-Matric Scholarship for SC students (Class 9–10)",
+      "ta": "SC மாணவர்களுக்கான 9–10ஆம் வகுப்பு கல்வி உதவித்தொகை"
+    },
+    "level": "shared",
+    "states": [
+      "TN"
+    ],
+    "segment": "school",
+    "department": "Ministry of Social Justice & Empowerment; run in Tamil Nadu by the Adi Dravidar & Tribal Welfare Dept",
+    "benefit": {
+      "en": "A yearly allowance and books grant while you study Class 9 and 10 (check the current amount with your school)",
+      "ta": "9, 10ஆம் வகுப்பு படிக்கும்போது ஆண்டு உதவித்தொகையும் புத்தக மானியமும் (தற்போதைய தொகையை பள்ளியில் கேளுங்கள்)"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "SC community",
+          "ta": "SC (ஆதிதிராவிடர்) பிரிவு"
+        },
+        "field": "community",
+        "op": "in",
+        "value": [
+          "SC"
+        ]
+      },
+      {
+        "label": {
+          "en": "Studying Class 9 or 10",
+          "ta": "9 அல்லது 10ஆம் வகுப்பு"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_9",
+          "class_10"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹2.5 lakh",
+          "ta": "குடும்ப வருமானம் ₹2.5 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 250000
+      },
+      {
+        "label": {
+          "en": "Not repeating the same class",
+          "ta": "அதே வகுப்பை மீண்டும் படிக்கவில்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account",
+        "ta": "வங்கிக் கணக்கு"
+      },
+      {
+        "en": "School bonafide certificate",
+        "ta": "பள்ளி படிப்புச் சான்றிதழ் (Bonafide)"
+      }
+    ],
+    "apply": {
+      "mode": "offline",
+      "portal_url": null,
+      "steps": [
+        {
+          "en": "Ask your school headmaster how to apply for this scholarship this year.",
+          "ta": "இந்த ஆண்டு இந்த உதவித்தொகைக்கு எப்படி விண்ணப்பிப்பது என்று தலைமை ஆசிரியரிடம் கேளுங்கள்."
+        },
+        {
+          "en": "Give the documents in the checklist to your school.",
+          "ta": "பட்டியலில் உள்ள ஆவணங்களைப் பள்ளியில் கொடுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "unknown",
+      "closes_on": null,
+      "note": {
+        "en": "Tamil Nadu dates for this year are not confirmed. Ask your school.",
+        "ta": "இந்த ஆண்டுக்கான தேதிகள் உறுதியாகவில்லை. பள்ளியில் கேளுங்கள்."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/pre-sc"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "medium",
+    "notes": "Eligibility from myscheme (OFFICIAL). Current amounts UNVERIFIED: myscheme lists ₹225/₹525 per month + books grant, but MoSJE moved to a consolidated allowance from 2022-23 and socialjustice.gov.in was down (503), so no amount is shown. TN application route (school HM vs ADTW/UMIS) and window UNVERIFIED. Whether TN extends it to SCC is UNVERIFIED."
+  },
+  {
+    "id": "pre-matric-minorities",
+    "name": {
+      "en": "Pre-Matric Scholarship for Minorities (Class 9–10)",
+      "ta": "சிறுபான்மையினர் மாணவர்களுக்கான 9–10ஆம் வகுப்பு கல்வி உதவித்தொகை"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "school",
+    "department": "Ministry of Minority Affairs; in Tamil Nadu coordinated by the Minorities Welfare wing (BC, MBC & Minorities Welfare Dept)",
+    "benefit": {
+      "en": "School admission fee (up to ₹500) and tuition fee (up to ₹3,500) a year, plus ₹1,000 a year (₹6,000 if in a hostel). 2024-25 rates.",
+      "ta": "ஆண்டுக்கு சேர்க்கைக் கட்டணம் (₹500 வரை), கல்விக் கட்டணம் (₹3,500 வரை), மேலும் ₹1,000 (விடுதியில் இருந்தால் ₹6,000). 2024-25 விகிதம்."
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Minority religion",
+          "ta": "சிறுபான்மை மதம்"
+        },
+        "field": "religion",
+        "op": "in",
+        "value": [
+          "muslim",
+          "christian",
+          "sikh",
+          "buddhist",
+          "parsi",
+          "jain"
+        ]
+      },
+      {
+        "label": {
+          "en": "Studying Class 9 or 10",
+          "ta": "9 அல்லது 10ஆம் வகுப்பு"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_9",
+          "class_10"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹1 lakh",
+          "ta": "குடும்ப வருமானம் ₹1 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 100000
+      },
+      {
+        "label": {
+          "en": "50% or more in last exam",
+          "ta": "கடந்த தேர்வில் 50% அல்லது அதற்கு மேல்"
+        },
+        "field": "last_exam_percent",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "documents": [
+      {
+        "en": "Religion self-declaration or community certificate",
+        "ta": "மத சுய உறுதிமொழி அல்லது சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "Last year's mark sheet",
+        "ta": "கடந்த ஆண்டு மதிப்பெண் சான்றிதழ்"
+      },
+      {
+        "en": "School bonafide certificate",
+        "ta": "பள்ளி படிப்புச் சான்றிதழ் (Bonafide)"
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account",
+        "ta": "வங்கிக் கணக்கு"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://scholarships.gov.in",
+      "steps": [
+        {
+          "en": "Register on the National Scholarship Portal (scholarships.gov.in).",
+          "ta": "தேசிய உதவித்தொகை இணையதளத்தில் (scholarships.gov.in) பதிவு செய்யுங்கள்."
+        },
+        {
+          "en": "Fill the Pre-Matric (Minorities) form and upload your documents.",
+          "ta": "சிறுபான்மையினர் Pre-Matric படிவத்தை நிரப்பி ஆவணங்களைப் பதிவேற்றுங்கள்."
+        },
+        {
+          "en": "Ask your school to verify your application.",
+          "ta": "உங்கள் விண்ணப்பத்தை சரிபார்க்க பள்ளியிடம் கேளுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "unknown",
+      "closes_on": null,
+      "note": {
+        "en": "2026-27 dates not confirmed. Seats are limited and lower-income families get first preference.",
+        "ta": "2026-27 தேதிகள் உறுதியாகவில்லை. இடங்கள் குறைவு; குறைந்த வருமானக் குடும்பங்களுக்கு முன்னுரிமை."
+      }
+    },
+    "sources": [
+      "https://cms.tn.gov.in/cms_migrated/document/docfiles/mw_e_pn_2024_25.pdf",
+      "https://www.myscheme.gov.in/schemes/presm"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "medium",
+    "notes": "Rates from TN Minorities Policy Note 2024-25 (OFFICIAL) and may be out of date. 2026-27 window and document list UNVERIFIED. Selection: fixed slots, poverty-weighted, 30% for girls. Classes 1-8 discontinued from 2022-23."
+  },
+  {
+    "id": "adtw-exam-fee",
+    "name": {
+      "en": "Public Exam Fee for Class 10 & 12 (SC/ST/SCC)",
+      "ta": "10, 12ஆம் வகுப்பு பொதுத் தேர்வுக் கட்டணம் (ஆதிதிராவிடர் நலத்துறை)"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "school",
+    "department": "Adi Dravidar & Tribal Welfare Dept, Govt of Tamil Nadu",
+    "benefit": {
+      "en": "Your full Class 10 or Class 12 public exam fee is paid for you",
+      "ta": "10 அல்லது 12ஆம் வகுப்பு பொதுத் தேர்வுக் கட்டணம் முழுவதும் அரசே செலுத்தும்"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "SC, ST or SCC community",
+          "ta": "SC, ST அல்லது SCC பிரிவு"
+        },
+        "field": "community",
+        "op": "in",
+        "value": [
+          "SC",
+          "ST",
+          "SCC"
+        ]
+      },
+      {
+        "label": {
+          "en": "Writing Class 10 or 12 public exam",
+          "ta": "10 அல்லது 12ஆம் வகுப்பு பொதுத் தேர்வு"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_10",
+          "class_12"
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "en": "Aadhaar card or other ID",
+        "ta": "ஆதார் அட்டை அல்லது வேறு அடையாள அட்டை"
+      },
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Public exam registration slip",
+        "ta": "பொதுத் தேர்வுப் பதிவுச் சீட்டு"
+      }
+    ],
+    "apply": {
+      "mode": "offline",
+      "portal_url": null,
+      "steps": [
+        {
+          "en": "Tell your school headmaster you belong to SC, ST or SCC when you register for the public exam.",
+          "ta": "பொதுத் தேர்வுக்குப் பதிவு செய்யும்போது நீங்கள் SC / ST / SCC என்று தலைமை ஆசிரியரிடம் சொல்லுங்கள்."
+        },
+        {
+          "en": "Give your community certificate to the school.",
+          "ta": "சாதிச் சான்றிதழைப் பள்ளியில் கொடுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "unknown",
+      "closes_on": null,
+      "note": {
+        "en": "Done at public exam registration time, through your school. No income limit.",
+        "ta": "பொதுத் தேர்வுப் பதிவு நேரத்தில் பள்ளி மூலம். வருமான வரம்பு இல்லை."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/adtwspe"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "OFFICIAL (myscheme): no income limit. Usually automatic through the school. Exact dates UNVERIFIED. The related ADTW 'Free Education up to 12th' tuition scheme (myscheme adtwsfe) is not seeded: its income limit is UNVERIFIED."
+  },
+  {
+    "id": "free-bicycle",
+    "name": {
+      "en": "Free Bicycle Scheme (Class 11)",
+      "ta": "விலையில்லா மிதிவண்டி திட்டம் (11ஆம் வகுப்பு)"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "school",
+    "department": "Govt of Tamil Nadu (BC, MBC & Minorities Welfare Dept with School Education Dept)",
+    "benefit": {
+      "en": "A free bicycle, given through your school",
+      "ta": "பள்ளி மூலம் விலையில்லா மிதிவண்டி"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Studying Class 11",
+          "ta": "11ஆம் வகுப்பு படிக்கிறீர்கள்"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_11"
+        ]
+      },
+      {
+        "label": {
+          "en": "Government or aided school",
+          "ta": "அரசு அல்லது அரசு உதவி பெறும் பள்ளி"
+        },
+        "field": "current_school_type",
+        "op": "in",
+        "value": [
+          "govt",
+          "govt_aided"
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "en": "No form needed; the school gives it",
+        "ta": "படிவம் தேவையில்லை; பள்ளியே வழங்கும்"
+      }
+    ],
+    "apply": {
+      "mode": "automatic",
+      "portal_url": null,
+      "steps": [
+        {
+          "en": "Nothing to apply. If you have not received it in Class 11, ask your class teacher.",
+          "ta": "விண்ணப்பிக்க வேண்டியதில்லை. 11ஆம் வகுப்பில் கிடைக்கவில்லை என்றால் வகுப்பு ஆசிரியரிடம் கேளுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "rolling",
+      "closes_on": null,
+      "note": {
+        "en": "Given through schools during Class 11.",
+        "ta": "11ஆம் வகுப்பின்போது பள்ளிகள் மூலம் வழங்கப்படும்."
+      }
+    },
+    "sources": [
+      "https://www.bcw.tn.gov.in/files/1780900126_2025-2026_compressed%20(1).pdf",
+      "https://news.careers360.com/tamil-nadu-education-budget-2026-27-breakfast-15-lakh-laptop-college-students-hostel-school-infra-upgrade-class-11-cycles-tvk-govt/amp"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "medium",
+    "notes": "Policy Note 2025-26 (OFFICIAL) lists BC/MBC/DNC students; 2026-27 budget reporting (NEWS) says all Class 11 students in govt and aided schools, so no community condition is encoded (UNVERIFIED). 'Partially aided' schools are folded into govt_aided. In-kind benefit, automatic."
+  },
+  {
+    "id": "pudhumai-penn",
+    "name": {
+      "en": "Pudhumai Penn",
+      "ta": "புதுமைப் பெண் திட்டம்"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "Social Welfare & Women Empowerment Dept, Govt of Tamil Nadu",
+    "benefit": {
+      "en": "₹1,000 every month until you finish your course, on top of other scholarships",
+      "ta": "படிப்பு முடியும் வரை மாதம் ₹1,000; மற்ற உதவித்தொகைகளுடன் சேர்த்து கிடைக்கும்"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Girl student",
+          "ta": "மாணவி"
+        },
+        "field": "gender",
+        "op": "in",
+        "value": [
+          "female"
+        ]
+      },
+      {
+        "label": {
+          "en": "Class 6–12 in government school",
+          "ta": "6–12ஆம் வகுப்பு அரசுப் பள்ளியில்"
+        },
+        "field": "school_6_to_12",
+        "op": "in",
+        "value": [
+          "govt_all",
+          "govt_aided_tamil_all"
+        ]
+      },
+      {
+        "label": {
+          "en": "Now in UG, diploma or ITI",
+          "ta": "இப்போது பட்டம் / டிப்ளமோ / ITI"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "ug",
+          "diploma",
+          "iti"
+        ]
+      },
+      {
+        "label": {
+          "en": "Your first college course",
+          "ta": "இது உங்கள் முதல் மேற்படிப்பு"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Photo",
+        "ta": "புகைப்படம்"
+      },
+      {
+        "en": "Residence proof",
+        "ta": "இருப்பிடச் சான்று"
+      },
+      {
+        "en": "Class 6–12 school records / Transfer Certificate",
+        "ta": "6–12ஆம் வகுப்பு பள்ளிச் சான்றுகள் / மாற்றுச் சான்றிதழ் (TC)"
+      },
+      {
+        "en": "Bank account in your name",
+        "ta": "உங்கள் பெயரில் வங்கிக் கணக்கு"
+      }
+    ],
+    "apply": {
+      "mode": "offline",
+      "portal_url": "https://umis.tn.gov.in",
+      "steps": [
+        {
+          "en": "Tell your college scholarship coordinator you studied Class 6–12 in a government school.",
+          "ta": "6–12ஆம் வகுப்பு அரசுப் பள்ளியில் படித்தேன் என்று கல்லூரி உதவித்தொகை ஒருங்கிணைப்பாளரிடம் சொல்லுங்கள்."
+        },
+        {
+          "en": "Give them your documents. The college applies for you on UMIS; students cannot apply on their own.",
+          "ta": "ஆவணங்களை அவர்களிடம் கொடுங்கள். கல்லூரியே UMIS-இல் உங்களுக்காக விண்ணப்பிக்கும்; மாணவர்கள் தனியாக விண்ணப்பிக்க முடியாது."
+        },
+        {
+          "en": "Open a bank account (zero-balance accounts at Indian Bank, Canara Bank, IOB or SBI) for the monthly money.",
+          "ta": "மாதத் தொகைக்கு வங்கிக் கணக்கு திறக்கவும் (Indian Bank, Canara Bank, IOB, SBI-இல் இருப்பு இல்லா கணக்கு)."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "rolling",
+      "closes_on": null,
+      "note": {
+        "en": "Any time after you join college. Your college confirms you every six months.",
+        "ta": "கல்லூரியில் சேர்ந்த பிறகு எப்போது வேண்டுமானாலும். ஆறு மாதத்துக்கு ஒருமுறை கல்லூரி உறுதிப்படுத்தும்."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/pudhumai-penn-scheme",
+      "https://umis.tn.gov.in",
+      "https://dte.tn.gov.in/pudhumai-penn-schemes",
+      "https://cms.tn.gov.in/cms_migrated/document/docfiles/mw_e_pn_2024_25.pdf"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "No income test. Govt-aided Tamil-medium schools added from Dec 2024 (G.O. number UNVERIFIED). Transgender students reportedly included by a later order (NEWS, verify) - not encoded. RTE-quota private school students and partial govt-school history are UNVERIFIED edge cases. Continuing under the TVK government (May 2026 instalment, NEWS)."
+  },
+  {
+    "id": "tamizh-pudhalvan",
+    "name": {
+      "en": "Tamizh Pudhalvan",
+      "ta": "தமிழ்ப் புதல்வன் திட்டம்"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "Social Welfare & Women Empowerment Dept, Govt of Tamil Nadu",
+    "benefit": {
+      "en": "₹1,000 every month while you study",
+      "ta": "படிக்கும்போது மாதம் ₹1,000"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Boy student",
+          "ta": "மாணவன்"
+        },
+        "field": "gender",
+        "op": "in",
+        "value": [
+          "male"
+        ]
+      },
+      {
+        "label": {
+          "en": "Studied in a government school",
+          "ta": "அரசுப் பள்ளியில் படித்தவர்"
+        },
+        "field": "school_6_to_12",
+        "op": "in",
+        "value": [
+          "govt_all",
+          "govt_aided_tamil_all"
+        ]
+      },
+      {
+        "label": {
+          "en": "Now in UG, diploma or ITI",
+          "ta": "இப்போது பட்டம் / டிப்ளமோ / ITI"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "ug",
+          "diploma",
+          "iti"
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "en": "Aadhaar card (or enrolment slip with another ID)",
+        "ta": "ஆதார் அட்டை (அல்லது பதிவுச் சீட்டு + வேறு அடையாள அட்டை)"
+      },
+      {
+        "en": "School certificates",
+        "ta": "பள்ளிச் சான்றிதழ்கள்"
+      },
+      {
+        "en": "Bank passbook",
+        "ta": "வங்கி பாஸ்புக்"
+      }
+    ],
+    "apply": {
+      "mode": "offline",
+      "portal_url": "https://umis.tn.gov.in",
+      "steps": [
+        {
+          "en": "Tell your college you studied in a government school (or an aided school in Tamil medium).",
+          "ta": "அரசுப் பள்ளியில் (அல்லது தமிழ் வழி உதவி பெறும் பள்ளியில்) படித்தேன் என்று கல்லூரியில் சொல்லுங்கள்."
+        },
+        {
+          "en": "Give your documents. The college registers you on UMIS.",
+          "ta": "ஆவணங்களைக் கொடுங்கள். கல்லூரி உங்களை UMIS-இல் பதிவு செய்யும்."
+        },
+        {
+          "en": "Helpline: 14417.",
+          "ta": "உதவி எண்: 14417."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "rolling",
+      "closes_on": null,
+      "note": {
+        "en": "Any time after you join college.",
+        "ta": "கல்லூரியில் சேர்ந்த பிறகு எப்போது வேண்டுமானாலும்."
+      }
+    },
+    "sources": [
+      "https://stationeryprinting.tn.gov.in/extraordinary/2024/230_Ex_II_1_2024.pdf",
+      "https://dte.tn.gov.in/tamil-pudhalvan",
+      "https://umis.tn.gov.in"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "G.O. Ms. No. 42, SWWE, 18 Jul 2024 (OFFICIAL): boys from Government Schools (both medium) / Government Aided Schools (Tamil medium only), in Graduation / Diploma / ITI. The Class 6-12 span is from news and the DTE page. No income test reported. Transgender inclusion (NEWS) not encoded."
+  },
+  {
+    "id": "post-matric-sc-st",
+    "name": {
+      "en": "Post-Matric Scholarship for SC / ST / SCC",
+      "ta": "SC / ST / SCC மாணவர்களுக்கான மேற்படிப்பு கல்வி உதவித்தொகை (போஸ்ட் மெட்ரிக்)"
+    },
+    "level": "shared",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "Ministry of Social Justice & Empowerment (SC) and Ministry of Tribal Affairs (ST); run in Tamil Nadu by the Adi Dravidar & Tribal Welfare Dept",
+    "benefit": {
+      "en": "Your compulsory college fees, plus a yearly allowance (amount depends on your course and whether you stay in a hostel)",
+      "ta": "கட்டாயக் கல்லூரிக் கட்டணங்கள், கூடவே ஆண்டு உதவித்தொகை (படிப்பு, விடுதி இருப்பதைப் பொறுத்து தொகை மாறும்)"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "SC, ST or SCC community",
+          "ta": "SC, ST அல்லது SCC பிரிவு"
+        },
+        "field": "community",
+        "op": "in",
+        "value": [
+          "SC",
+          "ST",
+          "SCC"
+        ]
+      },
+      {
+        "label": {
+          "en": "Class 11 or higher",
+          "ta": "11ஆம் வகுப்பு அல்லது அதற்கு மேல்"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_11",
+          "class_12",
+          "iti",
+          "diploma",
+          "ug",
+          "pg",
+          "phd"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹2.5 lakh",
+          "ta": "குடும்ப வருமானம் ₹2.5 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 250000
+      },
+      {
+        "label": {
+          "en": "No other scholarship or stipend",
+          "ta": "வேறு உதவித்தொகை / ஊக்கத்தொகை இல்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate from the revenue office (not self-declared)",
+        "ta": "வருவாய் அலுவலக வருமானச் சான்றிதழ் (சுய உறுதிமொழி அல்ல)"
+      },
+      {
+        "en": "Previous year mark sheet",
+        "ta": "கடந்த ஆண்டு மதிப்பெண் சான்றிதழ்"
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account linked to Aadhaar",
+        "ta": "ஆதாருடன் இணைந்த வங்கிக் கணக்கு"
+      },
+      {
+        "en": "Working mobile number",
+        "ta": "செயல்பாட்டில் உள்ள கைபேசி எண்"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://umis.tn.gov.in",
+      "steps": [
+        {
+          "en": "Apply online on UMIS (umis.tn.gov.in) when the window opens.",
+          "ta": "விண்ணப்பம் திறந்ததும் UMIS (umis.tn.gov.in) இணையதளத்தில் ஆன்லைனில் விண்ணப்பிக்கவும்."
+        },
+        {
+          "en": "Upload your documents.",
+          "ta": "ஆவணங்களைப் பதிவேற்றுங்கள்."
+        },
+        {
+          "en": "Your school or college verifies and approves it.",
+          "ta": "உங்கள் பள்ளி / கல்லூரி சரிபார்த்து ஒப்புதல் அளிக்கும்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "unknown",
+      "closes_on": null,
+      "note": {
+        "en": "Usually opens in Aug–Sep on UMIS. 2026-27 dates not confirmed yet.",
+        "ta": "பொதுவாக ஆகஸ்ட்–செப்டம்பரில் UMIS-இல் திறக்கும். 2026-27 தேதிகள் இன்னும் உறுதியாகவில்லை."
+      }
+    },
+    "sources": [
+      "https://umis.tn.gov.in",
+      "https://dte.tn.gov.in/schemes-engineering-students",
+      "https://www.myscheme.gov.in/schemes/pmsfss",
+      "https://www.myscheme.gov.in/schemes/post-st"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "Income ≤ ₹2.5 L per DTE (OFFICIAL). Some aggregators say ₹2 L for SCC - UNVERIFIED, ₹2.5 L used. The UMIS banner on 21 Nov 2026 still showed the 2025-26 notice (opened 15 Aug 2025), so the 2026-27 window is UNVERIFIED. Watch: a proposed rise of the SC ceiling to ₹4.5 L is not in force. Documents from DT Next (NEWS)."
+  },
+  {
+    "id": "post-matric-bc-mbc",
+    "name": {
+      "en": "Post-Matric Scholarship for BC / MBC / DNC",
+      "ta": "BC / MBC / DNC மாணவர்களுக்கான மேற்படிப்பு கல்வி உதவித்தொகை (போஸ்ட் மெட்ரிக்)"
+    },
+    "level": "shared",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "BC Welfare Dept and MBC & DNC Welfare Dept, Govt of Tamil Nadu (PM-YASASVI, centrally sponsored)",
+    "benefit": {
+      "en": "Tuition and other college fees covered, plus ₹4,000 a year if you stay in the college hostel",
+      "ta": "கல்விக் கட்டணமும் மற்ற கல்லூரிக் கட்டணங்களும்; கல்லூரி விடுதியில் இருந்தால் ஆண்டுக்கு கூடுதலாக ₹4,000"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "BC, BCM, MBC or DNC community",
+          "ta": "BC, BCM, MBC அல்லது DNC பிரிவு"
+        },
+        "field": "community",
+        "op": "in",
+        "value": [
+          "BC",
+          "BCM",
+          "MBC",
+          "DNC"
+        ]
+      },
+      {
+        "label": {
+          "en": "In diploma, UG, PG or research",
+          "ta": "டிப்ளமோ / பட்டம் / முதுகலை / ஆய்வு"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "diploma",
+          "ug",
+          "pg",
+          "phd"
+        ]
+      },
+      {
+        "label": {
+          "en": "Government or aided college",
+          "ta": "அரசு அல்லது உதவி பெறும் கல்லூரி"
+        },
+        "field": "institution_type",
+        "op": "in",
+        "value": [
+          "govt",
+          "govt_aided",
+          "private_self_financing"
+        ]
+      },
+      {
+        "label": {
+          "en": "Income up to ₹2.5 lakh (some exempt)",
+          "ta": "வருமானம் ₹2.5 லட்சம் வரை (சிலருக்கு விலக்கு)"
+        },
+        "any": [
+          {
+            "field": "income",
+            "op": "lte",
+            "value": 250000
+          },
+          {
+            "all": [
+              {
+                "field": "first_graduate",
+                "op": "eq",
+                "value": true
+              },
+              {
+                "field": "education_level",
+                "op": "in",
+                "value": [
+                  "ug"
+                ]
+              },
+              {
+                "field": "course_type",
+                "op": "in",
+                "value": [
+                  "arts_science"
+                ]
+              },
+              {
+                "field": "institution_type",
+                "op": "in",
+                "value": [
+                  "govt",
+                  "govt_aided"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": {
+          "en": "Self-financing college: government quota seat",
+          "ta": "சுயநிதிக் கல்லூரி: அரசு ஒதுக்கீட்டு இடம்"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "First graduate certificate",
+        "ta": "முதல் தலைமுறை பட்டதாரி சான்றிதழ்",
+        "only_if": {
+          "field": "first_graduate",
+          "op": "eq",
+          "value": true
+        }
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account",
+        "ta": "வங்கிக் கணக்கு"
+      },
+      {
+        "en": "College bonafide certificate",
+        "ta": "கல்லூரி படிப்புச் சான்றிதழ் (Bonafide)"
+      },
+      {
+        "en": "Mark sheets",
+        "ta": "மதிப்பெண் சான்றிதழ்கள்"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://umis.tn.gov.in",
+      "steps": [
+        {
+          "en": "Apply on UMIS (umis.tn.gov.in) when the window opens, with help from your college scholarship coordinator.",
+          "ta": "விண்ணப்பம் திறந்ததும் கல்லூரி உதவித்தொகை ஒருங்கிணைப்பாளர் உதவியுடன் UMIS-இல் விண்ணப்பிக்கவும்."
+        },
+        {
+          "en": "Upload your documents.",
+          "ta": "ஆவணங்களைப் பதிவேற்றுங்கள்."
+        },
+        {
+          "en": "For questions, contact your District BC & Minorities Welfare Officer.",
+          "ta": "சந்தேகங்களுக்கு மாவட்ட பிற்படுத்தப்பட்டோர் மற்றும் சிறுபான்மையினர் நல அலுவலரைத் தொடர்பு கொள்ளுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "closed",
+      "closes_on": "2026-10-21",
+      "note": {
+        "en": "2026-27 applications closed on 21 Oct 2026 (news report). Watch UMIS for next year's notice.",
+        "ta": "2026-27 விண்ணப்பம் 21 அக்டோபர் 2026 அன்று முடிந்தது (செய்தி). அடுத்த ஆண்டு அறிவிப்புக்கு UMIS-ஐப் பாருங்கள்."
+      }
+    },
+    "sources": [
+      "https://www.bcw.tn.gov.in/files/1780900126_2025-2026_compressed%20(1).pdf",
+      "https://www.dtnext.in/news/tamilnadu/tamil-nadu-bc-mbc-minority-scholarship-portal-open-till-oct-21"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "medium",
+    "notes": "Structure and ₹2.5 L limit from TN BCW Policy Note 2025-26 (OFFICIAL). The per-course mapping is the researcher's best reading of an ambiguous table: first-graduate UG arts & science in govt/aided colleges has no income test; otherwise income ≤ ₹2.5 L. Self-financing colleges only under govt quota (manual). Ignore myscheme 'fesfpc' (shows outdated ₹1 L). Deadline 21 Oct 2026 from news."
+  },
+  {
+    "id": "first-graduate-concession",
+    "name": {
+      "en": "First Graduate Tuition Fee Concession",
+      "ta": "முதல் தலைமுறை பட்டதாரி கல்விக் கட்டணச் சலுகை"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "Higher Education Dept / Directorate of Technical Education, Govt of Tamil Nadu",
+    "benefit": {
+      "en": "A tuition fee concession; the amount depends on your college type",
+      "ta": "கல்விக் கட்டணச் சலுகை; தொகை கல்லூரி வகையைப் பொறுத்தது"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "First graduate in your family",
+          "ta": "குடும்பத்தில் முதல் பட்டதாரி"
+        },
+        "field": "first_graduate",
+        "op": "eq",
+        "value": true
+      },
+      {
+        "label": {
+          "en": "Seat through government counselling",
+          "ta": "அரசு கலந்தாய்வு மூலம் இடம்"
+        },
+        "field": "admission_route",
+        "op": "in",
+        "value": [
+          "govt_counselling",
+          "govt_school_7_5_quota"
+        ]
+      },
+      {
+        "label": {
+          "en": "Professional course (engineering, medical…)",
+          "ta": "தொழில்முறைப் படிப்பு (பொறியியல், மருத்துவம்…)"
+        },
+        "field": "course_type",
+        "op": "in",
+        "value": [
+          "engineering",
+          "medical",
+          "other_professional"
+        ]
+      },
+      {
+        "label": {
+          "en": "SC/ST: not with post-matric scholarship",
+          "ta": "SC/ST: போஸ்ட் மெட்ரிக் உதவித்தொகையுடன் அல்ல"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "'No Graduate' certificate from the revenue office",
+        "ta": "வருவாய் அலுவலகத்தின் 'பட்டதாரி இல்லை' சான்றிதழ்"
+      },
+      {
+        "en": "Admission order",
+        "ta": "சேர்க்கை ஆணை"
+      }
+    ],
+    "apply": {
+      "mode": "automatic",
+      "portal_url": "https://dte.tn.gov.in/schemes-engineering-students",
+      "steps": [
+        {
+          "en": "Get a 'No Graduate' certificate from your revenue office before counselling.",
+          "ta": "கலந்தாய்வுக்கு முன் வருவாய் அலுவலகத்தில் 'பட்டதாரி இல்லை' சான்றிதழ் வாங்குங்கள்."
+        },
+        {
+          "en": "Submit it at counselling. The college charges you only the balance fee.",
+          "ta": "கலந்தாய்வில் சமர்ப்பியுங்கள். கல்லூரி மீதிக் கட்டணத்தை மட்டுமே வாங்கும்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "rolling",
+      "closes_on": null,
+      "note": {
+        "en": "Claimed at counselling time with your 'No Graduate' certificate.",
+        "ta": "கலந்தாய்வின்போது 'பட்டதாரி இல்லை' சான்றிதழுடன் பெறலாம்."
+      }
+    },
+    "sources": [
+      "https://dte.tn.gov.in/schemes-engineering-students",
+      "https://www.dtnext.in/news/tamilnadu/tn-issues-guidelines-for-first-graduate-scholarship-scheme-807567"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "Eligibility high (DTE OFFICIAL). Amount conflict: DTE lists fixed engineering amounts by college type (₹2,000-₹27,500/yr); 2024 news says the state bears the entire tuition fee - so the amount is shown generically. Students under the 7.5% quota are covered by govt-school-7-5-quota instead (admission_route excludes them). Sibling who already availed may make you ineligible (secondary, not encoded). Non-engineering streams UNVERIFIED. 7.5% govt-school quota seats are allotted through the same government counselling, so they count as government quota here (fees for those seats are already covered by the 7.5% scheme)."
+  },
+  {
+    "id": "govt-school-7-5-quota",
+    "name": {
+      "en": "7.5% Govt School Quota: Full Fee Coverage",
+      "ta": "7.5% அரசுப் பள்ளி இட ஒதுக்கீடு – முழுக் கட்டண விலக்கு"
+    },
+    "level": "state",
+    "states": [
+      "TN"
+    ],
+    "segment": "college",
+    "department": "Higher Education Dept (engineering, agriculture, law…) and Health Dept (medical), Govt of Tamil Nadu",
+    "benefit": {
+      "en": "Your full tuition fee is paid by the government",
+      "ta": "முழுக் கல்விக் கட்டணத்தையும் அரசே செலுத்தும்"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Class 6–12 in TN government school",
+          "ta": "6–12ஆம் வகுப்பு தமிழ்நாடு அரசுப் பள்ளியில்"
+        },
+        "field": "school_6_to_12",
+        "op": "in",
+        "value": [
+          "govt_all"
+        ]
+      },
+      {
+        "label": {
+          "en": "Seat under the 7.5% quota",
+          "ta": "7.5% ஒதுக்கீட்டில் இடம்"
+        },
+        "field": "admission_route",
+        "op": "in",
+        "value": [
+          "govt_school_7_5_quota"
+        ]
+      },
+      {
+        "label": {
+          "en": "Professional course (engineering, medical…)",
+          "ta": "தொழில்முறைப் படிப்பு (பொறியியல், மருத்துவம்…)"
+        },
+        "field": "course_type",
+        "op": "in",
+        "value": [
+          "engineering",
+          "medical",
+          "other_professional"
+        ]
+      }
+    ],
+    "documents": [
+      {
+        "en": "Certificate of study in govt school (Class 6–12)",
+        "ta": "அரசுப் பள்ளியில் படித்ததற்கான சான்றிதழ் (6–12ஆம் வகுப்பு)"
+      },
+      {
+        "en": "Transfer Certificate",
+        "ta": "மாற்றுச் சான்றிதழ் (TC)"
+      },
+      {
+        "en": "Mark sheets",
+        "ta": "மதிப்பெண் சான்றிதழ்கள்"
+      }
+    ],
+    "apply": {
+      "mode": "automatic",
+      "portal_url": "https://dte.tn.gov.in/reservation-scheme",
+      "steps": [
+        {
+          "en": "Claim the 7.5% government school quota when you register for counselling (TNEA, or medical counselling for NEET).",
+          "ta": "கலந்தாய்வுக்குப் பதிவு செய்யும்போது (TNEA, அல்லது NEET மருத்துவக் கலந்தாய்வு) 7.5% அரசுப் பள்ளி ஒதுக்கீட்டைத் தேர்வு செய்யுங்கள்."
+        },
+        {
+          "en": "If you get a seat under this quota, the fee is covered automatically.",
+          "ta": "இந்த ஒதுக்கீட்டில் இடம் கிடைத்தால் கட்டணம் தானாகவே ஈடுசெய்யப்படும்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "rolling",
+      "closes_on": null,
+      "note": {
+        "en": "Claimed during counselling registration.",
+        "ta": "கலந்தாய்வுப் பதிவின்போது தேர்வு செய்ய வேண்டும்."
+      }
+    },
+    "sources": [
+      "https://dte.tn.gov.in/reservation-scheme",
+      "https://www.bcw.tn.gov.in/files/1780900126_2025-2026_compressed%20(1).pdf"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "Eligibility high (DTE OFFICIAL): 'studied from Class 6 to Class 12 in a Tamil Nadu Government School'. Govt-aided schools UNVERIFIED (DTE text says Government School), so only govt_all passes. Fee items beyond tuition (hostel, transport, NBA fees) from news, not encoded. G.O. (Ms) No. 167, HE, 31.08.2021 could not be fetched. 2025-26: 40,653 engineering beneficiaries."
+  },
+  {
+    "id": "post-matric-minorities",
+    "name": {
+      "en": "Post-Matric Scholarship for Minorities",
+      "ta": "சிறுபான்மையினர் மாணவர்களுக்கான மேற்படிப்பு கல்வி உதவித்தொகை (போஸ்ட் மெட்ரிக்)"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "college",
+    "department": "Ministry of Minority Affairs; in Tamil Nadu routed through the BC, MBC & Minorities Welfare Dept",
+    "benefit": {
+      "en": "Admission and tuition fees up to a cap, plus a maintenance allowance for 10 months",
+      "ta": "வரம்புக்குள் சேர்க்கை, கல்விக் கட்டணம்; கூடவே 10 மாதங்களுக்கு பராமரிப்புத் தொகை"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Minority religion",
+          "ta": "சிறுபான்மை மதம்"
+        },
+        "field": "religion",
+        "op": "in",
+        "value": [
+          "muslim",
+          "christian",
+          "sikh",
+          "buddhist",
+          "parsi",
+          "jain"
+        ]
+      },
+      {
+        "label": {
+          "en": "Class 11 or higher",
+          "ta": "11ஆம் வகுப்பு அல்லது அதற்கு மேல்"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "class_11",
+          "class_12",
+          "iti",
+          "diploma",
+          "ug",
+          "pg",
+          "phd"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹2 lakh",
+          "ta": "குடும்ப வருமானம் ₹2 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 200000
+      },
+      {
+        "label": {
+          "en": "50% or more in last exam",
+          "ta": "கடந்த தேர்வில் 50% அல்லது அதற்கு மேல்"
+        },
+        "field": "last_exam_percent",
+        "op": "gte",
+        "value": 50
+      }
+    ],
+    "documents": [
+      {
+        "en": "Religion self-declaration or community certificate",
+        "ta": "மத சுய உறுதிமொழி அல்லது சாதிச் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "Last exam mark sheet",
+        "ta": "கடந்த தேர்வு மதிப்பெண் சான்றிதழ்"
+      },
+      {
+        "en": "Bonafide certificate",
+        "ta": "படிப்புச் சான்றிதழ் (Bonafide)"
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank account",
+        "ta": "வங்கிக் கணக்கு"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://umis.tn.gov.in",
+      "steps": [
+        {
+          "en": "In Tamil Nadu, apply on UMIS (umis.tn.gov.in) when the window opens; in other states, on scholarships.gov.in.",
+          "ta": "தமிழ்நாட்டில் விண்ணப்பம் திறந்ததும் UMIS-இல் விண்ணப்பிக்கவும்; மற்ற மாநிலங்களில் scholarships.gov.in-இல்."
+        },
+        {
+          "en": "Upload your documents and get your institution to verify.",
+          "ta": "ஆவணங்களைப் பதிவேற்றி உங்கள் கல்வி நிறுவனத்தில் சரிபார்க்கச் செய்யுங்கள்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "closed",
+      "closes_on": "2026-10-21",
+      "note": {
+        "en": "2026-27 applications in Tamil Nadu closed on 21 Oct 2026 (news report). Seats are limited; lower income gets preference.",
+        "ta": "தமிழ்நாட்டில் 2026-27 விண்ணப்பம் 21 அக்டோபர் 2026 அன்று முடிந்தது (செய்தி). இடங்கள் குறைவு; குறைந்த வருமானத்துக்கு முன்னுரிமை."
+      }
+    },
+    "sources": [
+      "https://cms.tn.gov.in/cms_migrated/document/docfiles/mw_e_pn_2024_25.pdf",
+      "https://www.dtnext.in/news/tamilnadu/tamil-nadu-bc-mbc-minority-scholarship-portal-open-till-oct-21"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "medium",
+    "notes": "Rules from TN Minorities Policy Note 2024-25 (OFFICIAL); its rate table is laid out ambiguously, so no amounts are shown. myscheme page /schemes/postsm returned 404 on 21 Nov 2026 - monitor for central changes. 2026-27 TN deadline from news. Selection: fixed quota, poverty-weighted, 30% girls."
+  },
+  {
+    "id": "pm-usp-csss",
+    "name": {
+      "en": "PM-USP Central Sector Scholarship for College Students",
+      "ta": "மத்திய அரசின் கல்லூரி மாணவர் உதவித்தொகை (PM-USP CSSS)"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "college",
+    "department": "Ministry of Education (Dept of Higher Education)",
+    "benefit": {
+      "en": "₹12,000 a year in UG (first 3 years), ₹20,000 a year in PG",
+      "ta": "பட்டப்படிப்பில் ஆண்டுக்கு ₹12,000 (முதல் 3 ஆண்டுகள்), முதுகலையில் ஆண்டுக்கு ₹20,000"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Regular UG or PG course",
+          "ta": "வழக்கமான பட்டம் / முதுகலை படிப்பு"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "ug",
+          "pg"
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹4.5 lakh",
+          "ta": "குடும்ப வருமானம் ₹4.5 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 450000
+      },
+      {
+        "label": {
+          "en": "Class 12 above 80th percentile",
+          "ta": "12ஆம் வகுப்பில் முதல் 20% இடத்தில்"
+        },
+        "manual": true
+      },
+      {
+        "label": {
+          "en": "No other scholarship or fee waiver",
+          "ta": "வேறு உதவித்தொகை / கட்டண விலக்கு இல்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Class 12 mark sheet",
+        "ta": "12ஆம் வகுப்பு மதிப்பெண் சான்றிதழ்"
+      },
+      {
+        "en": "Income certificate",
+        "ta": "வருமானச் சான்றிதழ்"
+      },
+      {
+        "en": "Community certificate",
+        "ta": "சாதிச் சான்றிதழ்",
+        "only_if": {
+          "field": "community",
+          "op": "in",
+          "value": [
+            "SC",
+            "SCC",
+            "ST",
+            "BC",
+            "BCM",
+            "MBC",
+            "DNC"
+          ]
+        }
+      },
+      {
+        "en": "Disability certificate",
+        "ta": "மாற்றுத்திறனாளி சான்றிதழ்",
+        "only_if": {
+          "field": "disability_percent",
+          "op": "gte",
+          "value": 1
+        }
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://scholarships.gov.in",
+      "steps": [
+        {
+          "en": "Register on the National Scholarship Portal (scholarships.gov.in) and choose the Central Sector Scheme.",
+          "ta": "தேசிய உதவித்தொகை இணையதளத்தில் (scholarships.gov.in) பதிவு செய்து Central Sector Scheme-ஐத் தேர்வு செய்யுங்கள்."
+        },
+        {
+          "en": "Your college nodal officer verifies, then the state nodal agency.",
+          "ta": "கல்லூரி பொறுப்பு அலுவலர் சரிபார்ப்பார், பிறகு மாநில அலுவலகம்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "unknown",
+      "closes_on": null,
+      "note": {
+        "en": "Usually open on NSP between June and Oct/Nov. 2026-27 dates not confirmed.",
+        "ta": "பொதுவாக ஜூன் முதல் அக்டோபர்/நவம்பர் வரை NSP-இல் திறந்திருக்கும். 2026-27 தேதிகள் உறுதியாகவில்லை."
+      }
+    },
+    "sources": [
+      "https://scholarships.gov.in/public/schemeGuidelines/CSSS_GUIDLINES_06022024.pdf",
+      "https://www.myscheme.gov.in/schemes/csss-cus"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "Guidelines OFFICIAL. The app cannot compute the 80th percentile from raw marks (TN board cut-offs UNVERIFIED) - manual. Not for diploma or distance courses. Exclusive: a TN student taking post-matric, first-graduate or 7.5% quota fee benefits is not eligible. B.E./B.Tech get ₹20,000 in year 4. Renewal needs 50% marks + 75% attendance."
+  },
+  {
+    "id": "aicte-pragati",
+    "name": {
+      "en": "AICTE Pragati Scholarship for Girls",
+      "ta": "AICTE பிரகதி – மாணவிகளுக்கான உதவித்தொகை"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "college",
+    "department": "AICTE (Ministry of Education)",
+    "benefit": {
+      "en": "₹50,000 every year for fees, laptop, books and equipment",
+      "ta": "கட்டணம், கணினி, புத்தகம், உபகரணங்களுக்காக ஆண்டுக்கு ₹50,000"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Girl student",
+          "ta": "மாணவி"
+        },
+        "field": "gender",
+        "op": "in",
+        "value": [
+          "female"
+        ]
+      },
+      {
+        "label": {
+          "en": "Technical degree or diploma",
+          "ta": "தொழில்நுட்ப பட்டம் அல்லது டிப்ளமோ"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "ug",
+          "diploma"
+        ]
+      },
+      {
+        "label": {
+          "en": "AICTE-approved course",
+          "ta": "AICTE அங்கீகாரம் பெற்ற படிப்பு"
+        },
+        "field": "aicte_approved",
+        "op": "eq",
+        "value": true
+      },
+      {
+        "label": {
+          "en": "1st year, or 2nd year lateral",
+          "ta": "முதல் ஆண்டு, அல்லது லேட்டரல் 2ஆம் ஆண்டு"
+        },
+        "any": [
+          {
+            "field": "year_of_study",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "all": [
+              {
+                "field": "year_of_study",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "lateral_entry",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹8 lakh",
+          "ta": "குடும்ப வருமானம் ₹8 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 800000
+      },
+      {
+        "label": {
+          "en": "At most 2 girls per family",
+          "ta": "ஒரு குடும்பத்தில் அதிகபட்சம் 2 மாணவிகள்"
+        },
+        "manual": true
+      },
+      {
+        "label": {
+          "en": "Joined within 2 years of qualifying",
+          "ta": "தகுதித் தேர்வுக்குப் பின் 2 ஆண்டுக்குள் சேர்ந்தவர்"
+        },
+        "manual": true
+      },
+      {
+        "label": {
+          "en": "No other scholarship or stipend",
+          "ta": "வேறு உதவித்தொகை / ஊக்கத்தொகை இல்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Class 10 certificate",
+        "ta": "10ஆம் வகுப்புச் சான்றிதழ்"
+      },
+      {
+        "en": "Class 12 / ITI / diploma certificate",
+        "ta": "12ஆம் வகுப்பு / ITI / டிப்ளமோ சான்றிதழ்"
+      },
+      {
+        "en": "Family income certificate (Appendix II)",
+        "ta": "குடும்ப வருமானச் சான்றிதழ் (Appendix II)"
+      },
+      {
+        "en": "Study certificate from college (Appendix I)",
+        "ta": "கல்லூரி படிப்புச் சான்றிதழ் (Appendix I)"
+      },
+      {
+        "en": "Parent's declaration (Appendix III)",
+        "ta": "பெற்றோர் உறுதிமொழி (Appendix III)"
+      },
+      {
+        "en": "Category certificate",
+        "ta": "பிரிவுச் சான்றிதழ்",
+        "only_if": {
+          "field": "community",
+          "op": "in",
+          "value": [
+            "SC",
+            "SCC",
+            "ST",
+            "BC",
+            "BCM",
+            "MBC",
+            "DNC"
+          ]
+        }
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      },
+      {
+        "en": "Bank passbook",
+        "ta": "வங்கி பாஸ்புக்"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://scholarships.gov.in",
+      "steps": [
+        {
+          "en": "Apply on the National Scholarship Portal (scholarships.gov.in) in your first year.",
+          "ta": "முதல் ஆண்டில் தேசிய உதவித்தொகை இணையதளத்தில் (scholarships.gov.in) விண்ணப்பிக்கவும்."
+        },
+        {
+          "en": "Your college nodal officer verifies, then the state nodal officer.",
+          "ta": "கல்லூரி பொறுப்பு அலுவலர் சரிபார்ப்பார், பிறகு மாநில அலுவலர்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "closed",
+      "closes_on": "2026-10-31",
+      "note": {
+        "en": "2026-27 student applications closed on 31 Oct 2026. AICTE announces the next round on NSP.",
+        "ta": "2026-27 விண்ணப்பம் 31 அக்டோபர் 2026 அன்று முடிந்தது. அடுத்த சுற்றை AICTE, NSP-இல் அறிவிக்கும்."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/psgs-deg",
+      "https://www.myscheme.gov.in/schemes/psgs-dip",
+      "https://www.aicte-india.org/schemes/students-development-schemes"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "OFFICIAL: AICTE notification for 2026-27 dated 19.06.2026 - student deadline 31 Oct 2026, institute verification 15 Nov 2026; extensions possible. Number of awards and merit basis for 2026-27 UNVERIFIED. Max 4 years (3 for lateral)."
+  },
+  {
+    "id": "aicte-saksham",
+    "name": {
+      "en": "AICTE Saksham Scholarship for Specially-Abled Students",
+      "ta": "AICTE சக்ஷம் – மாற்றுத்திறனாளி மாணவர்களுக்கான உதவித்தொகை"
+    },
+    "level": "central",
+    "states": [
+      "ALL"
+    ],
+    "segment": "college",
+    "department": "AICTE (Ministry of Education)",
+    "benefit": {
+      "en": "₹50,000 every year while you study",
+      "ta": "படிக்கும்போது ஆண்டுக்கு ₹50,000"
+    },
+    "conditions": [
+      {
+        "label": {
+          "en": "Disability 40% or more",
+          "ta": "மாற்றுத்திறன் 40% அல்லது அதற்கு மேல்"
+        },
+        "field": "disability_percent",
+        "op": "gte",
+        "value": 40
+      },
+      {
+        "label": {
+          "en": "Technical degree or diploma",
+          "ta": "தொழில்நுட்ப பட்டம் அல்லது டிப்ளமோ"
+        },
+        "field": "education_level",
+        "op": "in",
+        "value": [
+          "ug",
+          "diploma"
+        ]
+      },
+      {
+        "label": {
+          "en": "AICTE-approved course",
+          "ta": "AICTE அங்கீகாரம் பெற்ற படிப்பு"
+        },
+        "field": "aicte_approved",
+        "op": "eq",
+        "value": true
+      },
+      {
+        "label": {
+          "en": "1st year, or 2nd year lateral",
+          "ta": "முதல் ஆண்டு, அல்லது லேட்டரல் 2ஆம் ஆண்டு"
+        },
+        "any": [
+          {
+            "field": "year_of_study",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "all": [
+              {
+                "field": "year_of_study",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "field": "lateral_entry",
+                "op": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": {
+          "en": "Family income up to ₹8 lakh",
+          "ta": "குடும்ப வருமானம் ₹8 லட்சம் வரை"
+        },
+        "field": "income",
+        "op": "lte",
+        "value": 800000
+      },
+      {
+        "label": {
+          "en": "Joined within 2 years of qualifying",
+          "ta": "தகுதித் தேர்வுக்குப் பின் 2 ஆண்டுக்குள் சேர்ந்தவர்"
+        },
+        "manual": true
+      },
+      {
+        "label": {
+          "en": "No other scholarship or stipend",
+          "ta": "வேறு உதவித்தொகை / ஊக்கத்தொகை இல்லை"
+        },
+        "manual": true
+      }
+    ],
+    "documents": [
+      {
+        "en": "Disability certificate (UDID)",
+        "ta": "மாற்றுத்திறனாளி சான்றிதழ் (UDID)"
+      },
+      {
+        "en": "Class 10 and 12 (or ITI / diploma) certificates and mark sheets",
+        "ta": "10, 12ஆம் வகுப்பு (அல்லது ITI / டிப்ளமோ) சான்றிதழ்கள், மதிப்பெண் சான்றிதழ்கள்"
+      },
+      {
+        "en": "Income certificate (Appendix II)",
+        "ta": "வருமானச் சான்றிதழ் (Appendix II)"
+      },
+      {
+        "en": "Bonafide certificate (Appendix I)",
+        "ta": "படிப்புச் சான்றிதழ் (Appendix I)"
+      },
+      {
+        "en": "Category certificate",
+        "ta": "பிரிவுச் சான்றிதழ்",
+        "only_if": {
+          "field": "community",
+          "op": "in",
+          "value": [
+            "SC",
+            "SCC",
+            "ST",
+            "BC",
+            "BCM",
+            "MBC",
+            "DNC"
+          ]
+        }
+      },
+      {
+        "en": "Aadhaar card",
+        "ta": "ஆதார் அட்டை"
+      }
+    ],
+    "apply": {
+      "mode": "online",
+      "portal_url": "https://scholarships.gov.in",
+      "steps": [
+        {
+          "en": "Apply on the National Scholarship Portal (scholarships.gov.in) in your first year.",
+          "ta": "முதல் ஆண்டில் தேசிய உதவித்தொகை இணையதளத்தில் (scholarships.gov.in) விண்ணப்பிக்கவும்."
+        },
+        {
+          "en": "Your college nodal officer verifies, then the state nodal officer.",
+          "ta": "கல்லூரி பொறுப்பு அலுவலர் சரிபார்ப்பார், பிறகு மாநில அலுவலர்."
+        }
+      ]
+    },
+    "deadline": {
+      "status": "closed",
+      "closes_on": "2026-10-31",
+      "note": {
+        "en": "2026-27 student applications closed on 31 Oct 2026. AICTE announces the next round on NSP.",
+        "ta": "2026-27 விண்ணப்பம் 31 அக்டோபர் 2026 அன்று முடிந்தது. அடுத்த சுற்றை AICTE, NSP-இல் அறிவிக்கும்."
+      }
+    },
+    "sources": [
+      "https://www.myscheme.gov.in/schemes/sak-deg",
+      "https://www.myscheme.gov.in/schemes/sak-dip",
+      "https://www.aicte-india.org/schemes/students-development-schemes"
+    ],
+    "last_verified": "2026-11-21",
+    "confidence": "high",
+    "notes": "OFFICIAL (myscheme + AICTE 2026-27 notification): same window as Pragati, deadline 31 Oct 2026. Any gender. Exact disability certificate form UNVERIFIED (UDID assumed). Max 4 years (3 for lateral)."
+  }
+]
