@@ -1,7 +1,7 @@
 // Server only. Gemini JSON client with model fallback, 8s timeout and one JSON retry.
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const DEFAULT_TIMEOUT_MS = 10000;
 const TIMEOUT_MS = (() => {

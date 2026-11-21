@@ -409,3 +409,45 @@ Fix: remove "inline-flex" and "items-center justify-center" from TAP. Instead gi
 Never put two display utilities (hidden/inline-flex/flex/block) on one element at the same breakpoint.
 Then check the logo: at 360px the logo text must be visible (not truncated to nothing): reduce the toggle's px so logo + toggle + Menu fit in 336px.
 Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-p9[3:58]: /caveman ultra
+
+STEP P9: admin API and admin screen (list + editor).
+
+Read only: docs/CONTRACTS.md sections 2 and 4; exports of lib/data/schemesRepo.ts, lib/engine/schemas.ts, lib/engine/index.ts, lib/http.ts; app/globals.css; components/DeadlineChip.tsx.
+Create only: lib/adminAuth.ts, app/api/admin/schemes/route.ts, app/api/admin/schemes/[id]/route.ts, app/admin/page.tsx, components/admin/SchemeList.tsx, components/admin/SchemeEditor.tsx, tests/adminAuth.test.ts.
+Modify only: lib/i18n/strings.ts is NOT needed: the admin screen is English only, plain strings are fine.
+No installs. Do NOT add `export const runtime`, `dynamic` or "use cache" to any file.
+
+1. adminAuth.ts: isAdmin(req: Request): boolean. Compares header x-admin-passcode with process.env.ADMIN_PASSCODE using crypto.timingSafeEqual on equal-length Buffers (false if lengths differ or env unset or empty).
+2. GET /api/admin/schemes → getAllForAdmin(). PUT /api/admin/schemes/[id] body { status: "draft"|"published", data } → validate data with SchemeSchema (400 BAD_REQUEST with the zod issues as a short string list), path id must equal data.id, then upsertScheme. Not admin → 401 { error: { code: "UNAUTHORIZED", ... } } via lib/http.ts. Dynamic params are a Promise (await params). Never log request bodies or the passcode.
+3. /admin page (client): passcode form; keep the passcode in sessionStorage only and send it as x-admin-passcode. Wrong passcode (401) → show "Wrong passcode" and clear it. Once in: SchemeList with name, level, states, status, last_verified, a red "needs re-check" chip if last_verified is older than 90 days, confidence; filters All / Drafts / Stale; click a row opens SchemeEditor. A "New scheme" button starts from an empty template.
+4. SchemeEditor: text inputs for name (en, ta), benefit (en, ta), department, deadline (status select, closes_on, note en/ta), sources (one per line), last_verified, confidence select, notes; JSON textareas (monospace, 12 rows) for conditions, documents, apply with live SchemeSchema validation (rebuild the whole object, safeParse, show zod messages next to the form). Right panel "Preview as student": persona select (Kavya, Arun, Fathima; profiles below) → runs evaluateScheme(profile, scheme) and shows status + each reason with ✓/✗/?. Buttons: Save draft, Publish, Mark verified today (sets last_verified to today's IST date). Publish and Save are disabled while the object is invalid. After a save show "Saved" and refresh the list.
+   Kavya {state:"TN",education_level:"ug",year_of_study:1,course_type:"engineering",aicte_approved:true,institution_type:"govt",gender:"female",community:"SC",religion:"hindu",income:{min:0,max:100000},school_6_to_12:"govt_all",first_graduate:true,admission_route:"govt_school_7_5_quota",disability_percent:0}
+   Arun {state:"TN",education_level:"class_8",current_school_type:"govt",medium:"tamil",gender:"male",community:"MBC",religion:"hindu",income:{min:100001,max:200000},rural:true,last_exam_percent:72}
+   Fathima {state:"TN",education_level:"class_12",current_school_type:"govt_aided",medium:"english",gender:"female",community:"BCM",religion:"muslim",income:{min:100001,max:200000},last_exam_percent:78}
+5. tests/adminAuth.test.ts: correct passcode true; wrong false; env unset false; different length false.
+6. Styling: use btn-primary / btn-outline / link classes and accent-teal; max-w-5xl two-column layout on desktop (editor left, preview right), one column on phones, no horizontal scroll at 360px. Add a link-free page: the admin page is NOT linked from the header or anywhere else.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.
+
+prompt-p9b[4:08]: /caveman ultra
+STEP P9b: admin screen UI only. The admin API (lib/adminAuth.ts, app/api/admin/schemes/*) is DONE: do not touch it. Creating the folders components/admin and app/admin is approved.
+
+Read only: app/api/admin/schemes/route.ts and [id]/route.ts (to see request/response shape), lib/engine/schemas.ts, lib/engine/index.ts, app/globals.css, components/DeadlineChip.tsx.
+Create only: app/admin/page.tsx, components/admin/SchemeList.tsx, components/admin/SchemeEditor.tsx.
+No installs. Do NOT add `export const runtime`, `dynamic` or "use cache". English only, plain strings.
+
+1. /admin page (client): passcode form; keep the passcode in sessionStorage only and send it as header x-admin-passcode on every call. 401 → show "Wrong passcode" and clear it. Once in: fetch GET /api/admin/schemes and show SchemeList; "Log out" button clears the passcode; "New scheme" starts the editor from an empty template that passes nothing but is editable (id empty, level "state", states ["TN"], segment "school", confidence "medium", status draft, today's date as last_verified).
+2. SchemeList: rows with name (en), level, states, status (draft/published), last_verified, a red "needs re-check" chip when last_verified is older than 90 days, confidence; filter buttons All / Drafts / Stale. Click a row opens SchemeEditor.
+3. SchemeEditor: text inputs for id (read-only for existing schemes), name en/ta, benefit en/ta, department, deadline (status select, closes_on, note en/ta), sources (one per line), last_verified, confidence select, level select, segment select, states (comma list), notes. Monospace JSON textareas (12 rows) for conditions, documents, apply. Rebuild the whole object on every change and safeParse it with SchemeSchema; show every zod message in a red list near the buttons; invalid JSON shows "Invalid JSON in <field>".
+   Right panel "Preview as student": persona select with these three profiles, then evaluateScheme(profile, scheme) from lib/engine when the object is valid, showing the status and each reason with ✓ / ✗ / ?:
+   Kavya {state:"TN",education_level:"ug",year_of_study:1,course_type:"engineering",aicte_approved:true,institution_type:"govt",gender:"female",community:"SC",religion:"hindu",income:{min:0,max:100000},school_6_to_12:"govt_all",first_graduate:true,admission_route:"govt_school_7_5_quota",disability_percent:0}
+   Arun {state:"TN",education_level:"class_8",current_school_type:"govt",medium:"tamil",gender:"male",community:"MBC",religion:"hindu",income:{min:100001,max:200000},rural:true,last_exam_percent:72}
+   Fathima {state:"TN",education_level:"class_12",current_school_type:"govt_aided",medium:"english",gender:"female",community:"BCM",religion:"muslim",income:{min:100001,max:200000},last_exam_percent:78}
+   Buttons: "Save draft" (PUT status draft), "Publish" (PUT status published), "Mark verified today" (sets last_verified to today's IST date). Save and Publish are disabled while invalid. After a save show "Saved" and refresh the list. Show the API error message if the PUT fails.
+4. Styling: btn-primary / btn-outline / link classes and accent-teal; max-w-5xl, two columns on desktop (editor left, preview right), one column on phones, no horizontal scroll at 360px. The admin page is NOT linked from anywhere.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.

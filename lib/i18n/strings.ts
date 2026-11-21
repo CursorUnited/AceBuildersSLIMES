@@ -112,6 +112,10 @@ export const STRINGS = {
   openScheme: { en: "Open scheme", ta: "திட்டத்தைத் திற" },
   removeApp: { en: "Remove", ta: "நீக்கு" },
   removeConfirm: { en: "Remove this scheme from your applications?", ta: "இந்த திட்டத்தை உங்கள் விண்ணப்பங்களிலிருந்து நீக்கவா?" },
+  micStart: { en: "Tap to speak", ta: "பேச தட்டவும்" },
+  micStop: { en: "Stop", ta: "நிறுத்து" },
+  micListening: { en: "Listening…", ta: "கேட்கிறது…" },
+  micBlocked: { en: "Mic blocked. Type instead.", ta: "மைக் தடுக்கப்பட்டது. தட்டச்சு செய்யவும்." },
 
 } as const satisfies Record<string, { en: string; ta: string }>;
 

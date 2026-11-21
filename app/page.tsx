@@ -18,6 +18,7 @@ import { useLang } from "@/components/LangProvider";
 import ChatBubble from "@/components/ChatBubble";
 import ChipRow from "@/components/ChipRow";
 import ConfirmCard from "@/components/ConfirmCard";
+import MicButton from "@/components/MicButton";
 
 type Txt = { en: string; ta: string };
 type Chip = { value: string; label: string | Txt };
@@ -348,14 +349,14 @@ export default function Home() {
             placeholder="Type here..."
             className="max-h-32 min-h-11 flex-1 resize-none rounded-lg border px-3 py-2 text-base disabled:opacity-60"
           />
-          <button
-            type="button"
-            aria-label="Mic"
-            disabled
-            className="btn-outline min-h-11 min-w-11 cursor-pointer rounded-lg px-3 py-2 opacity-50"
-          >
-            🎤
-          </button>
+          <MicButton
+            lang={lang}
+            disabled={busy}
+            onText={(text) => {
+              setInput(text);
+              focusInput();
+            }}
+          />
           <button
             type="submit"
             disabled={busy || !input.trim()}
