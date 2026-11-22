@@ -4,12 +4,12 @@
 
 <br>
 
-**Tell us about yourself in Tamil or English. We find the government scholarships you can claim.** 🎓
+**Tell us about yourself in Tamil or English. We find the government scholarships you can claim.**
 
-### 🌐 Live app: **[https://urimai-sigma.vercel.app](https://urimai-sigma.vercel.app)**
+### Live app: **[https://urimai-sigma.vercel.app](https://urimai-sigma.vercel.app)**
 
 [![Live demo](https://img.shields.io/badge/live%20demo-urimai--sigma.vercel.app-0F4C5C?style=for-the-badge)](https://urimai-sigma.vercel.app)
-[![MCP](https://img.shields.io/badge/MCP-server-E9A23B?style=for-the-badge)](#-one-engine-two-doors)
+[![MCP](https://img.shields.io/badge/MCP-server-E9A23B?style=for-the-badge)](#one-engine-two-doors)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
@@ -23,21 +23,21 @@
 
 ---
 
-## ⚡ Try it in 30 seconds
+## Try it in 30 seconds
 
 1. Open **[urimai-sigma.vercel.app](https://urimai-sigma.vercel.app)** on a phone or laptop.
-2. Type (or tap 🎤 and say): `naan 10th padikren, ponnu, SC, govt school`
+2. Type (or tap the mic and say): `naan 10th padikren, ponnu, SC, govt school`
 3. Watch the **What I understood** panel fill in, answer the next question, then press **See my schemes**.
 4. Open a scheme, tick your documents, press **Track**, and add the deadline to your calendar.
-5. Using an AI agent? Connect the MCP server: `https://urimai-sigma.vercel.app/api/mcp` ([details](#-one-engine-two-doors)).
+5. Using an AI agent? Connect the MCP server: `https://urimai-sigma.vercel.app/api/mcp` ([details](#one-engine-two-doors)).
 
-## 🎯 The problem
+## The problem
 
 Thousands of Tamil Nadu students (Class 8 to college) qualify for scholarships and fee concessions they never claim. The rules sit in long English notices, they change every year, and nobody tells a Class 10 student which three of fifteen schemes apply to *her*.
 
 **Urimai** (உரிமை, "the right to claim") lets a student just talk. She types or speaks in Tamil, English or Tanglish ("naan 10th padikren, SC, appa coolie"), and Urimai answers with the schemes she is **likely eligible** for, the one question that would unlock the most schemes next, the documents to bring, and the deadline.
 
-## ⚙️ How it works
+## How it works
 
 ```
  student message ──► Gemini ──► facts (JSON) ──► rule engine ──► likely / one detail away / no match
@@ -49,26 +49,26 @@ Thousands of Tamil Nadu students (Class 8 to college) qualify for scholarships a
 
 | Layer | What it does | Where |
 | --- | --- | --- |
-| 🗣️ Extraction | Tamil / Tanglish / English → profile fields | `lib/llm/` |
-| ⚖️ Rule engine | Three-valued eligibility (pass / fail / unknown), next-best question, document filter | `lib/engine/` |
-| 🗄️ Scheme rules | 15 central and Tamil Nadu schemes as data, editable without code | Supabase + `data/schemes.seed.json` |
-| 💬 Chat + results | Mobile-first chat, live "What I understood" panel on desktop, scheme pages | `app/`, `components/` |
+| **Extraction** | Tamil / Tanglish / English → profile fields | `lib/llm/` |
+| **Rule engine** | Three-valued eligibility (pass / fail / unknown), next-best question, document filter | `lib/engine/` |
+| **Scheme rules** | 15 central and Tamil Nadu schemes as data, editable without code | Supabase + `data/schemes.seed.json` |
+| **Chat + results** | Mobile-first chat, live "What I understood" panel on desktop, scheme pages | `app/`, `components/` |
 
-## ✨ What you can do
+## What you can do
 
-| | Feature |
+| Feature | What it does |
 | --- | --- |
-| 💬 | Chat in Tamil, English or Tanglish. Fix yourself any time ("actually I'm in class 11"). |
-| 🎙️ | Speak instead of type. Gemini transcribes, the browser's speech API is the fallback. |
-| ❓ | Smart next question: always the one that unlocks the most schemes ("Tell me this and I can show 4 more"). |
-| ✅ | Results in three honest groups: **Likely eligible**, **One detail away**, **Doesn't match your answers**. Every ✓ or ✗ shows its reason. |
-| 📄 | Per-scheme document checklist, filtered to *your* situation. |
-| ⏰ | Track schemes, tick documents, set a reminder and add it to your phone's calendar (`.ics` or Google Calendar). |
-| 🛠️ | Admin screen: edit rules, **preview as a student** (3 personas), publish, mark verified. |
-| 🤖 | **AI import**: paste an official page, get a drafted scheme with Tamil text and warnings, review, publish. |
-| 🔌 | MCP server: any AI agent can ask Urimai what a student can claim. |
+| **Chat** | Tamil, English or Tanglish. Fix yourself any time ("actually I'm in class 11"). |
+| **Voice** | Speak instead of type. Gemini transcribes, the browser's speech API is the fallback. |
+| **Smart next question** | Always the one that unlocks the most schemes ("Tell me this and I can show 4 more"). |
+| **Honest results** | Three groups: **Likely eligible**, **One detail away**, **Doesn't match your answers**. Every ✓ or ✗ shows its reason. |
+| **Document checklist** | Per scheme, filtered to *your* situation. |
+| **Tracking and reminders** | Track schemes, tick documents, set a reminder and add it to your phone's calendar (`.ics` or Google Calendar). |
+| **Admin** | Edit rules, **preview as a student** (3 personas), publish, mark verified. |
+| **AI import** | Paste an official page, get a drafted scheme with Tamil text and warnings, review, publish. |
+| **MCP server** | Any AI agent can ask Urimai what a student can claim. |
 
-## 🛡️ The "never guess" rules
+## The "never guess" rules
 
 A wrong "you qualify" is worse than "tell me more", so the app is built to under-claim:
 
@@ -78,7 +78,7 @@ A wrong "you qualify" is worse than "tell me more", so the app is built to under
 - No Aadhaar or ID number is ever asked for or stored. If a student types one, it is ignored.
 - Questions and chips are fixed templates in Tamil, English and Tanglish, so the question wording never depends on an AI.
 
-## 📊 Honest evaluation
+## Honest evaluation
 
 We keep a 44-case slang test set (`eval/slang_testset.json`): Tanglish, Tamil script, typos, corrections, side questions, and traps that tempt a model to guess.
 
@@ -97,7 +97,7 @@ npx tsx --env-file=.env.local eval/run-eval.ts            # all cases
 npx tsx --env-file=.env.local eval/run-eval.ts --only=T07,T23
 ```
 
-## 🔌 One engine, two doors
+## One engine, two doors
 
 The same engine that powers the web app is exposed as an **MCP server** (Streamable HTTP, stateless, no login):
 
@@ -120,19 +120,19 @@ Add it to an MCP client (Zed, Claude, Antigravity, MCP Inspector):
 
 Then ask: *"Use the urimai tools: I'm a first-year B.E. girl from a govt school in Tamil Nadu, SC, income 90k, first graduate. What can I apply for?"*
 
-## 🗂️ Rules live in a database, not in code
+## Rules live in a database, not in code
 
 Each scheme is a JSON document in Supabase (`schemes` table): conditions, documents, apply steps, deadline, sources, `last_verified`, confidence. A non-developer can fix a rule at `/admin` (passcode-protected; ask the team for a demo passcode), check it with **Preview as student**, and publish. No deploy. `data/schemes.seed.json` seeds the table (`scripts/seed-supabase.ts`).
 
 15 schemes today: NMMSS, Pre-Matric (SC and Minorities), Public Exam Fee, Free Bicycle, Pudhumai Penn, Tamizh Pudhalvan, Post-Matric (SC/ST/SCC, BC/MBC/DNC, Minorities), First Graduate Concession, 7.5% Govt School Quota, PM-USP, AICTE Pragati and Saksham.
 
-## 🔒 Privacy
+## Privacy
 
 - The student's profile, chat and tracked schemes live **only in the phone's own storage** (`localStorage`). No account, no login. "Forget me" wipes it.
 - The server holds no student data. Message text is sent to the Gemini API for extraction and is never logged by us.
 - Admin routes need a passcode header and fail closed when it is unset.
 
-## 🚀 Run it yourself
+## Run it yourself
 
 ```bash
 git clone https://github.com/CursorUnited/AceBuildersSLIMES.git
@@ -156,7 +156,7 @@ npm run build      # production build
 npx tsx --env-file=.env.local scripts/seed-supabase.ts   # load the seed schemes
 ```
 
-## 🧱 Project map
+## Project map
 
 ```
 app/
@@ -171,7 +171,7 @@ eval/                     44-case slang test set + runner
 data/schemes.seed.json    the 15 schemes
 ```
 
-## ⚠️ Known limits
+## Known limits
 
 - **Rules are a snapshot.** Verified from public sources on 21 Nov 2026. Always check the official page (every scheme links it). Amounts and dates change yearly.
 - **Free-tier Gemini.** Fine for a demo; rate limits apply, and free-tier terms may allow Google to use prompts. Use a paid key for real students.
@@ -180,7 +180,7 @@ data/schemes.seed.json    the 15 schemes
 - **Coverage:** 15 schemes, Tamil Nadu plus central. Other states are a data job, not a code job.
 - **Next:** a WhatsApp channel on the same engine.
 
-## 🙌 Built with
+## Built with
 
 Next.js 16 · TypeScript · Tailwind CSS 4 · Zod · Gemini · Supabase · Vercel · Model Context Protocol
 
