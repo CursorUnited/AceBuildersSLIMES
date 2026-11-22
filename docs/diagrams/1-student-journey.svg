@@ -1,52 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="690" viewBox="0 0 1900 690" font-family="'Segoe UI', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1970" height="755" viewBox="0 0 1970 755" font-family="'Segoe UI', Arial, sans-serif">
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs>
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="60" y="72.4" font-size="36" fill="#0F4C5C">Urimai: from a messy message to the schemes you can claim</text>
 <text x="60" y="114.8" font-size="22" fill="#868e96">She types or speaks in Tamil, English or Tanglish. No form, no login.</text>
-<rect x="60" y="220" width="290" height="150" rx="14" fill="#fdebc8" stroke="#E9A23B" stroke-width="2" />
-<text x="205" y="264.6" text-anchor="middle" font-size="19" fill="#1e1e1e">STUDENT</text>
-<text x="205" y="288.35" text-anchor="middle" font-size="19" fill="#1e1e1e">types or speaks</text>
-<text x="205" y="312.1" text-anchor="middle" font-size="19" fill="#1e1e1e">"naan 10th padikren,</text>
-<text x="205" y="335.85" text-anchor="middle" font-size="19" fill="#1e1e1e">ponnu, SC, govt school"</text>
-<path d="M350 295 L430 295" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<rect x="430" y="220" width="290" height="150" rx="14" fill="#d0ebff" stroke="#1971c2" stroke-width="2" />
-<text x="575" y="264.6" text-anchor="middle" font-size="19" fill="#1e1e1e">GEMINI = TRANSLATOR</text>
-<text x="575" y="288.35" text-anchor="middle" font-size="19" fill="#1e1e1e">extracts only the facts</text>
-<text x="575" y="312.1" text-anchor="middle" font-size="19" fill="#1e1e1e">she stated</text>
-<text x="575" y="335.85" text-anchor="middle" font-size="19" fill="#1e1e1e">never decides</text>
-<path d="M720 295 L800 295" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<rect x="800" y="220" width="270" height="150" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
-<text x="935" y="266.2" text-anchor="middle" font-size="18" fill="#1e1e1e">FACTS (JSON)</text>
-<text x="935" y="288.7" text-anchor="middle" font-size="18" fill="#1e1e1e">class_10 · female · SC</text>
-<text x="935" y="311.2" text-anchor="middle" font-size="18" fill="#1e1e1e">govt school</text>
-<text x="935" y="333.7" text-anchor="middle" font-size="18" fill="#1e1e1e">checked with zod</text>
-<path d="M1070 295 L1150 295" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<rect x="1150" y="220" width="300" height="150" rx="14" fill="#0F4C5C" stroke="#0F4C5C" stroke-width="2" />
-<text x="1300" y="263" text-anchor="middle" font-size="20" fill="#ffffff">RULE ENGINE = JUDGE</text>
-<text x="1300" y="288" text-anchor="middle" font-size="20" fill="#ffffff">pure TypeScript, tested</text>
-<text x="1300" y="313" text-anchor="middle" font-size="20" fill="#ffffff">pass / fail / unknown</text>
-<text x="1300" y="338" text-anchor="middle" font-size="20" fill="#ffffff">no AI inside</text>
-<path d="M1450 250 L1540 190" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<path d="M1450 295 L1540 295" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<path d="M1450 340 L1540 410" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
-<rect x="1540" y="140" width="300" height="100" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
-<text x="1690" y="183" text-anchor="middle" font-size="20" fill="#1e1e1e">LIKELY ELIGIBLE</text>
-<text x="1690" y="208" text-anchor="middle" font-size="20" fill="#1e1e1e">reasons shown (✓ ✗ ?)</text>
-<rect x="1540" y="245" width="300" height="100" rx="14" fill="#ffe8cc" stroke="#e8590c" stroke-width="2" />
-<text x="1690" y="288" text-anchor="middle" font-size="20" fill="#1e1e1e">ONE DETAIL AWAY</text>
-<text x="1690" y="313" text-anchor="middle" font-size="20" fill="#1e1e1e">asks the ONE question</text>
-<rect x="1540" y="360" width="300" height="100" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
-<text x="1690" y="403" text-anchor="middle" font-size="20" fill="#1e1e1e">DOESN'T MATCH</text>
-<text x="1690" y="428" text-anchor="middle" font-size="20" fill="#1e1e1e">(never a hidden "no")</text>
-<path d="M1690 345 L1690 560 L205 560 L205 372" fill="none" stroke="#e8590c" stroke-width="2" stroke-dasharray="10 8" marker-end="url(#a)" />
-<text x="520" y="594.8" font-size="22" fill="#e8590c">"Tell me this and I can show 4 more schemes"</text>
-<text x="520" y="622.3" font-size="22" fill="#e8590c">the next question is the one that unlocks the most schemes</text>
-<path d="M1690 140 L1690 100 L1200 100" fill="none" stroke="#2f9e44" stroke-width="2"  marker-end="url(#a)" />
-<rect x="780" y="70" width="420" height="70" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
-<text x="990" y="98.7" text-anchor="middle" font-size="18" fill="#1e1e1e">SCHEME PAGE: documents checklist,</text>
-<text x="990" y="121.2" text-anchor="middle" font-size="18" fill="#1e1e1e">how to apply, deadline, sources</text>
-<path d="M780 105 L700 105" fill="none" stroke="#2f9e44" stroke-width="2"  marker-end="url(#a)" />
-<rect x="380" y="70" width="320" height="70" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
-<text x="540" y="98.7" text-anchor="middle" font-size="18" fill="#1e1e1e">TRACK + calendar reminder</text>
-<text x="540" y="121.2" text-anchor="middle" font-size="18" fill="#1e1e1e">(.ics / Google Calendar)</text>
+<rect x="60" y="265" width="290" height="150" rx="14" fill="#fdebc8" stroke="#E9A23B" stroke-width="2" />
+<text x="205" y="309.6" text-anchor="middle" font-size="19" fill="#1e1e1e">STUDENT</text>
+<text x="205" y="333.35" text-anchor="middle" font-size="19" fill="#1e1e1e">types or speaks</text>
+<text x="205" y="357.1" text-anchor="middle" font-size="19" fill="#1e1e1e">"naan 10th padikren,</text>
+<text x="205" y="380.85" text-anchor="middle" font-size="19" fill="#1e1e1e">ponnu, SC, govt school"</text>
+<path d="M350 340 L430 340" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="430" y="265" width="290" height="150" rx="14" fill="#d0ebff" stroke="#1971c2" stroke-width="2" />
+<text x="575" y="309.6" text-anchor="middle" font-size="19" fill="#1e1e1e">GEMINI = TRANSLATOR</text>
+<text x="575" y="333.35" text-anchor="middle" font-size="19" fill="#1e1e1e">extracts only the facts</text>
+<text x="575" y="357.1" text-anchor="middle" font-size="19" fill="#1e1e1e">she stated</text>
+<text x="575" y="380.85" text-anchor="middle" font-size="19" fill="#1e1e1e">never decides</text>
+<path d="M720 340 L800 340" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="800" y="265" width="270" height="150" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
+<text x="935" y="311.2" text-anchor="middle" font-size="18" fill="#1e1e1e">FACTS (JSON)</text>
+<text x="935" y="333.7" text-anchor="middle" font-size="18" fill="#1e1e1e">class_10 · female · SC</text>
+<text x="935" y="356.2" text-anchor="middle" font-size="18" fill="#1e1e1e">govt school</text>
+<text x="935" y="378.7" text-anchor="middle" font-size="18" fill="#1e1e1e">checked with zod</text>
+<path d="M1070 340 L1150 340" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="1150" y="265" width="300" height="150" rx="14" fill="#0F4C5C" stroke="#0F4C5C" stroke-width="2" />
+<text x="1300" y="308" text-anchor="middle" font-size="20" fill="#ffffff">RULE ENGINE = JUDGE</text>
+<text x="1300" y="333" text-anchor="middle" font-size="20" fill="#ffffff">pure TypeScript, tested</text>
+<text x="1300" y="358" text-anchor="middle" font-size="20" fill="#ffffff">pass / fail / unknown</text>
+<text x="1300" y="383" text-anchor="middle" font-size="20" fill="#ffffff">no AI inside</text>
+<rect x="1560" y="150" width="300" height="100" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="1710" y="193" text-anchor="middle" font-size="20" fill="#1e1e1e">LIKELY ELIGIBLE</text>
+<text x="1710" y="218" text-anchor="middle" font-size="20" fill="#1e1e1e">reasons shown (✓ ✗ ?)</text>
+<rect x="1560" y="290" width="300" height="100" rx="14" fill="#ffe8cc" stroke="#e8590c" stroke-width="2" />
+<text x="1710" y="333" text-anchor="middle" font-size="20" fill="#1e1e1e">ONE DETAIL AWAY</text>
+<text x="1710" y="358" text-anchor="middle" font-size="20" fill="#1e1e1e">asks the ONE question</text>
+<rect x="1560" y="430" width="300" height="100" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
+<text x="1710" y="473" text-anchor="middle" font-size="20" fill="#1e1e1e">DOESN'T MATCH</text>
+<text x="1710" y="498" text-anchor="middle" font-size="20" fill="#1e1e1e">(never a hidden "no")</text>
+<path d="M1450 310 L1560 200" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<path d="M1450 340 L1560 340" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<path d="M1450 370 L1560 480" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="1130" y="160" width="380" height="80" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="1320" y="194.05" text-anchor="middle" font-size="17" fill="#1e1e1e">SCHEME PAGE: documents checklist,</text>
+<text x="1320" y="215.3" text-anchor="middle" font-size="17" fill="#1e1e1e">how to apply, deadline, sources</text>
+<path d="M1560 200 L1510 200" fill="none" stroke="#2f9e44" stroke-width="2"  marker-end="url(#a)" />
+<rect x="680" y="160" width="380" height="80" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="870" y="193.7" text-anchor="middle" font-size="18" fill="#1e1e1e">TRACK + calendar reminder</text>
+<text x="870" y="216.2" text-anchor="middle" font-size="18" fill="#1e1e1e">(.ics / Google Calendar)</text>
+<path d="M1130 200 L1060 200" fill="none" stroke="#2f9e44" stroke-width="2"  marker-end="url(#a)" />
+<path d="M1860 340 L1910 340 L1910 620 L205 620 L205 417" fill="none" stroke="#e8590c" stroke-width="2" stroke-dasharray="10 8" marker-end="url(#a)" />
+<text x="300" y="659.8" font-size="22" fill="#e8590c">"Tell me this and I can show 4 more schemes"</text>
+<text x="300" y="687.3" font-size="22" fill="#e8590c">the next question is the one that unlocks the most schemes</text>
 </svg>
