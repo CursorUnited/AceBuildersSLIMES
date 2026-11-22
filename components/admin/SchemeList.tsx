@@ -67,7 +67,7 @@ export default function SchemeList(props: {
               <button
                 type="button"
                 onClick={() => onSelect(item.data)}
-                className="btn-outline flex w-full min-w-0 flex-col items-start gap-1 px-4 py-2 text-left text-base"
+                className="flex w-full flex-col items-start gap-1 text-left rounded-xl border border-accent-teal/30 bg-white px-4 py-3 text-base hover:bg-accent-teal/5 active:scale-[0.99] cursor-pointer transition min-h-[44px]"
               >
                 <span className="flex w-full min-w-0 flex-wrap items-center gap-2">
                   <span className="min-w-0 break-words font-medium">{item.data.name.en}</span>

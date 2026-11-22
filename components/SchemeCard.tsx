@@ -117,8 +117,8 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
           onClick={track}
           className={
             tracked
-              ? "min-h-[44px] cursor-pointer rounded-full border border-accent-teal bg-accent-teal/10 px-4 py-2 text-base font-medium text-accent-teal"
-              : "btn-outline min-h-[44px] cursor-pointer rounded-full px-4 py-2 text-base font-medium"
+              ? "min-h-[44px] cursor-pointer rounded-[1.375rem] border border-accent-teal bg-accent-teal/10 px-4 py-2 text-base font-medium text-accent-teal"
+              : "btn-outline min-h-[44px] cursor-pointer px-4 py-2 text-base font-medium"
           }
         >
           {tracked ? `${t("tracked", lang)} ★` : `${t("track", lang)} ☆`}

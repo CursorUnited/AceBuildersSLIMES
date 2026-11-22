@@ -29,7 +29,7 @@ export default function ChipRow({ chips, onPick, disabled = false, selectedValue
             disabled={disabled}
             onClick={() => onPick(chip.value)}
             aria-pressed={selected}
-            className={`chip min-h-[44px] cursor-pointer rounded-full border px-4 py-2 text-base disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`chip min-h-[44px] cursor-pointer border px-4 py-2 text-base disabled:cursor-not-allowed disabled:opacity-50 ${
               selected
                 ? "border-accent-teal bg-accent-teal text-white"
                 : "border-accent-teal/60 bg-white text-accent-teal"

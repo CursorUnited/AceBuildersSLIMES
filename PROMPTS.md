@@ -517,3 +517,53 @@ Modify only: app/page.tsx, components/DeadlineChip.tsx, components/SchemeCard.ts
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
 Reply: files changed + the three results, max 5 lines.
+
+prompt-p11b[14:49]: /caveman ultra
+STEP P11b: admin list rows are ovals and outline buttons have no padding. CSS/class fix only.
+
+Read only: app/globals.css, components/admin/SchemeList.tsx.
+Modify only: app/globals.css, components/admin/SchemeList.tsx.
+Do not change behaviour.
+
+1. globals.css: in the shared .btn-outline / .chip rule add `padding-inline: 1rem;` (same as .btn-primary) and `padding-block: 0.5rem;`. Utility classes like px-3 must still override it (keep the rule inside @layer components).
+2. SchemeList.tsx: each row button must NOT use btn-outline. Make it a card: `block w-full text-left rounded-xl border border-accent-teal/30 bg-white px-4 py-3 text-base hover:bg-accent-teal/5 active:scale-[0.99] cursor-pointer transition` and keep the inner layout (name, level, status, chips) unchanged. Add the focus-visible outline from globals.css (already global). Rows keep a 44px minimum height.
+3. Check other uses of btn-outline on long multi-line content in app/ and components/ (grep). Any that wrap multi-line text must switch to the same card style. Report which ones.
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-p11c[14:55]: /caveman ultra
+STEP P11c: wrapped chips/buttons look like ovals. CSS/class fix only.
+
+Read only: app/globals.css, app/results/page.tsx.
+Modify only: app/globals.css, app/results/page.tsx.
+Do not change behaviour.
+
+1. globals.css: .btn-outline, .chip and .btn-primary use `border-radius: 1.375rem` instead of 9999px. A 44px single-line button stays a full pill (radius = half the height); two-line labels become rounded rectangles instead of ovals. Keep everything else in those rules.
+2. results/page.tsx: the "Doesn't match / Show these" toggle (the button with aria-expanded, currently class btn-outline flex w-full ... justify-between) becomes a card-style row: `flex w-full items-center justify-between gap-3 rounded-xl border border-accent-teal/30 bg-white px-4 py-3 text-left hover:bg-accent-teal/5 cursor-pointer`. Keep the label and "Show these / Hide these" text and the aria-expanded behaviour.
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-p11d[15:04]: /caveman ultra
+STEP P11d: admin list rows lost their line breaks. Class fix only.
+
+Read only: components/admin/SchemeList.tsx.
+Modify only: components/admin/SchemeList.tsx.
+Not a render question: confirmed in a real browser, the row text runs together as "central · ALLStatus: published · Last verified: ..." because the card button is `block` and the three inner spans are inline.
+
+1. The row button class `block w-full text-left ...` becomes `flex w-full flex-col items-start gap-1 text-left ...` (keep the same border, radius, padding, hover and cursor classes). The three inner spans (title row, "level · states", "Status: ... · Last verified: ... · Confidence: ...") each stay on their own line. Do not use `block`.
+2. Do not touch behaviour, props or any other file.
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-p11e[15:09]: /caveman ultra
+STEP P11e: explicit `rounded-full` on buttons overrides the shared radius, so wrapped chips stay ovals. Class fix only.
+
+Read only: components/ChipRow.tsx, and a grep for "rounded-full" across app/ and components/.
+Modify only: components/ChipRow.tsx, plus any other button (NOT badges, dots, avatars, language toggle group or status chips) whose className contains rounded-full together with btn-outline / btn-primary / chip, e.g. the Track button in components/SchemeCard.tsx.
+Confirmed in a real browser: chip "Govt-aided, Tamil medium, all years" is 66px tall with border-radius calc(infinity*1px) because ChipRow's className contains `rounded-full`, which beats the .chip/.btn-outline rule in globals.css.
+
+1. Remove `rounded-full` from those buttons. The shared classes in globals.css (border-radius 1.375rem) now do the rounding. If a button has no shared class (plain utilities only), replace rounded-full with rounded-[1.375rem].
+2. Leave small decorative pills alone (level badge, deadline chip, red "needs re-check" chip, the pulsing mic dot).
+3. Do not change behaviour or any other file. Report the list of files you changed.
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.

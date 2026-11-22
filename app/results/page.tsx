@@ -133,7 +133,7 @@ export default function ResultsPage() {
                 type="button"
                 aria-expanded={showNotEligible}
                 onClick={() => setShowNotEligible((v) => !v)}
-              className="btn-outline flex min-h-[44px] w-full cursor-pointer items-center justify-between text-left"
+              className="flex w-full items-center justify-between gap-3 rounded-xl border border-accent-teal/30 bg-white px-4 py-3 text-left hover:bg-accent-teal/5 cursor-pointer"
               >
                 <span>{`${t("sectionNotEligible", lang)} (${notEligible.length})`}</span>
                 <span className="text-base font-medium text-accent-teal">

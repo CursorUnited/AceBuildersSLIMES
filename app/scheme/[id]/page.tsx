@@ -158,7 +158,7 @@ export default function SchemeDetailPage({ params }: Props) {
             href={scheme.apply.portal_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-outline inline-flex min-h-[44px] w-fit cursor-pointer items-center rounded-full px-4 py-2 text-base font-medium"
+            className="btn-outline inline-flex min-h-[44px] w-fit cursor-pointer items-center px-4 py-2 text-base font-medium"
           >
             {t("openPortal", lang)}
           </a>
@@ -169,7 +169,7 @@ export default function SchemeDetailPage({ params }: Props) {
         <button
           type="button"
           onClick={track}
-          className="btn-primary min-h-[44px] cursor-pointer rounded-full px-4 py-2 text-base font-medium"
+          className="btn-primary min-h-[44px] cursor-pointer px-4 py-2 text-base font-medium"
         >
           {tracked ? `${t("tracked", lang)} ★` : `${t("track", lang)} ☆`}
         </button>

@@ -71,7 +71,7 @@ export default function ConfirmCard({ profile, changedFields, onProfileChange, o
           <button
             type="button"
             onClick={onClose}
-            className="btn-outline min-h-[44px] min-w-[44px] cursor-pointer rounded-full px-3 text-base"
+            className="btn-outline min-h-[44px] min-w-[44px] cursor-pointer px-3 text-base"
           >
             {CLOSE[lang]}
           </button>
@@ -119,7 +119,7 @@ export default function ConfirmCard({ profile, changedFields, onProfileChange, o
         <button
           type="button"
           onClick={() => router.push("/results")}
-          className="btn-primary mt-4 min-h-[44px] w-full cursor-pointer rounded-full px-4 py-2 text-base font-medium"
+          className="btn-primary mt-4 min-h-[44px] w-full cursor-pointer px-4 py-2 text-base font-medium"
         >
           {t("looksRight", lang)}
         </button>
