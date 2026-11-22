@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1881" height="828" viewBox="0 0 1881 828" font-family="'Segoe UI', Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="60" y="72.4" font-size="36" fill="#0F4C5C">Gemini translates. Rules decide. It never guesses.</text>
+<rect x="60" y="130" width="760" height="360" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="440" y="233.55" text-anchor="middle" font-size="22" fill="#1e1e1e">GEMINI MAY</text>
+<text x="440" y="261.05" text-anchor="middle" font-size="22" fill="#1e1e1e"></text>
+<text x="440" y="288.55" text-anchor="middle" font-size="22" fill="#1e1e1e">• read Tamil, Tanglish and English</text>
+<text x="440" y="316.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• extract facts the student actually said</text>
+<text x="440" y="343.55" text-anchor="middle" font-size="22" fill="#1e1e1e">  (class, community, state, gender, income figure...)</text>
+<text x="440" y="371.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• answer a small side question, in her language</text>
+<text x="440" y="398.55" text-anchor="middle" font-size="22" fill="#1e1e1e">  ("where do I get an income certificate?")</text>
+<rect x="880" y="130" width="800" height="360" rx="14" fill="#ffe3e3" stroke="#e03131" stroke-width="2" />
+<text x="1280" y="206.05" text-anchor="middle" font-size="22" fill="#1e1e1e">GEMINI NEVER</text>
+<text x="1280" y="233.55" text-anchor="middle" font-size="22" fill="#1e1e1e"></text>
+<text x="1280" y="261.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• decides eligibility (the rule engine does)</text>
+<text x="1280" y="288.55" text-anchor="middle" font-size="22" fill="#1e1e1e">• states scheme facts: amounts, dates, rules</text>
+<text x="1280" y="316.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• guesses income from a job ("appa coolie")</text>
+<text x="1280" y="343.55" text-anchor="middle" font-size="22" fill="#1e1e1e">• turns "OBC" into a Tamil Nadu community</text>
+<text x="1280" y="371.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• sets a value that bundles two facts</text>
+<text x="1280" y="398.55" text-anchor="middle" font-size="22" fill="#1e1e1e">  when only one was said (govt-aided + medium)</text>
+<text x="1280" y="426.05" text-anchor="middle" font-size="22" fill="#1e1e1e">• asks for or keeps Aadhaar / ID numbers</text>
+<text x="60" y="553.4" font-size="26" fill="#0F4C5C">Worked example</text>
+<rect x="60" y="590" width="330" height="110" rx="14" fill="#fdebc8" stroke="#E9A23B" stroke-width="2" />
+<text x="225" y="651.6" text-anchor="middle" font-size="24" fill="#1e1e1e">"appa coolie"</text>
+<path d="M390 645 L470 645" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="470" y="590" width="330" height="110" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
+<text x="635" y="638.7" text-anchor="middle" font-size="18" fill="#1e1e1e">income: NOT set</text>
+<text x="635" y="661.2" text-anchor="middle" font-size="18" fill="#1e1e1e">(occupation is not a figure)</text>
+<path d="M800 645 L880 645" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="880" y="590" width="330" height="110" rx="14" fill="#ffe8cc" stroke="#e8590c" stroke-width="2" />
+<text x="1045" y="639.05" text-anchor="middle" font-size="17" fill="#1e1e1e">engine: income = unknown</text>
+<text x="1045" y="660.3" text-anchor="middle" font-size="17" fill="#1e1e1e">→ scheme is "one detail away"</text>
+<path d="M1210 645 L1290 645" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="1290" y="590" width="390" height="110" rx="14" fill="#d6ecef" stroke="#0F4C5C" stroke-width="2" />
+<text x="1485" y="638.35" text-anchor="middle" font-size="19" fill="#1e1e1e">bot asks: "What is your family's</text>
+<text x="1485" y="662.1" text-anchor="middle" font-size="19" fill="#1e1e1e">yearly income? (rough is fine)"</text>
+<text x="60" y="759.8" font-size="22" fill="#0F4C5C">Proof: 44 slang test cases, 110/112 facts correct, 0 facts invented. A miss is a fact left out (she is asked again), never a fact made up.</text>
+</svg>

@@ -47,6 +47,8 @@ Thousands of Tamil Nadu students (Class 8 to college) qualify for scholarships a
 
 **Gemini is a translator, not a judge.** It turns messy language into fixed fields and never decides eligibility. A pure, tested rule engine decides. The same engine runs on the server and in the browser, so changing an answer re-checks every scheme instantly.
 
+<img src="docs/diagrams/1-student-journey.svg" alt="From a messy message to the schemes you can claim" width="100%">
+
 | Layer | What it does | Where |
 | --- | --- | --- |
 | **Extraction** | Tamil / Tanglish / English → profile fields | `lib/llm/` |
@@ -71,6 +73,8 @@ Thousands of Tamil Nadu students (Class 8 to college) qualify for scholarships a
 ## The "never guess" rules
 
 A wrong "you qualify" is worse than "tell me more", so the app is built to under-claim:
+
+<img src="docs/diagrams/2-ai-may-and-never.svg" alt="What Gemini may and never does" width="100%">
 
 - Eligibility wording is always **"likely eligible"**. The office makes the final decision, and every scheme shows its source and *last verified* date.
 - Gemini only **extracts stated facts**. "Appa coolie" never becomes an income. "OBC" never becomes a Tamil Nadu community. A value that bundles two facts (like govt-aided *and* Tamil medium) is only set when both are stated.
@@ -99,6 +103,8 @@ npx tsx --env-file=.env.local eval/run-eval.ts --only=T07,T23
 
 ## One engine, two doors
 
+<img src="docs/diagrams/3-one-engine-many-doors.svg" alt="One rule engine, many doors" width="100%">
+
 The same engine that powers the web app is exposed as an **MCP server** (Streamable HTTP, stateless, no login):
 
 ```
@@ -122,11 +128,15 @@ Then ask: *"Use the urimai tools: I'm a first-year B.E. girl from a govt school 
 
 ## Rules live in a database, not in code
 
+<img src="docs/diagrams/4-rules-are-data.svg" alt="New scheme in about a minute: no developer, no deploy" width="100%">
+
 Each scheme is a JSON document in Supabase (`schemes` table): conditions, documents, apply steps, deadline, sources, `last_verified`, confidence. A non-developer can fix a rule at `/admin` (passcode-protected; ask the team for a demo passcode), check it with **Preview as student**, and publish. No deploy. `data/schemes.seed.json` seeds the table (`scripts/seed-supabase.ts`).
 
 15 schemes today: NMMSS, Pre-Matric (SC and Minorities), Public Exam Fee, Free Bicycle, Pudhumai Penn, Tamizh Pudhalvan, Post-Matric (SC/ST/SCC, BC/MBC/DNC, Minorities), First Graduate Concession, 7.5% Govt School Quota, PM-USP, AICTE Pragati and Saksham.
 
 ## Privacy
+
+<img src="docs/diagrams/5-privacy.svg" alt="Where her data lives" width="100%">
 
 - The student's profile, chat and tracked schemes live **only in the phone's own storage** (`localStorage`). No account, no login. "Forget me" wipes it.
 - The server holds no student data. Message text is sent to the Gemini API for extraction and is never logged by us.
@@ -175,7 +185,7 @@ data/schemes.seed.json    the 15 schemes
 
 - **Rules are a snapshot.** Verified from public sources on 21 Nov 2026. Always check the official page (every scheme links it). Amounts and dates change yearly.
 - **Free-tier Gemini.** Fine for a demo; rate limits apply, and free-tier terms may allow Google to use prompts. Use a paid key for real students.
-- **Voice** is tested with English clips. Tamil and Tanglish speech quality depends on the Gemini model and the phone.
+- **Voice** works on a real Android phone (permission prompt, recording, transcript into the input box) and was tested end to end with English speech. Tamil and Tanglish transcription quality depends on the Gemini model and has not been measured.
 - **Reminders** are calendar entries, not push notifications. A website cannot ring a closed phone.
 - **Coverage:** 15 schemes, Tamil Nadu plus central. Other states are a data job, not a code job.
 - **Next:** a WhatsApp channel on the same engine.

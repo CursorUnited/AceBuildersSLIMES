@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1660" height="755" viewBox="0 0 1660 755" font-family="'Segoe UI', Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="60" y="72.4" font-size="36" fill="#0F4C5C">New scheme in about a minute: no developer, no deploy</text>
+<rect x="60" y="150" width="300" height="130" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
+<text x="210" y="195.5" text-anchor="middle" font-size="20" fill="#1e1e1e">OFFICIAL PAGE</text>
+<text x="210" y="220.5" text-anchor="middle" font-size="20" fill="#1e1e1e">copy the scheme text</text>
+<text x="210" y="245.5" text-anchor="middle" font-size="20" fill="#1e1e1e">+ its https link</text>
+<path d="M360 215 L440 215" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="440" y="150" width="300" height="130" rx="14" fill="#d0ebff" stroke="#1971c2" stroke-width="2" />
+<text x="590" y="195.5" text-anchor="middle" font-size="20" fill="#1e1e1e">ADMIN: AI IMPORT</text>
+<text x="590" y="220.5" text-anchor="middle" font-size="20" fill="#1e1e1e">Gemini drafts the rules</text>
+<text x="590" y="245.5" text-anchor="middle" font-size="20" fill="#1e1e1e">in about 8 seconds</text>
+<path d="M740 215 L820 215" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="820" y="150" width="330" height="130" rx="14" fill="#fdebc8" stroke="#E9A23B" stroke-width="2" />
+<text x="985" y="183" text-anchor="middle" font-size="20" fill="#1e1e1e">DRAFT SCHEME</text>
+<text x="985" y="208" text-anchor="middle" font-size="20" fill="#1e1e1e">conditions · documents</text>
+<text x="985" y="233" text-anchor="middle" font-size="20" fill="#1e1e1e">Tamil text · deadline</text>
+<text x="985" y="258" text-anchor="middle" font-size="20" fill="#1e1e1e">warnings</text>
+<path d="M1150 215 L1230 215" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="1230" y="150" width="370" height="130" rx="14" fill="#d6ecef" stroke="#0F4C5C" stroke-width="2" />
+<text x="1415" y="195.5" text-anchor="middle" font-size="20" fill="#1e1e1e">PREVIEW AS A STUDENT</text>
+<text x="1415" y="220.5" text-anchor="middle" font-size="20" fill="#1e1e1e">Kavya · Arun · Fathima</text>
+<text x="1415" y="245.5" text-anchor="middle" font-size="20" fill="#1e1e1e">see ✓ ✗ ? for each rule</text>
+<path d="M1415 280 L1415 420" fill="none" stroke="#0F4C5C" stroke-width="2"  marker-end="url(#a)" />
+<rect x="1230" y="420" width="370" height="130" rx="14" fill="#ffe3e3" stroke="#e03131" stroke-width="2" />
+<text x="1415" y="453" text-anchor="middle" font-size="20" fill="#1e1e1e">GUARDRAILS</text>
+<text x="1415" y="478" text-anchor="middle" font-size="20" fill="#1e1e1e">lowercase id · no overwrite</text>
+<text x="1415" y="503" text-anchor="middle" font-size="20" fill="#1e1e1e">real dates · 2-letter state</text>
+<text x="1415" y="528" text-anchor="middle" font-size="20" fill="#1e1e1e">https sources only</text>
+<path d="M1230 485 L1150 485" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="820" y="420" width="330" height="130" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="985" y="477.3" text-anchor="middle" font-size="22" fill="#1e1e1e">PUBLISH</text>
+<text x="985" y="504.8" text-anchor="middle" font-size="22" fill="#1e1e1e">(or save as draft)</text>
+<path d="M820 485 L740 485" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="440" y="420" width="300" height="130" rx="14" fill="#f1f3f5" stroke="#868e96" stroke-width="2" />
+<text x="590" y="477.3" text-anchor="middle" font-size="22" fill="#1e1e1e">SUPABASE</text>
+<text x="590" y="504.8" text-anchor="middle" font-size="22" fill="#1e1e1e">schemes table</text>
+<path d="M440 485 L360 485" fill="none" stroke="#1e1e1e" stroke-width="2"  marker-end="url(#a)" />
+<rect x="60" y="420" width="300" height="130" rx="14" fill="#d3f9d8" stroke="#2f9e44" stroke-width="2" />
+<text x="210" y="465.5" text-anchor="middle" font-size="20" fill="#1e1e1e">LIVE FOR STUDENTS</text>
+<text x="210" y="490.5" text-anchor="middle" font-size="20" fill="#1e1e1e">and for MCP agents,</text>
+<text x="210" y="515.5" text-anchor="middle" font-size="20" fill="#1e1e1e">right away</text>
+<text x="60" y="659.8" font-size="22" fill="#0F4C5C">Adding Karnataka or Kerala is the same loop: paste their official page, review, publish.</text>
+<text x="60" y="687.3" font-size="22" fill="#0F4C5C">Every scheme shows its source and a "last verified" date, and stale ones are flagged after 90 days.</text>
+</svg>
