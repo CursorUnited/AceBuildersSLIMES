@@ -567,3 +567,35 @@ Confirmed in a real browser: chip "Govt-aided, Tamil medium, all years" is 66px 
 3. Do not change behaviour or any other file. Report the list of files you changed.
 
 Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-p12[15:20]: /caveman ultra
+STEP P12: MCP server exposing the engine. Installing the two packages and creating the new files is approved.
+
+Read only: docs/CONTRACTS.md section 4.1; exports of lib/engine/index.ts, lib/data/schemesRepo.ts, lib/engine/schemas.ts, lib/i18n/questions.ts; package.json (zod version).
+Install exactly: npm i mcp-handler @modelcontextprotocol/sdk   (if it fails with a zod or peer-dependency error, tell me the exact error first; do NOT switch packages or add --force/--legacy-peer-deps unless I say so).
+Create only: app/api/[transport]/route.ts (mcp-handler convention, basePath "/api"), lib/mcpTools.ts, tests/mcpTools.test.ts.
+Do NOT add `export const runtime`, `dynamic`, `maxDuration` or "use cache" to the route (Next 16 build fails). Never log the student profile or any tool input.
+
+1. lib/mcpTools.ts: plain async functions, testable without MCP:
+   - matchSchemes(profile) → for every published scheme { id, name_en, name_ta, status, benefit_en, deadline_status, reasons: [{ label_en, result }] } (status is likely_eligible | needs_info | not_eligible, from evaluateAll).
+   - nextQuestionTool(profile) → { field, question_en, unlock_count } | null (nextQuestion + QUESTIONS[field].en).
+   - getScheme(id, lang) → the scheme with text in the chosen language, apply steps, documents, deadline, sources, last_verified, or null if not found.
+   - documentChecklist(scheme_id, profile) → filterDocuments(...) as [{ text_en, text_ta, if_applicable }].
+   Validate every profile with a lenient ProfileSchema parse (drop invalid keys; never throw on bad input). Use getPublished().
+2. route.ts: createMcpHandler registering tools match_schemes, next_question, get_scheme, document_checklist with zod input schemas and short descriptions. match_schemes description: "Find Indian government scholarships a student is likely eligible for. Results are 'likely eligible', never guaranteed." Return JSON text content. Export GET, POST and DELETE as the package docs show. Serves /api/mcp.
+3. tests/mcpTools.test.ts: Kavya profile {state:"TN",education_level:"ug",year_of_study:1,course_type:"engineering",aicte_approved:true,institution_type:"govt",gender:"female",community:"SC",religion:"hindu",income:{min:0,max:100000},school_6_to_12:"govt_all",first_graduate:true,admission_route:"govt_school_7_5_quota",disability_percent:0} → matchSchemes includes pudhumai-penn as likely_eligible; empty profile → nextQuestionTool returns a field; getScheme("pudhumai-penn","ta") returns Tamil name; unknown id → null.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results + the MCP URL path, max 5 lines.
+
+promp-p12b[15:29]: /caveman ultra
+STEP P12b: tell MCP clients what a profile looks like. Description text only.
+
+Read only: app/api/[transport]/route.ts, lib/engine/fields.ts, lib/engine/schemas.ts.
+Modify only: app/api/[transport]/route.ts. Do not change behaviour or any other file.
+
+1. Add one shared constant PROFILE_HELP (a string) and use it as the .describe(...) text on the `profile` input of match_schemes, next_question and document_checklist. Content: "Student profile as a JSON object. Only include facts the student actually said; leave unknown fields out. Fields: state (2-letter code, e.g. TN); education_level (class_8..class_12, iti, diploma, ug, pg, phd); course_type (arts_science, engineering, medical, other_professional, polytechnic, iti_trade); institution_type (govt, govt_aided, private_self_financing, central_institute); year_of_study (1-6); gender (female, male, transgender); community (SC, SCC, ST, BC, BCM, MBC, DNC, FC); religion (hindu, muslim, christian, sikh, buddhist, jain, parsi, other); income {min, max} in rupees per YEAR (max null = no upper bound); first_graduate (boolean); school_6_to_12 (govt_all, govt_aided_tamil_all, govt_aided_english_all, private_or_mixed); current_school_type (govt, govt_aided, local_body, private); medium (tamil, english, other); admission_route (govt_counselling, govt_school_7_5_quota, management); aicte_approved, central_obc_certificate, lateral_entry, rural (booleans); disability_percent, last_exam_percent (0-100); age (integer)." Build the enum lists from ENUMS in lib/engine/fields.ts where possible so they never drift.
+2. get_scheme's `id` gets .describe("Scheme id from match_schemes, e.g. pudhumai-penn") and document_checklist's scheme_id the same.
+3. Tool descriptions stay as they are.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 3 lines.
