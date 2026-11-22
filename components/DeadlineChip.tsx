@@ -9,7 +9,7 @@ type Props = {
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const PILL = "inline-flex min-h-[44px] items-center rounded-full px-3 py-1 text-base font-medium";
+const PILL = "inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-medium whitespace-nowrap";
 
 function daysLeft(closesOn: string): number {
   return Math.ceil((Date.parse(`${closesOn}T23:59:59`) - Date.now()) / DAY_MS);
@@ -52,5 +52,13 @@ export default function DeadlineChip({ deadline, lang }: Props) {
     );
   }
 
-  return <span className={`${PILL} bg-gray-200 text-gray-700`}>{t("deadlineUnknown", lang)}</span>;
+  return (
+    <span className="inline-flex items-center gap-1 whitespace-nowrap text-sm text-gray-600">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      {t("deadlineUnknown", lang)}
+    </span>
+  );
 }

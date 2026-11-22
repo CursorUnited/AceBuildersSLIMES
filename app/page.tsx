@@ -15,6 +15,7 @@ import {
   type Profile,
 } from "@/lib/storage";
 import { useLang } from "@/components/LangProvider";
+import { STRINGS } from "@/lib/i18n/strings";
 import ChatBubble from "@/components/ChatBubble";
 import ChipRow from "@/components/ChipRow";
 import ConfirmCard from "@/components/ConfirmCard";
@@ -46,13 +47,7 @@ type ChatOk = {
 };
 type ChatErr = { error: { code: string; message: string } };
 
-const WELCOME =
-  "Vanakkam! Unga situation-a unga style-la sollunga, naan unga-ku scholarships kaatuven.";
-const EXAMPLES: Chip[] = [
-  { value: "Naan 12th padichen", label: "Naan 12th padichen" },
-  { value: "Naan first-year college student", label: "Naan first-year college student" },
-  { value: "Naan kudumbam vivasayam", label: "Naan kudumbam vivasayam" },
-];
+
 const DEFAULT_REGISTER = "casual" as Register;
 const NOT_UNDERSTOOD: Record<"tanglish" | "ta" | "en", string> = {
   en: "Sorry, I didn't catch that. Please tap one of these.",
@@ -76,6 +71,11 @@ function isKnown(profile: Profile): boolean {
 export default function Home() {
   const { lang } = useLang();
   const pick = (t: Txt) => (lang === "ta" ? t.ta : t.en);
+  const examples: Chip[] = [
+    { value: pick(STRINGS.exampleClass12), label: pick(STRINGS.exampleClass12) },
+    { value: pick(STRINGS.exampleFirstYear), label: pick(STRINGS.exampleFirstYear) },
+    { value: pick(STRINGS.exampleFarmer), label: pick(STRINGS.exampleFarmer) },
+  ];
 
   const [profile, setProfileState] = useState<Profile>({} as Profile);
   const [schemes, setSchemes] = useState<Schemes | null>(null);
@@ -117,6 +117,7 @@ export default function Home() {
   );
   const likelyCount = results.filter((r) => r.status === "likely_eligible").length;
   const known = isKnown(profile);
+  const hasText = input.trim().length > 0;
   const lastQ = useMemo(() => [...msgs].reverse().find((m) => m.kind === "question"), [msgs]);
   const lastChips = lastQ?.chips;
 
@@ -270,9 +271,27 @@ export default function Home() {
       <div className="flex-1 space-y-3 overflow-y-auto p-3">
         {msgs.length === 0 && (
           <div className="flex flex-col gap-2">
-            <ChatBubble from="bot">{WELCOME}</ChatBubble>
+            <ChatBubble from="bot">{pick(STRINGS.welcomeTitle)}</ChatBubble>
+            <p className="flex items-start gap-1.5 text-sm text-gray-600">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="mt-0.5 shrink-0"
+              >
+                <rect x="4" y="11" width="16" height="10" rx="2" />
+                <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+              </svg>
+              <span>{pick(STRINGS.privacyNote)}</span>
+            </p>
             <ChipRow
-              chips={EXAMPLES}
+              chips={examples}
               onPick={(v) => {
                 focusInput();
                 void send(v);
@@ -360,7 +379,11 @@ export default function Home() {
           <button
             type="submit"
             disabled={busy || !input.trim()}
-            className="btn-primary min-h-11 min-w-11 cursor-pointer rounded-lg px-4 py-2 font-medium disabled:opacity-50"
+            className={`min-h-[44px] min-w-[44px] rounded-lg px-4 py-2 font-medium ${
+              hasText && !busy
+                ? "btn-primary cursor-pointer"
+                : "border border-gray-300 text-gray-500 opacity-50 cursor-not-allowed"
+            }`}
           >
             Send
           </button>

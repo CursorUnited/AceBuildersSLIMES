@@ -501,3 +501,19 @@ No installs. No `export const runtime`, `dynamic` or "use cache". Never log past
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
 Reply: files changed + the three results, max 5 lines.
+
+prompt-p11[11:53]: /caveman ultra
+STEP P11: UI polish. Do ONLY the items below, one file at a time, run `npx tsc --noEmit` after each file. Tailwind only, no new packages, do not touch lib/engine, lib/llm, app/api, tests. No `export const runtime/dynamic`.
+
+Read only: app/page.tsx, components/ChatBubble.tsx, components/DeadlineChip.tsx, components/SchemeCard.tsx, app/globals.css, lib/i18n/strings.ts.
+Modify only: app/page.tsx, components/DeadlineChip.tsx, components/SchemeCard.tsx, lib/i18n/strings.ts, app/globals.css.
+
+1. Chat welcome + example chips follow the UI language (useLang): "ta" → Tamil script text, "en" → English text. Keep the tone friendly and say "Tell me in Tamil, Tanglish or English". Example chips: Class 12 student / first-year college student / farming family (Tamil and English versions). Add the strings to strings.ts (en + ta). Typing Tanglish still works: only the starter text changes.
+2. Under the welcome bubble add one small muted line with a lock icon (inline SVG or emoji): "Your answers stay on this phone. No login, no Aadhaar." (ta version too).
+3. Send button: when the input has text it uses the btn-primary style; when empty it stays muted/disabled-looking. Mic button next to it keeps btn-outline. Both min 44px.
+4. DeadlineChip: make it compact. text-sm, py-0.5 px-2.5, rounded-full. For unknown ("Check official page") use plain muted text with no background pill and no button look (text-gray-600 text-sm, small clock or info glyph). Open (green/orange), closed and rolling keep their coloured chips but also compact. Put the level badge and the deadline chip on the same row (flex-wrap gap-2 items-center, nowrap when they fit on 360px).
+5. SchemeCard: benefit line gets font-medium and slightly larger (text-base text-foreground); reasons stay as they are. The "Track ☆" button stays btn-outline. When tracked it becomes a filled accent-teal/10 background with accent-teal border and text "Tracked ★" (not plain text).
+6. Do not change any behaviour, routes or storage. No new features.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.

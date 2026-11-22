@@ -116,6 +116,18 @@ export const STRINGS = {
   micStop: { en: "Stop", ta: "நிறுத்து" },
   micListening: { en: "Listening…", ta: "கேட்கிறது…" },
   micBlocked: { en: "Mic blocked. Type instead.", ta: "மைக் தடுக்கப்பட்டது. தட்டச்சு செய்யவும்." },
+  welcomeTitle: {
+    en: "Hi! Tell me in Tamil, Tanglish or English, and I'll find the scholarships you are likely eligible for.",
+    ta: "வணக்கம்! தமிழ், தங்கிலிஷ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் கண்டுபிடிக்கிறேன்.",
+  },
+  exampleClass12: { en: "I am a Class 12 student", ta: "நான் 12ஆம் வகுப்பு படிக்கிறேன்" },
+  exampleFirstYear: { en: "I am a first-year college student", ta: "நான் கல்லூரியில் முதலாம் ஆண்டு படிக்கிறேன்" },
+  exampleFarmer: { en: "My family does farming", ta: "என் குடும்பம் விவசாயம் செய்கிறது" },
+  privacyNote: {
+    en: "Your answers stay on this phone. No login, no Aadhaar.",
+    ta: "உங்கள் பதில்கள் இந்த போனிலேயே இருக்கும். உள்நுழைவு தேவையில்லை, Aadhaar தேவையில்லை.",
+  },
+
 
 } as const satisfies Record<string, { en: string; ta: string }>;
 

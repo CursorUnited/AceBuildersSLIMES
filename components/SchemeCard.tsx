@@ -83,7 +83,7 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
         {scheme.name[lang]}
       </Link>
 
-      <p className="mt-1 text-base text-gray-700">{scheme.benefit[lang]}</p>
+      <p className="mt-1 text-base font-medium text-foreground">{scheme.benefit[lang]}</p>
 
       {reasonLines.length > 0 && (
         <ul className="mt-2 flex flex-col gap-1 text-base text-gray-800">
@@ -115,7 +115,11 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
         <button
           type="button"
           onClick={track}
-          className="btn-primary min-h-[44px] cursor-pointer rounded-full px-4 py-2 text-base font-medium"
+          className={
+            tracked
+              ? "min-h-[44px] cursor-pointer rounded-full border border-accent-teal bg-accent-teal/10 px-4 py-2 text-base font-medium text-accent-teal"
+              : "btn-outline min-h-[44px] cursor-pointer rounded-full px-4 py-2 text-base font-medium"
+          }
         >
           {tracked ? `${t("tracked", lang)} ★` : `${t("track", lang)} ☆`}
         </button>
