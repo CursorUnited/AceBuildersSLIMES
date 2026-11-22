@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { z } from "zod";
 import SchemeList from "../../components/admin/SchemeList";
 import SchemeEditor from "../../components/admin/SchemeEditor";
+import ImportPanel from "../../components/admin/ImportPanel";
 import { SchemeSchema } from "../../lib/engine/schemas";
 
 type SchemeData = z.infer<typeof SchemeSchema>;
@@ -20,7 +21,7 @@ const ListItemSchema = z.object({
 const ListSchema = z.array(ListItemSchema);
 type ListItem = z.infer<typeof ListItemSchema>;
 
-type View = { kind: "list" } | { kind: "edit"; data: SchemeData; isNew: boolean };
+type View = { kind: "list" } | { kind: "edit"; data: SchemeData; isNew: boolean } | { kind: "import" };
 
 function readStoredPasscode(): string | null {
   try {
@@ -173,12 +174,31 @@ export default function AdminPage() {
                 New scheme
               </button>
             )}
+            {view.kind === "list" && (
+              <button
+                type="button"
+                className="btn-outline min-h-[44px]"
+                onClick={() => setView({ kind: "import" })}
+              >
+                Import
+              </button>
+            )}
             <button type="button" className="btn-outline min-h-[44px]" onClick={handleLogout}>
               Log out
             </button>
           </div>
 
-          {view.kind === "edit" ? (
+          {view.kind === "import" ? (
+            <div className="mt-6">
+              <ImportPanel
+                passcode={passcode}
+                onSaved={() => {
+                  void loadList(passcode);
+                }}
+                onClose={() => setView({ kind: "list" })}
+              />
+            </div>
+          ) : view.kind === "edit" ? (
             <div className="mt-6">
               <SchemeEditor
                 key={view.isNew ? "new" : view.data.id}

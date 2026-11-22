@@ -451,3 +451,53 @@ No installs. Do NOT add `export const runtime`, `dynamic` or "use cache". Englis
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
 Reply: files changed + the three results, max 5 lines.
+
+prompt-p7[4:24]: /caveman ultra
+STEP P7: voice input.
+
+Read only: docs/CONTRACTS.md section 3.3; lib/llm/gemini.ts; app/page.tsx (only the input area); app/globals.css; lib/http.ts; lib/i18n/strings.ts.
+Create only: lib/llm/vocabulary.ts, lib/llm/transcribe.ts, app/api/transcribe/route.ts, components/MicButton.tsx. Modify only: app/page.tsx (replace the mic placeholder), lib/llm/gemini.ts (add an audio helper only if needed), lib/i18n/strings.ts (add keys). Creating the new files is approved.
+No installs. Do NOT add `export const runtime`, `dynamic`, or "use cache" to any file (Next 16 build fails). Node is the default runtime.
+
+1. vocabulary.ts: exported string array: NMMSS, Pudhumai Penn, புதுமைப் பெண், Tamizh Pudhalvan, தமிழ்ப் புதல்வன், Post-Matric, Pre-Matric, PM-USP, AICTE Pragati, Saksham, first graduate, polytechnic, ITI, SC, ST, SCC, BC, BCM, MBC, DNC, FC, B.E., B.Tech, MBBS, plus two, SSLC, lakh, லட்சம்.
+2. transcribe.ts (server only): transcribeAudio(buffer: Buffer, mimeType: string): Promise<string>. Use ai.models.generateContent (NOT the Live API / WebSocket). Models from process.env.GEMINI_TRANSCRIBE_MODELS (comma-separated, trimmed, empty ones dropped), tried in order; move to the next on 429 / 5xx / timeout; all fail → throw AiError("UNAVAILABLE"). Per-model timeout 8 s (race with a timer, same pattern as gemini.ts). Contents: [{ role: "user", parts: [{ inlineData: { mimeType, data: buffer.toString("base64") } }, { text: INSTRUCTIONS }] }]. INSTRUCTIONS: "Transcribe exactly what is said. The speaker is a student in Tamil Nadu speaking Tamil, English, or Tanglish (Tamil words mixed with English). Write Tamil words in Tamil script only if spoken as pure Tamil sentences; keep Tanglish in Latin letters as spoken. Do not translate. Remove only filler sounds (umm, aah). Prefer these spellings: <vocabulary joined by comma>. Output the transcript text only." Trim the result; if empty, throw AiError("UNAVAILABLE"). Never log audio or transcript text.
+3. /api/transcribe POST, multipart field "audio": missing / not audio/* / larger than 1.5 MB → 400 BAD_REQUEST (use lib/http.ts jsonError); success → { text }; AiError → 503 AI_UNAVAILABLE; anything else → 500 INTERNAL. Strip codec params from the mime type before sending (audio/webm;codecs=opus → audio/webm).
+4. MicButton (client): props { onText(text: string): void; disabled?: boolean; lang }. Tap to start, tap to stop, auto-stop at 30 s. MediaRecorder with "audio/webm;codecs=opus", fallback "audio/mp4" (Safari). While recording: red pulsing dot + seconds counter + the button reads "Stop". On stop: POST to /api/transcribe, show a "Listening…" state, then onText(text) puts the text INTO the input box (never auto-sends). On 503 or MediaRecorder missing: fall back to window.SpeechRecognition || window.webkitSpeechRecognition with lang "ta-IN" (en-IN if ui lang is en), interimResults true, streaming into the input via onText. Mic permission denied: hide the button and show a toast "Mic blocked. Type instead." (both languages, in strings.ts). Release the stream tracks after every recording. 44px tap target, use btn-outline and focus classes from globals.css.
+5. app/page.tsx: replace the mic placeholder with <MicButton>; onText sets the input value and focuses the input. Keep everything else.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.
+
+prompt-p5f[4:39]: /caveman ultra
+STEP P5f: stop the model guessing community from "OBC"; tighten register on short Tanglish. Prompt text only.
+
+Read only: lib/llm/prompts.ts.
+Modify only: lib/llm/prompts.ts. Do not touch any other file. Do not add or change any example (EXAMPLES) and never copy test messages from eval/ into the prompt.
+
+1. FIELD_HINTS.community: append: 'OBC / "other backward class" is NOT one of these values. Never turn OBC into BC or MBC.'
+2. FIELD_HINTS.central_obc_certificate: replace with: 'boolean. true when they say they hold a central / Government of India OBC certificate. This is a separate fact: it NEVER sets community, in either direction.'
+3. Add rule 11 to RULES: "11. community is set only when the student names one of SC, SCC, ST, BC, BCM, MBC, DNC, FC (or its Tamil / Tanglish name). A caste-certificate type, a reservation word or a scheme name alone does not give a community. When the student mentions a central OBC certificate, set central_obc_certificate and leave community out."
+4. Add rule 12 to RULES: "12. register: a message that mixes Tamil words written in Latin letters (illa, aama, ponnu, padikkiren, naan ...) with English or community codes is tanglish even when it is very short. Use en only when the whole message is plain English."
+5. Rule 3 and rule 10 stay as they are.
+
+Run: npx tsc --noEmit; npx vitest run.
+Reply: files changed + results, max 3 lines.
+
+prompt-p10[11:32]: /caveman ultra
+STEP P10: draft a scheme from pasted official text. Creating the new files is approved.
+
+Read only: docs/CONTRACTS.md sections 1 and 2; lib/llm/gemini.ts (generateJson signature); lib/engine/schemas.ts; lib/engine/fields.ts; lib/adminAuth.ts; lib/http.ts; app/admin/page.tsx; components/admin/SchemeEditor.tsx (Props only: initial, isNew, passcode, onSaved, onClose).
+Create only: lib/llm/draftScheme.ts, app/api/admin/import/route.ts, components/admin/ImportPanel.tsx, tests/draftScheme.test.ts.
+Modify only: app/admin/page.tsx (add an "Import" button/tab next to "New scheme"), lib/llm/gemini.ts (ONLY to let generateJson take an optional timeoutMs that overrides the default; every existing caller must behave exactly as before).
+No installs. No `export const runtime`, `dynamic` or "use cache". Never log pasted text, model output or the passcode.
+
+1. draftScheme({ text, source_url, today }) → Promise<{ draft: unknown-validated Scheme-shaped object, warnings: string[] }>.
+   Call generateJson with timeoutMs 30000. System prompt: "Turn this official government scheme text into JSON matching the schema below. Use ONLY facts in the text; never invent amounts, dates or rules. Conditions may only use these fields and enum values: <ENUMS and numeric fields from fields.ts>. Anything the app cannot check becomes { label: {en, ta}, manual: true }. Unknown amounts or dates: leave them out and explain in notes; set confidence to 'low' if unsure. Write simple Tamil (ta) for every label, benefit and step that a Class 9 student can read. sources = [source_url]. last_verified = today. id = a short lowercase-hyphen slug of the English name." Include the scheme JSON example from CONTRACTS section 2 in the prompt.
+   After generateJson: SchemeSchema.safeParse. If it fails, drop invalid conditions / documents one by one (re-validating), add one warning per dropped item, and if it still fails return the best-effort object with a warning "needs manual fixing" (the editor shows the zod errors). Extra warnings for: missing ta text, deadline status unknown, confidence low, no conditions left.
+2. POST /api/admin/import (admin only, 401 otherwise) body { text: string 50..20000 chars, source_url: https url } validated with zod → 200 { draft, warnings }. Not saved to the database. AiError → 503 AI_UNAVAILABLE, bad body → 400.
+3. ImportPanel (client): textarea "Paste the official page text", URL input, "Draft with AI" button with a loading state (the call can take up to 30 s: say "This can take about 20 seconds"). On success show the warnings in an amber list and open SchemeEditor prefilled (isNew true, status draft) with the pasted text shown in a scrollable box beside it. Errors show a plain message.
+4. tests/draftScheme.test.ts (mock generateJson with vi.mock): an invalid condition field is dropped with a warning; a valid draft passes through with no warnings except none expected; missing Tamil text gives a warning.
+5. Use btn-primary / btn-outline / accent-teal classes; phone width 360px with no horizontal scroll.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply: files changed + the three results, max 5 lines.

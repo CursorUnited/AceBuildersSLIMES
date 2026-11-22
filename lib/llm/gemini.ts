@@ -30,7 +30,7 @@ export class AiError extends Error {
 
 // One model call raced against the timeout. HTTP 429/5xx/4xx all surface as
 // thrown errors from the SDK; the caller moves on to the next model for any of them.
-async function callModel(model: string, system: string, userText: string): Promise<string> {
+async function callModel(model: string, system: string, userText: string, timeoutMs: number): Promise<string> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const res = await Promise.race([
@@ -44,7 +44,7 @@ async function callModel(model: string, system: string, userText: string): Promi
         },
       }),
       new Promise<never>((_, reject) => {
-        timer = setTimeout(() => reject(new AiError("TIMEOUT")), TIMEOUT_MS);
+        timer = setTimeout(() => reject(new AiError("TIMEOUT")), timeoutMs);
       }),
     ]);
     return res.text ?? "";
@@ -54,15 +54,15 @@ async function callModel(model: string, system: string, userText: string): Promi
 }
 
 // Calls one model; parses JSON, retrying once on the same model if parsing fails.
-async function runOnModel(model: string, system: string, userText: string): Promise<unknown> {
-  const first = await callModel(model, system, userText);
+async function runOnModel(model: string, system: string, userText: string, timeoutMs: number): Promise<unknown> {
+  const first = await callModel(model, system, userText, timeoutMs);
   try {
     return JSON.parse(first) as unknown;
   } catch {
     // fall through to the single retry
   }
 
-  const second = await callModel(model, system, userText + JSON_RETRY_SUFFIX);
+  const second = await callModel(model, system, userText + JSON_RETRY_SUFFIX, timeoutMs);
   try {
     return JSON.parse(second) as unknown;
   } catch {
@@ -74,13 +74,15 @@ export async function generateJson(opts: {
   system: string;
   user: string;
   model?: string;
+  timeoutMs?: number;
 }): Promise<unknown> {
   const models = opts.model ? [opts.model] : modelChain();
   const failures: Array<"TIMEOUT" | "UNAVAILABLE"> = [];
+  const timeoutMs = opts.timeoutMs ?? TIMEOUT_MS;
 
   for (const model of models) {
     try {
-      return await runOnModel(model, opts.system, opts.user);
+      return await runOnModel(model, opts.system, opts.user, timeoutMs);
     } catch (err) {
       if (err instanceof AiError && err.code === "BAD_JSON") throw err;
       failures.push(err instanceof AiError && err.code === "TIMEOUT" ? "TIMEOUT" : "UNAVAILABLE");
