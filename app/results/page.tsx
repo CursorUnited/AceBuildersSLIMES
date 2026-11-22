@@ -82,7 +82,7 @@ export default function ResultsPage() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-6">
+    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-6 lg:max-w-6xl">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold text-accent-teal">{t("resultsTitle", lang)}</h1>
         <Link
@@ -117,14 +117,14 @@ export default function ResultsPage() {
             <h2 id="likely-heading" className="text-xl font-semibold text-green-800">
               {`${t("sectionLikely", lang)} (${likely.length})`}
             </h2>
-            {renderCards(likely)}
+            <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">{renderCards(likely)}</div>
           </section>
 
           <section className="flex flex-col gap-3" aria-labelledby="oneaway-heading">
             <h2 id="oneaway-heading" className="text-xl font-semibold text-orange-800">
               {`${t("sectionOneAway", lang)} (${oneAway.length})`}
             </h2>
-            {renderCards(oneAway)}
+            <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">{renderCards(oneAway)}</div>
           </section>
 
           <section className="flex flex-col gap-3" aria-labelledby="noteligible-heading">
@@ -141,7 +141,7 @@ export default function ResultsPage() {
                 </span>
               </button>
             </h2>
-            {showNotEligible && renderCards(notEligible)}
+            {showNotEligible && <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">{renderCards(notEligible)}</div>}
           </section>
         </>
       )}

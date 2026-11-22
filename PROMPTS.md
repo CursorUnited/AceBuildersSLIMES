@@ -599,3 +599,41 @@ Modify only: app/api/[transport]/route.ts. Do not change behaviour or any other 
 3. Tool descriptions stay as they are.
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 3 lines.
+
+prompt-p14[16:40]: /caveman ultra
+STEP P14: desktop layout for the home page and results. Mobile (<1024px) must look EXACTLY as it does now. No behaviour changes. Creating the new component is approved.
+
+Read only: app/page.tsx, app/results/page.tsx, components/Header.tsx, components/ConfirmCard.tsx, components/SchemeCard.tsx, lib/i18n/describe.ts, lib/i18n/questions.ts, lib/i18n/strings.ts, app/globals.css.
+Create only: components/ProfilePanel.tsx.
+Modify only: app/page.tsx, app/results/page.tsx, components/Header.tsx, lib/i18n/strings.ts (new keys, en + ta).
+Do not touch lib/engine, lib/llm, app/api, tests.
+
+1. Home layout at `lg` (≥1024px) only: wrapper `mx-auto grid w-full max-w-6xl gap-6 px-6 py-6 lg:grid-cols-[minmax(0,1fr)_380px]`. Left column = the existing chat, now a card: `lg:rounded-2xl lg:border lg:border-black/10 lg:bg-white lg:shadow-sm lg:overflow-hidden`, fixed height `lg:h-[calc(100dvh-6rem)]` with the message list scrolling inside (flex-1 overflow-y-auto) and the input bar pinned at the bottom of the card (not sticky to the viewport). Below lg keep the current single-column full-height white layout unchanged. The page background outside the card stays cream.
+2. components/ProfilePanel.tsx (client, `hidden lg:flex`, sticky top-24, self-start, w-full, card style rounded-2xl border bg-white p-5): props { profile, changedFields, results (SchemeResult[]), lang, onReview }.
+   - Empty profile: heading "How Urimai works" with 3 short numbered lines: 1 Tell us about yourself in Tamil, Tanglish or English (type or speak). 2 We match only what the official rules say and never guess. 3 Check your documents and track deadlines. Then the privacy line with the lock icon (reuse the existing string) and, if results.length > 0, "{n} schemes checked: central and Tamil Nadu".
+   - Known facts: heading "What I understood"; one row per known field, in the existing field order, label = question short name from QUESTIONS (en/ta) and value = value part of describeFact(field, value, lang) (never blank); changed fields get the turmeric dot. Below: two counters as chips: "{x} likely" (success tint) and "{y} one detail away" (turmeric tint); then up to 3 names of likely schemes (name in current language) as plain text list; then primary button "See my schemes" (router push to /results) and an outline button "Review answers" (calls onReview, which opens the existing ConfirmCard sheet).
+   - All text via strings.ts (en + ta). Use the existing classes (btn-primary, btn-outline, accent-teal, rounded-2xl, text-base). Rows are not interactive.
+3. page.tsx: render <ProfilePanel/> next to the chat using the profile, lastChanged, results and lang that page.tsx already has. Hide the bottom "See my schemes now" bar from lg up (`lg:hidden`) because the panel has that button. ConfirmCard (the bottom sheet) stays and opens via onReview or the mobile bar; on desktop it should render as a centred dialog (max-w-xl) which it already is.
+4. Header.tsx: inner container uses `max-w-6xl` from lg up (`max-w-xl lg:max-w-6xl`) so the logo and nav line up with the new layout; mobile unchanged.
+5. results/page.tsx: container `max-w-xl lg:max-w-5xl`; each section's card list becomes `grid gap-3 lg:grid-cols-2`. Section headings, the reminder banner and the footer stay full-width. Mobile unchanged.
+6. Do not make the scheme detail, applications or admin pages wider in this step.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply max 6 lines: files changed + results.
+
+prompt-p14b[16:54]: /caveman ultra
+STEP P14b: four small copy/layout nits. No behaviour changes.
+
+Read only: components/ProfilePanel.tsx, app/page.tsx, app/results/page.tsx, lib/i18n/strings.ts.
+Modify only: components/ProfilePanel.tsx, app/page.tsx, app/results/page.tsx, lib/i18n/strings.ts.
+
+1. The "{n} one detail away" counter chip text in the panel becomes "{n} need one more detail" (ta equivalent), via strings.ts. The "likely" chip stays.
+2. In page.tsx the privacy line shown inside the chat's welcome block gets `lg:hidden` because the panel shows it on desktop. On mobile it stays.
+3. results/page.tsx container uses `lg:max-w-6xl` instead of lg:max-w-5xl so its left edge matches the header; the card grid stays 2 columns at lg and becomes 3 columns from xl (`xl:grid-cols-3`).
+4. Copy: student-facing text should only say "Tamil or English", never "Tanglish". In lib/i18n/strings.ts change the three strings that mention it (lines ~8-9, ~120-121 and ~134-135, en + ta):
+   - en: "…in Tamil or English…" (remove ", Tanglish").
+   - ta: replace "தமிழ், தங்கிலிஷ் அல்லது ஆங்கிலத்தில்" with "தமிழ் அல்லது ஆங்கிலத்தில்".
+   Do not change any logic: the app still understands Tanglish, we just do not advertise it. Do not touch lib/llm or the "tanglish" register code anywhere.
+   Afterwards grep app/, components/ and lib/i18n for "Tanglish" and "தங்கிலிஷ்": the only remaining hits may be code identifiers like register names (e.g. "tanglish" lowercase in types and question templates), never visible text.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 4 lines.

@@ -20,6 +20,7 @@ import ChatBubble from "@/components/ChatBubble";
 import ChipRow from "@/components/ChipRow";
 import ConfirmCard from "@/components/ConfirmCard";
 import MicButton from "@/components/MicButton";
+import ProfilePanel from "@/components/ProfilePanel";
 
 type Txt = { en: string; ta: string };
 type Chip = { value: string; label: string | Txt };
@@ -267,12 +268,13 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col bg-white text-base">
+    <div className="mx-auto w-full lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-6 lg:px-6 lg:py-6">
+    <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col bg-white text-base lg:h-[calc(100dvh-6rem)] lg:min-h-0 lg:max-w-none lg:overflow-hidden lg:rounded-2xl lg:border lg:border-black/10 lg:shadow-sm">
       <div className="flex-1 space-y-3 overflow-y-auto p-3">
         {msgs.length === 0 && (
           <div className="flex flex-col gap-2">
             <ChatBubble from="bot">{pick(STRINGS.welcomeTitle)}</ChatBubble>
-            <p className="flex items-start gap-1.5 text-sm text-gray-600">
+            <p className="flex items-start gap-1.5 text-sm text-gray-600 lg:hidden">
               <svg
                 width="16"
                 height="16"
@@ -347,12 +349,12 @@ export default function Home() {
         />
       )}
 
-      <div className="sticky bottom-0 border-t bg-white p-2">
+      <div className="sticky bottom-0 border-t bg-white p-2 lg:static">
         {known && (
           <button
             type="button"
             onClick={() => setConfirmOpen(true)}
-            className="btn-primary mb-2 min-h-11 w-full cursor-pointer rounded-lg px-3 py-2 font-medium"
+            className="btn-primary mb-2 min-h-11 w-full cursor-pointer rounded-lg px-3 py-2 font-medium lg:hidden"
           >
             See my schemes now ({likelyCount} likely) -&gt;
           </button>
@@ -390,5 +392,14 @@ export default function Home() {
         </form>
       </div>
     </main>
+    <ProfilePanel
+      profile={profile}
+      changedFields={lastChanged}
+      results={results}
+      schemes={schemes ?? []}
+      lang={lang}
+      onReview={() => setConfirmOpen(true)}
+    />
+    </div>
   );
 }

@@ -38,7 +38,7 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-black/10 bg-background/95 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-xl items-center justify-between gap-2 px-3 py-1">
+        <div className="mx-auto flex w-full max-w-xl items-center justify-between gap-2 px-3 py-1 lg:max-w-6xl">
           <span className="min-w-0 truncate text-sm font-semibold text-accent-teal sm:text-base">{t("appTitle", lang)}</span>
 
           <div className="flex shrink-0 items-center gap-1">

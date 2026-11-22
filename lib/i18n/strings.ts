@@ -5,8 +5,8 @@ import type { ProfileField } from "@/lib/engine/types";
 export const STRINGS = {
   appTitle: { en: "உரிமை Urimai", ta: "உரிமை Urimai" },
   welcome: {
-    en: "Hi! Tell me about yourself in Tamil, Tanglish or English, and I'll show the scholarships you are likely eligible for.",
-    ta: "வணக்கம்! உங்களைப் பற்றி தமிழ், தங்கிலிஷ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் காட்டுகிறேன்.",
+    en: "Hi! Tell me about yourself in Tamil or English, and I'll show the scholarships you are likely eligible for.",
+    ta: "வணக்கம்! உங்களைப் பற்றி தமிழ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் காட்டுகிறேன்.",
   },
   inputPlaceholder: {
     en: "Type or speak here…",
@@ -117,8 +117,8 @@ export const STRINGS = {
   micListening: { en: "Listening…", ta: "கேட்கிறது…" },
   micBlocked: { en: "Mic blocked. Type instead.", ta: "மைக் தடுக்கப்பட்டது. தட்டச்சு செய்யவும்." },
   welcomeTitle: {
-    en: "Hi! Tell me in Tamil, Tanglish or English, and I'll find the scholarships you are likely eligible for.",
-    ta: "வணக்கம்! தமிழ், தங்கிலிஷ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் கண்டுபிடிக்கிறேன்.",
+    en: "Hi! Tell me in Tamil or English, and I'll find the scholarships you are likely eligible for.",
+    ta: "வணக்கம்! தமிழ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் கண்டுபிடிக்கிறேன்.",
   },
   exampleClass12: { en: "I am a Class 12 student", ta: "நான் 12ஆம் வகுப்பு படிக்கிறேன்" },
   exampleFirstYear: { en: "I am a first-year college student", ta: "நான் கல்லூரியில் முதலாம் ஆண்டு படிக்கிறேன்" },
@@ -129,6 +129,28 @@ export const STRINGS = {
   },
 
 
+  howTitle: { en: "How Urimai works", ta: "Urimai எப்படி வேலை செய்கிறது" },
+  howStep1: {
+    en: "Tell us about yourself in Tamil or English (type or speak).",
+    ta: "தமிழ் அல்லது ஆங்கிலத்தில் உங்களைப் பற்றிச் சொல்லுங்கள் (தட்டச்சு அல்லது பேச்சு).",
+  },
+  howStep2: {
+    en: "We match only what the official rules say and never guess.",
+    ta: "அதிகாரப்பூர்வ விதிகள் சொல்வதை மட்டுமே பொருத்துகிறோம்; ஒருபோதும் யூகிப்பதில்லை.",
+  },
+  howStep3: {
+    en: "Check your documents and track deadlines.",
+    ta: "உங்கள் ஆவணங்களைச் சரிபாருங்கள்; கடைசி தேதிகளைக் கண்காணியுங்கள்.",
+  },
+  schemesChecked: {
+    en: "{n} schemes checked: central and Tamil Nadu",
+    ta: "{n} திட்டங்கள் சரிபார்க்கப்பட்டன: மத்திய மற்றும் தமிழ்நாடு",
+  },
+  profileUnderstood: { en: "What I understood", ta: "நான் புரிந்துகொண்டது" },
+  chipLikely: { en: "{n} likely", ta: "{n} தகுதி வாய்ப்பு" },
+  chipOneAway: { en: "{n} need one more detail", ta: "{n} ஒரு விவரம் குறைவு" },
+  seeMySchemes: { en: "See my schemes", ta: "என் திட்டங்களைப் பார்" },
+  reviewAnswers: { en: "Review answers", ta: "பதில்களை மறுபரிசீலி" },
 } as const satisfies Record<string, { en: string; ta: string }>;
 
 export const FIELD_NAMES: Record<ProfileField, { en: string; ta: string }> = {
