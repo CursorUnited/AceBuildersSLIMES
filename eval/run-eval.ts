@@ -18,6 +18,7 @@ const CaseSchema = z.object({
     side_answer: z.boolean().optional(),
     register: z.string().optional(),
   }),
+  profile_before: z.record(z.string(), z.unknown()).optional(),
 });
 type Case = z.infer<typeof CaseSchema>;
 
@@ -75,7 +76,7 @@ async function runCase(c: Case, model: string): Promise<Outcome> {
     try {
       const result = await extractFacts({
         message: c.message,
-        profile: {} as Profile, // empty profile: every field is unknown at start
+        profile: (c.profile_before ?? {}) as Profile, // from the case's profile_before (empty when absent)
         asked_field: c.asked_field ?? null,
         today: istToday(),
         model,

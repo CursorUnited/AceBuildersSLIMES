@@ -694,3 +694,29 @@ Modify only those files. Do not touch lib/engine, lib/llm, app/api, lib/calendar
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
 Reply max 5 lines: files changed + results.
+
+prompt-p5i[19:13]: /caveman ultra
+STEP P5i: fix T23 regression and make the eval honour profile_before.
+
+Read only: lib/llm/prompts.ts, eval/run-eval.ts.
+Modify only: lib/llm/prompts.ts, eval/run-eval.ts. Do not put test messages into the prompt.
+
+1. prompts.ts rule 8: keep the current text and append: "Postgraduate degrees also set course_type: MSc, MA, MCom = pg + arts_science; ME, MTech = pg + engineering; MBA, MCA, LLM = pg + other_professional; MD, MS (medical) = pg + medical. So 'msc physics' sets education_level pg AND course_type arts_science even when the student does not say 'arts'."
+2. run-eval.ts: CaseSchema gets `profile_before: z.record(z.string(), z.unknown()).optional()`, and runCase passes `profile: (c.profile_before ?? {}) as Profile` to extractFacts instead of the hard-coded empty profile. Update the comment next to it. Nothing else in the runner changes.
+
+Run: npx tsc --noEmit; npx vitest run. Reply max 3 lines.
+
+prompt-p5j[20:15]: /caveman ultra
+STEP P5j: pin grade numbers; stop course answer changing education level. Prompt text only.
+
+Read only: lib/llm/prompts.ts.
+Modify only: lib/llm/prompts.ts. Do not add examples. Do not put test messages into the prompt.
+
+Bug (reproduced 5 of 5 against /api/chat): "naan 9th padikren, SC, appa coolie" returns education_level class_10. Removing any single rule or example makes it return class_9 again, so the prompt is fragile: pin the digit mapping.
+
+1. FIELD_HINTS.education_level: replace the digit part with an explicit table and an instruction: 'Grade numbers map one-to-one: "8th"/"8" = class_8, "9th" = class_9, "10th"/"SSLC" = class_10, "11th"/"plus one"/"+1" = class_11, "12th"/"plus two"/"+2" = class_12. ALWAYS use exactly the number the student says; never round up or down to a neighbouring class. Only a correction such as "X illa, Y" (it is not X, it is Y) uses the second number.' Keep the rest of that hint (iti, diploma, ug, pg, phd rules).
+2. FIELD_HINTS.course_type: append: "When asked_field is course_type, the reply sets ONLY course_type (and year_of_study if stated); never education_level unless the student explicitly says they changed level."
+3. Rule 4 (corrections): append: "A correction needs a clear negation or 'actually'/'sorry'. Two numbers in one sentence without a negation (e.g. a grade and an age) are NOT a correction."
+4. Do not change any other rule.
+
+Run: npx tsc --noEmit; npx vitest run. Reply max 2 lines.
