@@ -98,6 +98,9 @@ export default function Home() {
   const prevBusyRef = useRef(busy);
   // Set synchronously in send(); blocks a second send until the first request ends.
   const sendingRef = useRef(false);
+  // Sticky input row; scrolled into view when the on-screen keyboard opens.
+  const inputRowRef = useRef<HTMLDivElement>(null);
+  const [inputFocused, setInputFocused] = useState(false);
 
   // Restore profile + chat, fetch schemes once.
   useEffect(() => {
@@ -141,6 +144,20 @@ export default function Home() {
     if (prevBusyRef.current && !busy) inputRef.current?.focus({ preventScroll: true });
     prevBusyRef.current = busy;
   }, [busy]);
+
+  // While the input is focused, keep the input row visible as the keyboard resizes the viewport.
+  useEffect(() => {
+    if (!inputFocused) return;
+    const scrollRowIntoView = () =>
+      inputRowRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+    const timer = setTimeout(scrollRowIntoView, 250);
+    const vv = typeof window !== "undefined" ? window.visualViewport : undefined;
+    vv?.addEventListener("resize", scrollRowIntoView);
+    return () => {
+      clearTimeout(timer);
+      vv?.removeEventListener("resize", scrollRowIntoView);
+    };
+  }, [inputFocused]);
 
   function focusInput() {
     inputRef.current?.focus({ preventScroll: true });
@@ -288,7 +305,7 @@ export default function Home() {
   return (
     <div className="mx-auto w-full lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-6 lg:px-6 lg:py-6">
     <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col bg-white text-base lg:h-[calc(100dvh-6rem)] lg:min-h-0 lg:max-w-none lg:overflow-hidden lg:rounded-2xl lg:border lg:border-black/10 lg:shadow-sm">
-      <div className="flex-1 space-y-3 overflow-y-auto p-3">
+      <div className="flex-1 min-h-0 space-y-3 overflow-y-auto p-3">
         {msgs.length === 0 && (
           <div className="flex flex-col gap-2">
             <ChatBubble from="bot">{pick(STRINGS.welcomeTitle)}</ChatBubble>
@@ -371,7 +388,7 @@ export default function Home() {
         <p className="px-3 pb-1 text-base text-gray-700">{pick(STRINGS.coverageNotice)}</p>
       )}
 
-      <div className="sticky bottom-0 border-t bg-white p-2 lg:static">
+      <div ref={inputRowRef} className="sticky bottom-0 border-t bg-white p-2 lg:static">
         {known && (
           <button
             type="button"
@@ -394,6 +411,8 @@ export default function Home() {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
             onKeyDown={onKeyDown}
             rows={1}
             disabled={busy}

@@ -790,3 +790,30 @@ Read only: app/layout.tsx. Modify only: app/layout.tsx.
 Add `metadataBase: new URL("https://urimai-sigma.vercel.app")` to the exported metadata object. Nothing else.
 
 Run: npx tsc --noEmit; npm run build. The metadataBase warning must be gone. Reply max 2 lines.
+
+prompt-23[22:03]:/caveman ultra
+STEP P23: coverage notice for students outside Tamil Nadu. UI copy only; no engine or data changes.
+
+Read only: app/results/page.tsx, app/page.tsx, components/ProfilePanel.tsx, lib/i18n/strings.ts.
+Modify only: those four files.
+
+1. Add a string coverageNotice (en + ta): en "Urimai covers Tamil Nadu and central government schemes for now. We show the central schemes that apply to you; your state's own schemes are not added yet." ta: the natural Tamil equivalent.
+2. Condition: profile.state is set and is not "TN". (Unknown state: show nothing.)
+3. results/page.tsx: show the notice as an info banner (accent-turmeric/15 background, text-foreground, rounded-xl, p-3) above the first section, full width on desktop.
+4. ProfilePanel (desktop panel) and the mobile confirm sheet area in app/page.tsx: show the same notice as one short line under the facts list when the condition holds.
+5. The "Doesn't match your answers" section label stays unchanged.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 3 lines.
+
+prompt-p24[22:22]: /caveman ultra
+STEP P24: input row hidden behind the phone keyboard (Android Chrome). Real-device bug.
+
+Read only: app/layout.tsx, app/page.tsx.
+Modify only: app/layout.tsx, app/page.tsx.
+
+1. layout.tsx: in the exported `viewport` object add `interactiveWidget: "resizes-content"` (keep themeColor and everything else), so the layout viewport shrinks when the keyboard opens and dvh units and sticky bottom bars sit above the keyboard.
+2. page.tsx: on the chat textarea `onFocus`, after 250 ms call `scrollIntoView({ block: "end", behavior: "smooth" })` on the input row (the sticky bottom container, give it a ref), and again on `window.visualViewport` `resize` events while the textarea is focused (add/remove the listener with the focus state). Also keep the existing scroll-to-last-message behaviour.
+3. On mobile (< lg) make sure the input row is never taller than needed: keep `sticky bottom-0`, and give the scroll area above it `min-h-0` so the messages list shrinks instead of pushing the input off screen.
+4. Do not change desktop (lg and up) layout.
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
