@@ -158,6 +158,10 @@ export const STRINGS = {
     en: "{n} schemes checked: central and Tamil Nadu",
     ta: "{n} திட்டங்கள் சரிபார்க்கப்பட்டன: மத்திய மற்றும் தமிழ்நாடு",
   },
+  coverageNotice: {
+    en: "Urimai covers Tamil Nadu and central government schemes for now. We show the central schemes that apply to you; your state's own schemes are not added yet.",
+    ta: "Urimai இப்போதைக்கு தமிழ்நாடு மற்றும் மத்திய அரசுத் திட்டங்களை உள்ளடக்கியது. உங்களுக்குப் பொருந்தும் மத்திய திட்டங்களைக் காட்டுகிறோம்; உங்கள் மாநில அரசின் சொந்தத் திட்டங்கள் இன்னும் சேர்க்கப்படவில்லை.",
+  },
   profileUnderstood: { en: "What I understood", ta: "நான் புரிந்துகொண்டது" },
   chipLikely: { en: "{n} likely", ta: "{n} தகுதி வாய்ப்பு" },
   chipOneAway: { en: "{n} need one more detail", ta: "{n} ஒரு விவரம் குறைவு" },

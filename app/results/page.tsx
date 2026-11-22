@@ -70,6 +70,7 @@ export default function ResultsPage() {
   const likely = results.filter((r) => r.status === "likely_eligible");
   const oneAway = results.filter((r) => r.status === "needs_info");
   const notEligible = results.filter((r) => r.status === "not_eligible");
+  const showCoverageNotice = !!profile?.state && profile.state !== "TN";
 
   function renderCards(list: SchemeResult[]) {
     return list.map((r) => {
@@ -113,6 +114,12 @@ export default function ResultsPage() {
 
       {ready && schemes.length > 0 && (
         <>
+          {showCoverageNotice && (
+            <div className="w-full rounded-xl bg-accent-turmeric/15 p-3 text-base text-foreground">
+              {t("coverageNotice", lang)}
+            </div>
+          )}
+
           <section className="flex flex-col gap-3" aria-labelledby="likely-heading">
             <h2 id="likely-heading" className="text-xl font-semibold text-green-800">
               {`${t("sectionLikely", lang)} (${likely.length})`}

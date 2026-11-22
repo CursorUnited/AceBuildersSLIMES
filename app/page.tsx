@@ -126,6 +126,7 @@ export default function Home() {
   );
   const likelyCount = results.filter((r) => r.status === "likely_eligible").length;
   const known = isKnown(profile);
+  const showCoverageNotice = !!profile.state && profile.state !== "TN";
   const hasText = input.trim().length > 0;
   const lastQ = useMemo(() => [...msgs].reverse().find((m) => m.kind === "question"), [msgs]);
   const lastChips = lastQ?.chips;
@@ -364,6 +365,10 @@ export default function Home() {
             focusInput();
           }}
         />
+      )}
+
+      {confirmOpen && showCoverageNotice && (
+        <p className="px-3 pb-1 text-base text-gray-700">{pick(STRINGS.coverageNotice)}</p>
       )}
 
       <div className="sticky bottom-0 border-t bg-white p-2 lg:static">

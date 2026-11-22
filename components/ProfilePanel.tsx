@@ -91,6 +91,10 @@ export default function ProfilePanel({ profile, changedFields, results, schemes,
               })}
             </ul>
 
+            {profile.state && profile.state !== "TN" && (
+              <p className="text-base text-gray-700">{t("coverageNotice", lang)}</p>
+            )}
+
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full bg-green-100 px-3 py-1 text-base font-semibold text-green-800">
                 {t("chipLikely", lang).replace("{n}", String(likely.length))}
