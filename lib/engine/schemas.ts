@@ -4,10 +4,31 @@ import { ENUMS, FIELD_ASK_ORDER } from "./fields";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const HTTPS_URL = z.url({ protocol: /^https$/ });
+const SCHEME_ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+// Two-letter state code, or the all-states value used in data/schemes.seed.json.
+const STATE_RE = /^(?:[A-Z]{2}|ALL)$/;
 
+/** Scheme id slug: lowercase letters, digits and single hyphens, max 60 chars. */
+export function isValidSchemeId(id: string): boolean {
+  return id.length <= 60 && SCHEME_ID_RE.test(id);
+}
+
+/** True when a YYYY-MM-DD string is a real calendar date (rejects 2026-02-30). */
+function isRealDate(value: string): boolean {
+  const [y, m, d] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
+}
+
+const CalendarDateSchema = z
+  .string()
+  .regex(DATE_RE, { message: "Use the date format YYYY-MM-DD" })
+  .refine((v) => !DATE_RE.test(v) || isRealDate(v), { message: "Not a real calendar date" });
+
+// Text is capped at 500 chars; labels are short so the same cap is harmless there.
 export const LocalizedSchema = z.object({
-  en: z.string().min(1),
-  ta: z.string().min(1),
+  en: z.string().min(1).max(500),
+  ta: z.string().min(1).max(500),
 });
 
 export const IncomeSchema = z.object({
@@ -61,12 +82,15 @@ export type Condition =
   | { label?: z.infer<typeof LocalizedSchema>; manual: true };
 
 export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
-  z.union([
-    LeafSchema,
-    z.object({ label: LocalizedSchema.optional(), any: z.array(ConditionSchema) }),
-    z.object({ label: LocalizedSchema.optional(), all: z.array(ConditionSchema) }),
-    z.object({ label: LocalizedSchema.optional(), manual: z.literal(true) }),
-  ]),
+  z.union(
+    [
+      LeafSchema,
+      z.object({ label: LocalizedSchema.optional(), any: z.array(ConditionSchema) }),
+      z.object({ label: LocalizedSchema.optional(), all: z.array(ConditionSchema) }),
+      z.object({ label: LocalizedSchema.optional(), manual: z.literal(true) }),
+    ],
+    { message: "Condition uses an unknown field, operator or value" },
+  ),
 );
 
 const DocumentSchema = LocalizedSchema.extend({
@@ -75,12 +99,20 @@ const DocumentSchema = LocalizedSchema.extend({
 
 export const SchemeSchema = z
   .object({
-    id: z.string().min(1),
+    id: z
+      .string()
+      .min(1)
+      .max(60)
+      .regex(SCHEME_ID_RE, {
+        message: "Use lowercase letters, digits and single hyphens (e.g. tn-scholarship-2026)",
+      }),
     name: LocalizedSchema,
     level: z.enum(["central", "state", "shared"]),
-    states: z.array(z.string().min(1)).min(1),
+    states: z
+      .array(z.string().regex(STATE_RE, { message: "Use a 2-letter state code like TN, or ALL" }))
+      .min(1),
     segment: z.enum(["school", "college"]),
-    department: z.string().min(1),
+    department: z.string().min(1).max(500),
     benefit: LocalizedSchema,
     conditions: z.array(ConditionSchema),
     documents: z.array(DocumentSchema),
@@ -91,15 +123,28 @@ export const SchemeSchema = z
     }),
     deadline: z.object({
       status: z.enum(["open", "closed", "rolling", "unknown"]),
-      closes_on: z.string().regex(DATE_RE).nullable(),
+      closes_on: CalendarDateSchema.nullable(),
       note: LocalizedSchema,
     }),
     sources: z.array(HTTPS_URL).min(1),
-    last_verified: z.string().regex(DATE_RE),
+    last_verified: CalendarDateSchema,
     confidence: z.enum(["high", "medium", "low"]),
-    notes: z.string().optional(),
+    notes: z.string().max(2000).optional(),
   })
   .refine((s) => s.conditions.every((c) => c.label !== undefined), {
     message: "Every top-level condition must have a label",
     path: ["conditions"],
-  });
+  })
+  .refine((s) => s.deadline?.status !== "open" || s.deadline?.closes_on != null, {
+    message: "Status open needs a closes_on date",
+    path: ["deadline", "closes_on"],
+  })
+  .refine(
+    (s) =>
+      !(s.deadline?.status === "unknown" || s.deadline?.status === "rolling") ||
+      s.deadline?.closes_on == null,
+    {
+      message: "closes_on must be empty when status is unknown or rolling",
+      path: ["deadline", "closes_on"],
+    },
+  );

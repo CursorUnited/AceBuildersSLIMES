@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Tamil } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -15,8 +15,30 @@ const notoSansTamil = Noto_Sans_Tamil({
   weight: ["400", "500", "600", "700"],
 });
 
+const TITLE = "Urimai: scholarships you can claim";
+const DESCRIPTION =
+  "Tell us about yourself in Tamil or English. We find the Tamil Nadu and central government scholarships you are likely eligible for.";
+
 export const metadata: Metadata = {
-  title: "Urimai: scholarships you can claim",
+  metadataBase: new URL("https://urimai-sigma.vercel.app"),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "website",
+    siteName: "Urimai",
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0F4C5C",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

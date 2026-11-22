@@ -8,6 +8,7 @@ import { t } from "@/lib/i18n/strings";
 import type { Lang } from "@/lib/storage";
 
 const MAX_SECONDS = 30;
+const BLOCKED_NOTICE_MS = 6000;
 const SEND_URL = "/api/transcribe";
 const PREFERRED_MIME = "audio/webm;codecs=opus";
 const FALLBACK_MIME = "audio/mp4";
@@ -36,18 +37,24 @@ function speechCtor(): SpeechCtor | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
+// Status line shown by the parent above the input row (not inside it).
+export type MicNotice = { text: string; tone: "error" | "info" };
+
 type Props = {
   onText: (text: string) => void;
+  onNotice?: (notice: MicNotice | null) => void;
   disabled?: boolean;
   lang: Lang;
 };
 
-export default function MicButton({ onText, disabled = false, lang }: Props) {
+export default function MicButton({ onText, onNotice, disabled = false, lang }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [seconds, setSeconds] = useState(0);
   const [blocked, setBlocked] = useState(false);
 
   const onTextRef = useRef(onText);
+  const onNoticeRef = useRef(onNotice);
+  const noticeTimerRef = useRef<number | undefined>(undefined);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -59,11 +66,22 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
     onTextRef.current = onText;
   }, [onText]);
 
+  useEffect(() => {
+    onNoticeRef.current = onNotice;
+  }, [onNotice]);
+
+  // Listening status goes to the parent while sending; cleared otherwise.
+  useEffect(() => {
+    if (phase === "sending") onNoticeRef.current?.({ text: t("micListening", lang), tone: "info" });
+    else onNoticeRef.current?.(null);
+  }, [phase, lang]);
+
   // Release mic, timers and recorder on unmount.
   useEffect(() => {
     return () => {
       window.clearInterval(tickRef.current);
       window.clearTimeout(stopTimeoutRef.current);
+      window.clearTimeout(noticeTimerRef.current);
       streamRef.current?.getTracks().forEach((track) => track.stop());
       const rec = recorderRef.current;
       if (rec) {
@@ -73,6 +91,13 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
       recognitionRef.current?.stop();
     };
   }, []);
+
+  // Blocked mic: red line above the input row, hidden again after 6 s. The mic stays disabled.
+  function showBlockedNotice() {
+    window.clearTimeout(noticeTimerRef.current);
+    onNoticeRef.current?.({ text: t("micBlocked", lang), tone: "error" });
+    noticeTimerRef.current = window.setTimeout(() => onNoticeRef.current?.(null), BLOCKED_NOTICE_MS);
+  }
 
   function clearTimers() {
     window.clearInterval(tickRef.current);
@@ -168,7 +193,10 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err) {
-      if (err instanceof Error && err.name === "NotAllowedError") setBlocked(true);
+      if (err instanceof Error && err.name === "NotAllowedError") {
+        setBlocked(true);
+        showBlockedNotice();
+      }
       else startSpeechFallback();
       return;
     }
@@ -222,14 +250,6 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
     else if (phase === "idle") void start();
   }
 
-  if (blocked) {
-    return (
-      <p role="status" className="flex min-h-11 items-center px-2 text-base text-red-700">
-        {t("micBlocked", lang)}
-      </p>
-    );
-  }
-
   const isRecording = phase === "recording";
   const isSending = phase === "sending";
 
@@ -237,7 +257,7 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
     <button
       type="button"
       onClick={onClick}
-      disabled={(disabled && !isRecording) || isSending}
+      disabled={(disabled && !isRecording) || isSending || blocked}
       aria-label={isRecording ? t("micStop", lang) : t("micStart", lang)}
       className="btn-outline flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-base disabled:cursor-not-allowed disabled:opacity-50"
     >
@@ -247,8 +267,6 @@ export default function MicButton({ onText, disabled = false, lang }: Props) {
           <span className="tabular-nums">{seconds}s</span>
           <span>{t("micStop", lang)}</span>
         </>
-      ) : isSending ? (
-        <span role="status">{t("micListening", lang)}</span>
       ) : (
         <span aria-hidden="true">🎤</span>
       )}

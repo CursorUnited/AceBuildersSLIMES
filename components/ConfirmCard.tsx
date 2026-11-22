@@ -91,15 +91,15 @@ export default function ConfirmCard({ profile, changedFields, onProfileChange, o
                   type="button"
                   aria-expanded={open}
                   onClick={() => setOpenField(open ? null : field)}
-                  className="link flex min-h-[44px] w-full cursor-pointer items-center justify-between gap-2 px-3 py-2 text-left text-base"
+                  className="flex min-h-[44px] w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-base text-foreground hover:bg-accent-teal/5"
                 >
                   <span className="flex items-center gap-2">
                     {changedFields.includes(field) && (
                       <span aria-hidden="true" className="inline-block h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
                     )}
-                    <span className="text-accent-teal">{lang === "ta" ? q.ta : q.en}</span>
+                    <span className="text-foreground">{lang === "ta" ? q.ta : q.en}</span>
                   </span>
-                  <span className="font-medium text-accent-teal/80">{valueLabel}</span>
+                  <span className="font-medium text-foreground/80">{valueLabel}</span>
                 </button>
                 {open && (
                   <div className="px-3 pb-3">

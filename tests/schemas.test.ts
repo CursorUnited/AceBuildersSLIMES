@@ -71,6 +71,40 @@ describe("SchemeSchema", () => {
     };
     expect(SchemeSchema.safeParse(bad).success).toBe(false);
   });
+
+  it.each(["My Scheme!", "a/b", "a".repeat(70)])("rejects bad id %s", (id) => {
+    expect(SchemeSchema.safeParse({ ...validScheme, id }).success).toBe(false);
+  });
+
+  it("accepts a clean slug id", () => {
+    expect(SchemeSchema.safeParse({ ...validScheme, id: "tn-scholarship-2026" }).success).toBe(true);
+  });
+
+  it.each(["tn", "Tamil Nadu"])("rejects bad state %s", (state) => {
+    expect(SchemeSchema.safeParse({ ...validScheme, states: [state] }).success).toBe(false);
+  });
+
+  it.each(["TN", "ALL"])("accepts state %s", (state) => {
+    expect(SchemeSchema.safeParse({ ...validScheme, states: [state] }).success).toBe(true);
+  });
+
+  it.each(["2026-13-45", "2026-02-30"])("rejects impossible last_verified %s", (date) => {
+    expect(SchemeSchema.safeParse({ ...validScheme, last_verified: date }).success).toBe(false);
+  });
+
+  it("accepts leap day 2026-02-28 as last_verified", () => {
+    expect(SchemeSchema.safeParse({ ...validScheme, last_verified: "2026-02-28" }).success).toBe(true);
+  });
+
+  it("rejects status open without closes_on", () => {
+    const deadline = { ...validScheme.deadline, closes_on: null };
+    expect(SchemeSchema.safeParse({ ...validScheme, deadline }).success).toBe(false);
+  });
+
+  it("rejects status unknown with closes_on", () => {
+    const deadline = { ...validScheme.deadline, status: "unknown" };
+    expect(SchemeSchema.safeParse({ ...validScheme, deadline }).success).toBe(false);
+  });
 });
 
 describe("ConditionSchema", () => {

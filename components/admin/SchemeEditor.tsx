@@ -11,6 +11,8 @@ export type SchemeData = Scheme;
 interface Props {
   initial: SchemeData;
   isNew: boolean;
+  /** Ids of every existing scheme (drafts included), used to block duplicate new ids. */
+  existingIds?: string[];
   passcode: string;
   onSaved: () => void;
   onClose: () => void;
@@ -40,9 +42,14 @@ interface Form {
   notes: string;
 }
 
+interface Problem {
+  field: string;
+  message: string;
+}
+
 interface Built {
   data: SchemeData | null;
-  errors: string[];
+  errors: Problem[];
 }
 
 const PERSONA_NAMES = ["Kavya", "Arun", "Fathima"] as const;
@@ -133,18 +140,18 @@ function toForm(s: SchemeData): Form {
   };
 }
 
-function parseJson(text: string, label: string, errors: string[]): unknown {
+function parseJson(text: string, label: string, errors: Problem[]): unknown {
   try {
     return JSON.parse(text) as unknown;
   } catch {
-    errors.push(`Invalid JSON in ${label}`);
+    errors.push({ field: label, message: "Invalid JSON" });
     return undefined;
   }
 }
 
 /** Rebuilds the whole scheme from form state and validates it with SchemeSchema. */
 function build(f: Form): Built {
-  const errors: string[] = [];
+  const errors: Problem[] = [];
   const conditions = parseJson(f.conditions, "conditions", errors);
   const documents = parseJson(f.documents, "documents", errors);
   const apply = parseJson(f.apply, "apply", errors);
@@ -177,7 +184,17 @@ function build(f: Form): Built {
   if (!parsed.success) {
     return {
       data: null,
-      errors: parsed.error.issues.map((i) => `${i.path.join(".") || "scheme"}: ${i.message}`),
+      errors: parsed.error.issues.map((i): Problem => {
+        const [head, index] = i.path;
+        // A condition that matches no known shape: number it for the admin (1-based).
+        if (head === "conditions" && typeof index === "number" && i.path.length === 2) {
+          return {
+            field: "conditions",
+            message: `Condition ${index + 1} uses an unknown field, operator or value`,
+          };
+        }
+        return { field: i.path.join(".") || "scheme", message: i.message };
+      }),
     };
   }
   return { data: parsed.data, errors: [] };
@@ -212,8 +229,19 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClose }: Props) {
+export default function SchemeEditor({
+  initial,
+  isNew,
+  existingIds = [],
+  passcode,
+  onSaved,
+  onClose,
+}: Props) {
   const [form, setForm] = useState<Form>(() => toForm(initial));
+  // Last saved state; differs from form means unsaved changes.
+  const [baseline, setBaseline] = useState<Form>(() => toForm(initial));
+  // True until the scheme has been saved once; only then is it sent as a create.
+  const [creating, setCreating] = useState(isNew);
   const [persona, setPersona] = useState<PersonaName>("Kavya");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -242,6 +270,7 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
 
   async function save(status: "draft" | "published") {
     if (!built.data) return;
+    const saved = form;
     setBusy(true);
     setNotice(null);
     setSaveError(null);
@@ -251,6 +280,7 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
         headers: {
           "Content-Type": "application/json",
           "x-admin-passcode": passcode,
+          ...(creating ? { "x-create": "1" } : {}),
         },
         body: JSON.stringify({ status, data: built.data }),
       });
@@ -259,6 +289,8 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
         setSaveError(readErrorMessage(body) ?? `Save failed (HTTP ${res.status}).`);
         return;
       }
+      setBaseline(saved);
+      setCreating(false);
       setNotice("Saved");
       onSaved();
     } catch {
@@ -268,7 +300,14 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
     }
   }
 
-  const canSave = valid && !busy;
+  const idTaken = creating && existingIds.includes(form.id.trim());
+  const dirty = JSON.stringify(form) !== JSON.stringify(baseline);
+  const canSave = valid && !busy && !idTaken;
+
+  function handleClose() {
+    if (dirty && !window.confirm("Discard your changes?")) return;
+    onClose();
+  }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6">
@@ -276,7 +315,7 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
         <h2 className="min-w-0 break-words text-xl font-semibold">
           {isNew ? "New scheme" : `Edit ${form.nameEn.trim() || form.id}`}
         </h2>
-        <button type="button" onClick={onClose} className={`${BUTTON} shrink-0`}>
+        <button type="button" onClick={handleClose} className={`${BUTTON} shrink-0`}>
           Close
         </button>
       </div>
@@ -286,10 +325,15 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
           <Field label="ID">
             <input
               {...bind("id")}
-              readOnly={!isNew}
-              className={`${INPUT} ${!isNew ? "bg-gray-100" : ""}`}
+              readOnly={!creating}
+              className={`${INPUT} ${!creating ? "bg-gray-100" : ""}`}
             />
           </Field>
+          {idTaken && (
+            <p role="alert" className="text-base text-red-700">
+              A scheme with this id already exists. Pick another id.
+            </p>
+          )}
           <Field label="Name (English)">
             <input {...bind("nameEn")} className={INPUT} />
           </Field>
@@ -369,9 +413,9 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
               role="alert"
               className="list-disc space-y-1 rounded border border-red-300 bg-red-50 p-3 pl-6 text-base text-red-700"
             >
-              {built.errors.map((msg, i) => (
+              {built.errors.slice(0, 3).map((p, i) => (
                 <li key={i} className="break-words">
-                  {msg}
+                  <strong>{p.field}</strong>: {p.message}
                 </li>
               ))}
             </ul>

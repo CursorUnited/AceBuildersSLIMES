@@ -720,3 +720,73 @@ Bug (reproduced 5 of 5 against /api/chat): "naan 9th padikren, SC, appa coolie" 
 4. Do not change any other rule.
 
 Run: npx tsc --noEmit; npx vitest run. Reply max 2 lines.
+
+prompt-p19[20:59]: /caveman ultra
+STEP P19: chat and card robustness fixes. No new features.
+
+Read only: app/page.tsx, components/MicButton.tsx, components/ChatBubble.tsx, components/DeadlineChip.tsx, components/SchemeCard.tsx, lib/i18n/strings.ts, lib/i18n/questions.ts.
+Modify only those files.
+
+1. MicButton "Mic blocked. Type instead." must NOT sit inside the input row. Render it as a small red line ABOVE the input row (role="status", auto-hides after 6 s), and keep the mic button visible but disabled. The textarea must keep `min-w-0 flex-1` and at least 160px width at 360px viewport. Same for the "sending/Listening" state.
+2. DeadlineChip: the text must wrap on narrow screens: `max-w-full whitespace-normal break-words text-left` (keep pill shape via rounded-[1.375rem] and compact padding). No horizontal page overflow in Tamil at 320px on /results, /applications and /scheme/[id].
+3. SchemeCard: when a needs_info question has no chips (numeric fields such as last_exam_percent, age, disability_percent, year_of_study), show a small number input with an OK button that sets the value (validated 0-100 for percents, integers for year/age) via the existing onAnswer, instead of nothing.
+4. app/page.tsx: when the AI call fails, the fallback question bubble must have text: use the local template question text (questionFor / QUESTIONS[field]) so the bubble is never empty; chips only for the field being asked.
+5. Chat textarea: maxLength 1000. When a message is over 1000 chars (paste), show "Message too long. Please keep it under 1000 characters." (en/ta) instead of the generic error. ChatBubble text gets `break-words [overflow-wrap:anywhere]` so long words wrap.
+6. Double-send guard: a useRef flag set synchronously at the start of send() and cleared when the request ends; a second call while set is ignored.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 5 lines.
+
+prompt-p20[21:08]:/caveman ultra
+STEP P20: header title, default language, metadata. No logic changes outside what is listed.
+
+Read only: components/Header.tsx, components/LangProvider.tsx, app/layout.tsx, app/page.tsx, lib/i18n/strings.ts, lib/i18n/describe.ts, lib/storage.ts.
+Create only: app/icon.svg. Modify only: components/ConfirmCard.tsx,components/Header.tsx, components/LangProvider.tsx, app/layout.tsx, app/page.tsx, lib/i18n/strings.ts, lib/storage.ts.
+
+1. Header title: show only "Urimai" (English, bold, accent-teal) in BOTH languages. Remove the Tamil word from the logo text everywhere (appTitle string and Header). Keep the document <title>.
+2. Default language: when no saved language exists, use ta if navigator.language starts with "ta", otherwise en. Saved choice still wins. Avoid the flash: read the saved/derived language in the layout via a tiny inline script that sets <html lang> and a data attribute before paint, or render language-dependent text only after LangProvider has resolved it (no Tamil flash for English users). Keep SSR hydration warning-free.
+3. Confirmation note after a message ("Purinjudhu ✔ ..."): for register tanglish, build the labels with the UI language's labels (English labels when UI is en, Tamil when ta). The "Purinjudhu ✔" prefix may stay for tanglish. Never mix Tamil-script labels into an English UI.
+4. app/layout.tsx metadata: title "Urimai: scholarships you can claim", description "Tell us about yourself in Tamil or English. We find the Tamil Nadu and central government scholarships you are likely eligible for.", openGraph (title, description, type website, siteName Urimai, locale en_IN), twitter card summary, themeColor #0F4C5C (via the viewport export), icons from app/icon.svg.
+5. app/icon.svg: 64x64, rounded square #0F4C5C with a cream (#FAF7F2) bold "U" and a small turmeric (#E9A23B) dot, no external fonts (draw the U with a path).
+6. components/ConfirmCard.tsx: the row buttons use the `link` class, which underlines every row label and value. Remove `link` from the rows. Style rows as plain tappable cards (text-foreground, no underline, hover:bg-accent-teal/5, rounded-lg, border), keep the expand/collapse behaviour. Only the Close button keeps an underline if it had one.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 5 lines.
+
+prompt-p21[21:16]: /caveman ultra
+STEP P21: admin guardrails. Validation and warnings only; no new features.
+
+Read only: lib/engine/schemas.ts, components/admin/SchemeEditor.tsx, components/admin/SchemeList.tsx, app/admin/page.tsx, app/api/admin/schemes/[id]/route.ts, tests/schemas.test.ts, tests/schemes.seed.test.ts, data/schemes.seed.json.
+Modify only: lib/engine/schemas.ts, components/admin/SchemeEditor.tsx, app/admin/page.tsx, app/api/admin/schemes/[id]/route.ts, tests/schemas.test.ts. All 15 seed schemes must still parse (tests/schemes.seed.test.ts unchanged and green).
+
+1. schemas.ts (SchemeSchema):
+   - id: lowercase slug `^[a-z0-9]+(-[a-z0-9]+)*$`, max 60.
+   - states: each item must be exactly 2 uppercase letters or "ALL" (check the seed for the value used for all states and allow exactly that).
+   - date strings (last_verified, deadline.closes_on): must be a real calendar date YYYY-MM-DD (reject 2026-13-45, 2026-02-30).
+   - refine: deadline.status "open" requires closes_on to be set; closes_on must be null for unknown/rolling.
+   - notes max 2000 chars; name, benefit, department, deadline note, each document and step text max 500 chars.
+   - Friendlier zod messages where easy (e.g. conditions item invalid: "Condition N uses an unknown field, operator or value").
+2. SchemeEditor: when creating a NEW scheme, if the id matches an existing scheme id (from the list passed down by app/admin/page.tsx), show a red error "A scheme with this id already exists. Pick another id." and disable Save and Publish. Existing schemes keep id read-only. Show the first 3 validation messages as a plain list with the field name in bold.
+3. SchemeEditor Close: if the form differs from the initial scheme, window.confirm("Discard your changes?") before closing; Save success resets the dirty state.
+4. Server: PUT /api/admin/schemes/[id] additionally rejects (400) an id that is not a valid slug and a non-existing id when the request carries header x-create: "1" only if the id already exists (409 "exists") — creating via the editor sends x-create: 1 and must get 409 if the id is taken. Updating an existing scheme (no x-create) behaves as now.
+5. tests/schemas.test.ts: add cases: bad id rejected ("My Scheme!", "a/b", 70 chars), good id accepted; states "tn" and "Tamil Nadu" rejected, "TN" and the ALL value accepted; "2026-13-45" and "2026-02-30" rejected, "2026-02-28" accepted; open deadline without closes_on rejected; closes_on with status unknown rejected.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass. Reply max 5 lines.
+
+prompt-p22[21:24]:/caveman ultra
+STEP P22: favicon duplicate and share-preview image.
+
+Read only: app/layout.tsx, app/icon.svg, app/favicon.ico (exists).
+Create only: app/opengraph-image.tsx. Modify only: app/layout.tsx. Delete: app/favicon.ico.
+
+1. Delete app/favicon.ico (the default Next icon) so only app/icon.svg is used. Remove any explicit `icons` entry in layout.tsx metadata that duplicates the auto-detected icon.
+2. Create app/opengraph-image.tsx using next/og ImageResponse (size 1200x630, contentType image/png, alt "Urimai: claim what's yours"): background #0F4C5C, big cream (#FAF7F2) text "Urimai", below it "Tell us about yourself. We find the scholarships you can claim." in cream, and a turmeric (#E9A23B) pill "Tamil · English · Tanglish". English text only (no Tamil glyphs, no custom font files). Do not set `runtime` or `dynamic` exports.
+3. layout.tsx: twitter card becomes "summary_large_image" (the opengraph image is picked up automatically).
+
+Run: npx tsc --noEmit; npm run build. Reply max 3 lines.
+
+prompt-22b[21:29]: /caveman ultra
+STEP P22b: pin metadataBase. One line.
+
+Read only: app/layout.tsx. Modify only: app/layout.tsx.
+Add `metadataBase: new URL("https://urimai-sigma.vercel.app")` to the exported metadata object. Nothing else.
+
+Run: npx tsc --noEmit; npm run build. The metadataBase warning must be gone. Reply max 2 lines.

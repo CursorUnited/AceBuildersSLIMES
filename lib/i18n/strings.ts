@@ -3,7 +3,7 @@ import type { Lang } from "@/lib/storage";
 import type { ProfileField } from "@/lib/engine/types";
 
 export const STRINGS = {
-  appTitle: { en: "உரிமை Urimai", ta: "உரிமை Urimai" },
+  appTitle: { en: "Urimai", ta: "Urimai" },
   welcome: {
     en: "Hi! Tell me about yourself in Tamil or English, and I'll show the scholarships you are likely eligible for.",
     ta: "வணக்கம்! உங்களைப் பற்றி தமிழ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் காட்டுகிறேன்.",
@@ -117,6 +117,17 @@ export const STRINGS = {
   micStop: { en: "Stop", ta: "நிறுத்து" },
   micListening: { en: "Listening…", ta: "கேட்கிறது…" },
   micBlocked: { en: "Mic blocked. Type instead.", ta: "மைக் தடுக்கப்பட்டது. தட்டச்சு செய்யவும்." },
+  messageTooLong: {
+    en: "Message too long. Please keep it under 1000 characters.",
+    ta: "செய்தி மிக நீளமாக உள்ளது. 1000 எழுத்துகளுக்குள் வைக்கவும்.",
+  },
+  numberOk: { en: "OK", ta: "சரி" },
+  numberRange: { en: "Enter a number from {min} to {max}.", ta: "{min} முதல் {max} வரையிலான எண்ணை உள்ளிடவும்." },
+  numberWholeRange: {
+    en: "Enter a whole number from {min} to {max}.",
+    ta: "{min} முதல் {max} வரையிலான முழு எண்ணை உள்ளிடவும்.",
+  },
+
   welcomeTitle: {
     en: "Hi! Tell me in Tamil or English, and I'll find the scholarships you are likely eligible for.",
     ta: "வணக்கம்! தமிழ் அல்லது ஆங்கிலத்தில் சொல்லுங்கள். நீங்கள் தகுதி இருக்க வாய்ப்புள்ள உதவித்தொகைகளைக் கண்டுபிடிக்கிறேன்.",

@@ -19,7 +19,7 @@ import { STRINGS } from "@/lib/i18n/strings";
 import ChatBubble from "@/components/ChatBubble";
 import ChipRow from "@/components/ChipRow";
 import ConfirmCard from "@/components/ConfirmCard";
-import MicButton from "@/components/MicButton";
+import MicButton, { type MicNotice } from "@/components/MicButton";
 import ProfilePanel from "@/components/ProfilePanel";
 
 type Txt = { en: string; ta: string };
@@ -27,7 +27,6 @@ type Chip = { value: string; label: string | Txt };
 type Schemes = Parameters<typeof evaluateAll>[1];
 type Register = Parameters<typeof questionFor>[1];
 type MergeUpdates = Parameters<typeof mergeProfile>[1];
-type LocalQ = { text: Txt; chips: Chip[] };
 
 type ChatMsg = {
   id: string;
@@ -50,6 +49,7 @@ type ChatErr = { error: { code: string; message: string } };
 
 
 const DEFAULT_REGISTER = "casual" as Register;
+const MAX_MESSAGE_CHARS = 1000;
 const NOT_UNDERSTOOD: Record<"tanglish" | "ta" | "en", string> = {
   en: "Sorry, I didn't catch that. Please tap one of these.",
   tanglish: "Sorry, puriyala. Keela ulla option-la onna tap pannunga.",
@@ -92,9 +92,12 @@ export default function Home() {
   const [register, setRegister] = useState<Register>(DEFAULT_REGISTER);
   const [lastChanged, setLastChanged] = useState<string[]>([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [micNotice, setMicNotice] = useState<MicNotice | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const prevBusyRef = useRef(busy);
+  // Set synchronously in send(); blocks a second send until the first request ends.
+  const sendingRef = useRef(false);
 
   // Restore profile + chat, fetch schemes once.
   useEffect(() => {
@@ -149,7 +152,9 @@ export default function Home() {
   ) {
     if (changed.length === 0) return;
     setLastChanged(changed);
-    const factLang = register === "en" ? "en" : "ta";
+    // Tanglish keeps the "Purinjudhu" lead but labels follow the UI language, so Tamil script never mixes into an English UI.
+    const factLang =
+      register === "tanglish" ? (lang === "ta" ? "ta" : "en") : register === "en" ? "en" : "ta";
     const rec = profileAfter as unknown as Record<string, unknown>;
     const facts = changed
       .map((f) => describeFact(f as ProfileField, rec[f], factLang))
@@ -165,14 +170,14 @@ export default function Home() {
       setConfirmOpen(true);
       return;
     }
-    const q = questionFor(next.field, register, next.unlock_count) as unknown as LocalQ;
+    const q = questionFor(next.field, register, next.unlock_count);
     setMsgs((m) => [
       ...m,
-      mk("bot", pick(q.text), {
+      mk("bot", q.text, {
         kind: "question",
         field: next.field,
         unlock_count: next.unlock_count,
-        chips: q.chips,
+        chips: q.chips as unknown as Chip[],
       }),
     ]);
   }
@@ -205,7 +210,12 @@ export default function Home() {
 
   async function send(text: string) {
     const trimmed = text.trim();
-    if (!trimmed || busy) return;
+    if (!trimmed || busy || sendingRef.current) return;
+    if (trimmed.length > MAX_MESSAGE_CHARS) {
+      setMsgs((m) => [...m, mk("bot", pick(STRINGS.messageTooLong))]);
+      return;
+    }
+    sendingRef.current = true;
     setInput("");
     setMsgs((m) => [...m, mk("student", trimmed)]);
     setBusy(true);
@@ -257,6 +267,7 @@ export default function Home() {
     } catch {
       fallback();
     } finally {
+      sendingRef.current = false;
       setBusy(false);
     }
   }
@@ -365,6 +376,14 @@ export default function Home() {
             See my schemes now ({likelyCount} likely) -&gt;
           </button>
         )}
+        {micNotice && (
+          <p
+            role="status"
+            className={`px-1 pb-1 text-base ${micNotice.tone === "error" ? "text-red-700" : "text-gray-700"}`}
+          >
+            {micNotice.text}
+          </p>
+        )}
         <form onSubmit={onSubmit} className="flex items-end gap-2">
           <textarea
             ref={inputRef}
@@ -373,8 +392,9 @@ export default function Home() {
             onKeyDown={onKeyDown}
             rows={1}
             disabled={busy}
+            maxLength={MAX_MESSAGE_CHARS}
             placeholder="Type here..."
-            className="max-h-32 min-h-11 flex-1 resize-none rounded-lg border px-3 py-2 text-base disabled:opacity-60"
+            className="max-h-32 min-h-11 min-w-0 flex-1 resize-none rounded-lg border px-3 py-2 text-base disabled:opacity-60"
           />
           <MicButton
             lang={lang}
@@ -383,6 +403,7 @@ export default function Home() {
               setInput(text);
               focusInput();
             }}
+            onNotice={setMicNotice}
           />
           <button
             type="submit"

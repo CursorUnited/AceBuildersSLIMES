@@ -204,6 +204,7 @@ export default function AdminPage() {
                 key={view.isNew ? "new" : view.data.id}
                 initial={view.data}
                 isNew={view.isNew}
+                existingIds={items.map((item) => item.data.id)}
                 passcode={passcode}
                 onSaved={() => {
                   void loadList(passcode);

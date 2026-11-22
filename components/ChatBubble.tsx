@@ -12,7 +12,7 @@ export default function ChatBubble({ from, children }: Props) {
   return (
     <div className={`flex w-full ${isStudent ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-3 text-base leading-relaxed shadow-sm ${
+        className={`max-w-[85%] whitespace-pre-line break-words [overflow-wrap:anywhere] rounded-2xl px-4 py-3 text-base leading-relaxed shadow-sm ${
           isStudent
             ? "rounded-br-sm bg-accent-teal text-white"
             : "rounded-bl-sm bg-white text-slate-800"

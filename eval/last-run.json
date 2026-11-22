@@ -1,10 +1,8 @@
 [
   {
     "id": "T01",
-    "pass": false,
-    "problems": [
-      "education_level:wrong"
-    ],
+    "pass": true,
+    "problems": [],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -21,8 +19,10 @@
   },
   {
     "id": "T04",
-    "pass": true,
-    "problems": [],
+    "pass": false,
+    "problems": [
+      "first_graduate:missing"
+    ],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -39,8 +39,10 @@
   },
   {
     "id": "T07",
-    "pass": true,
-    "problems": [],
+    "pass": false,
+    "problems": [
+      "community:missing"
+    ],
     "model": "gemini-3.5-flash-lite"
   },
   {
@@ -255,10 +257,8 @@
   },
   {
     "id": "T43",
-    "pass": false,
-    "problems": [
-      "course_type:missing"
-    ],
+    "pass": true,
+    "problems": [],
     "model": "gemini-3.5-flash-lite"
   },
   {

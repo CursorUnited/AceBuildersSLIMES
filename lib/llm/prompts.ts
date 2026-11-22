@@ -19,7 +19,7 @@ export interface ExtractionPrompt {
 /** One hint line per profile field. Record type forces every field in FIELD_ASK_ORDER to be covered. */
 const FIELD_HINTS: Record<ExtractableField, string> = {
   education_level:
-    'one of class_8, class_9, class_10, class_11, class_12, iti, diploma, ug, pg, phd. What they are studying NOW. "9th" / "ஒன்பதாம் வகுப்பு" = class_9; "SSLC" = class_10; "plus one" = class_11; "plus two" / "+2" / "12th" = class_12; diploma = polytechnic; ug = BE, B.Tech, BSc, BA, BCom, MBBS, "degree"; pg = ME, MSc, MA, MBA; phd.',
+    'one of class_8, class_9, class_10, class_11, class_12, iti, diploma, ug, pg, phd. What they are studying NOW. Grade numbers map one-to-one: "8th"/"8" = class_8, "9th" = class_9, "10th"/"SSLC" = class_10, "11th"/"plus one"/"+1" = class_11, "12th"/"plus two"/"+2" = class_12. ALWAYS use exactly the number the student says; never round up or down to a neighbouring class. Only a correction such as "X illa, Y" (it is not X, it is Y) uses the second number. "ஒன்பதாம் வகுப்பு" = class_9; diploma = polytechnic; ug = BE, B.Tech, BSc, BA, BCom, MBBS, "degree"; pg = ME, MSc, MA, MBA; phd.',
   state:
     '2-letter Indian state code, e.g. TN, KA, KL, AP. "Tamil Nadu" / "TN" = TN. Only when they state their domicile state.',
   income:
@@ -37,7 +37,7 @@ const FIELD_HINTS: Record<ExtractableField, string> = {
   institution_type:
     "one of govt, govt_aided, private_self_financing, central_institute (IIT, NIT, IIM etc.). Current college.",
   course_type:
-    "one of arts_science (BA/BSc/BCom), engineering (BE/B.Tech), medical (MBBS, BDS, nursing), polytechnic, iti_trade, other_professional (law, agri, vet). College only.",
+    "one of arts_science (BA/BSc/BCom), engineering (BE/B.Tech), medical (MBBS, BDS, nursing), polytechnic, iti_trade, other_professional (law, agri, vet). College only. When asked_field is course_type, the reply sets ONLY course_type (and year_of_study if stated); never education_level unless the student explicitly says they changed level.",
   year_of_study:
     'integer 1-6. College / diploma / ITI only. "1st yr" = 1; "moonaam varusham" = 3.',
   current_school_type:
@@ -59,7 +59,7 @@ const RULES: readonly string[] = [
   "1. Only fields and enum values listed above. Anything else is dropped by validation.",
   "2. Only facts the student stated or clearly implied. \"appa coolie\" says nothing about income, so no income. Never guess.",
   "3. Ambiguous: leave the field out of updates and add it to ambiguous. A bare \"BC\" is still community BC, but central_obc_certificate stays unknown.",
-  "4. A correction (\"class 10 not 9\", \"actually I'm in 2nd year\") overrides the old value, in updates and evidence.",
+  "4. A correction (\"class 10 not 9\", \"actually I'm in 2nd year\") overrides the old value, in updates and evidence. A correction needs a clear negation or 'actually'/'sorry'. Two numbers in one sentence without a negation (e.g. a grade and an age) are NOT a correction.",
   "5. A side question (\"iniku date enna\", \"income certificate enga vaanguradhu?\") gets a short answer in side_answer, in the student's register. Today's date is given above. Never state scheme facts in side_answer; those come only from the database. side_answer must be in the same register as the student's message (ta = Tamil script, en = English, tanglish = Tamil in Latin letters). Write it in your own words, one or two short sentences. If the question needs live data (weather, news, sports, prices, anything after today's date) or is unrelated to scholarships, say briefly and politely that you can't help with that here. Never invent facts. Never reuse a fixed phrase. side_answer is always in the language of the student's CURRENT message: an English message gets an English answer, Tamil script gets Tamil, Tanglish gets Tanglish. A general how-to question (where to get a certificate) may get one short, common-knowledge sentence; if unsure, say you are not sure.",
   "6. Never ask for or store Aadhaar or any ID number. If the student types one (including 12-digit numbers), ignore it completely.",
   "7. register: \"ta\" (Tamil script), \"en\" (English), or \"tanglish\" (Tamil in Latin letters, often mixed with English).",

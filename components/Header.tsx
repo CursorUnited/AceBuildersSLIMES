@@ -39,7 +39,7 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-40 border-b border-black/10 bg-background/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-xl items-center justify-between gap-2 px-3 py-1 lg:max-w-6xl">
-          <span className="min-w-0 truncate text-sm font-semibold text-accent-teal sm:text-base">{t("appTitle", lang)}</span>
+          <span className="min-w-0 truncate text-sm font-bold text-accent-teal sm:text-base">{t("appTitle", lang)}</span>
 
           <div className="flex shrink-0 items-center gap-1">
             <div role="group" aria-label="Language" className="flex shrink-0 rounded-full border border-accent-teal/30">

@@ -106,8 +106,14 @@ export function setProfile(profile: Profile): void {
   if (parsed.success) writeJson(KEYS.profile, parsed.data);
 }
 
+/** Browser language guess used only when no language has been saved: Tamil if navigator.language starts with "ta". */
+function detectLang(): Lang {
+  if (typeof navigator === "undefined") return "en";
+  return navigator.language?.toLowerCase().startsWith("ta") ? "ta" : "en";
+}
+
 export function getLang(): Lang {
-  return readValid<Lang>(KEYS.lang, LangSchema, "ta");
+  return readValid<Lang>(KEYS.lang, LangSchema, detectLang());
 }
 
 export function setLang(lang: Lang): void {

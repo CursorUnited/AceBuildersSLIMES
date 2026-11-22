@@ -17,8 +17,18 @@ type Props = {
   onAnswer: (field: ProfileField, value: unknown) => void;
 };
 
+// Bounds for chip-less numeric questions. Percent fields take decimals; age and year are whole numbers.
+const NUMERIC_RANGE: Partial<Record<ProfileField, { min: number; max: number; integer: boolean }>> = {
+  last_exam_percent: { min: 0, max: 100, integer: false },
+  disability_percent: { min: 0, max: 100, integer: false },
+  age: { min: 0, max: 120, integer: true },
+  year_of_study: { min: 1, max: 10, integer: true },
+};
+
 export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
   const [tracked, setTracked] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [inputErr, setInputErr] = useState<string | null>(null);
 
   useEffect(() => {
     setTracked(getApplications().some((a) => a.scheme_id === scheme.id));
@@ -68,6 +78,27 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
 
   const field = result.status === "needs_info" ? result.missing_fields[0] : undefined;
   const template = field ? QUESTIONS[field] : undefined;
+  const range = field ? NUMERIC_RANGE[field] : undefined;
+
+  function submitNumber() {
+    if (!field || !range) return;
+    const raw = draft.trim();
+    const value = Number(raw);
+    const valid =
+      raw !== "" &&
+      Number.isFinite(value) &&
+      value >= range.min &&
+      value <= range.max &&
+      (!range.integer || Number.isInteger(value));
+    if (!valid) {
+      const msg = t(range.integer ? "numberWholeRange" : "numberRange", lang);
+      setInputErr(msg.replace("{min}", String(range.min)).replace("{max}", String(range.max)));
+      return;
+    }
+    setInputErr(null);
+    setDraft("");
+    onAnswer(field, value);
+  }
 
   return (
     <article className="relative flex h-full flex-col rounded-xl border border-accent-teal/30 bg-white p-4 shadow-sm">
@@ -107,6 +138,36 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
                 if (chip) onAnswer(field, chip.value);
               }}
             />
+          )}
+          {template.chips.length === 0 && range && (
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  inputMode={range.integer ? "numeric" : "decimal"}
+                  min={range.min}
+                  max={range.max}
+                  step={range.integer ? 1 : "any"}
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  aria-label={template[lang]}
+                  aria-invalid={inputErr ? true : undefined}
+                  className="min-h-11 w-28 rounded-lg border px-3 py-2 text-base"
+                />
+                <button
+                  type="button"
+                  onClick={submitNumber}
+                  className="btn-outline min-h-[44px] min-w-[44px] cursor-pointer rounded-lg px-4 py-2 text-base font-medium"
+                >
+                  {t("numberOk", lang)}
+                </button>
+              </div>
+              {inputErr && (
+                <p role="alert" className="text-base text-red-700">
+                  {inputErr}
+                </p>
+              )}
+            </div>
           )}
         </div>
       )}

@@ -11,13 +11,16 @@ interface LangContextValue {
 const LangContext = createContext<LangContextValue | null>(null);
 
 export function LangProvider({ children }: { children: ReactNode }) {
-  // Server render and first client render both use "ta"; the stored value is read after mount.
+  // Server render and first client render both use "ta"; the saved or browser-derived value is read after mount.
+  // Children stay invisible until then, so the wrong language never flashes on screen.
   const [lang, setLangState] = useState<Lang>("ta");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const stored = getLang();
-    setLangState(stored);
-    document.documentElement.lang = stored;
+    const resolved = getLang();
+    setLangState(resolved);
+    document.documentElement.lang = resolved;
+    setReady(true);
   }, []);
 
   const setLang = useCallback((next: Lang) => {
@@ -28,7 +31,14 @@ export function LangProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => ({ lang, setLang }), [lang, setLang]);
 
-  return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
+  return (
+    <LangContext.Provider value={value}>
+      {/* display: contents keeps the parent's layout; visibility hides the pre-resolution render. */}
+      <div className="contents" style={ready ? undefined : { visibility: "hidden" }}>
+        {children}
+      </div>
+    </LangContext.Provider>
+  );
 }
 
 export function useLang(): LangContextValue {
