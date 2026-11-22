@@ -273,8 +273,10 @@ export default function SchemeEditor({ initial, isNew, passcode, onSaved, onClos
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="min-w-0 break-all text-xl font-semibold">{isNew ? "New scheme" : `Edit ${form.id}`}</h2>
-        <button type="button" onClick={onClose} className={BUTTON}>
+        <h2 className="min-w-0 break-words text-xl font-semibold">
+          {isNew ? "New scheme" : `Edit ${form.nameEn.trim() || form.id}`}
+        </h2>
+        <button type="button" onClick={onClose} className={`${BUTTON} shrink-0`}>
           Close
         </button>
       </div>

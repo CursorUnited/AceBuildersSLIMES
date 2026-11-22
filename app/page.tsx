@@ -55,6 +55,11 @@ const NOT_UNDERSTOOD: Record<"tanglish" | "ta" | "en", string> = {
   tanglish: "Sorry, puriyala. Keela ulla option-la onna tap pannunga.",
   ta: "மன்னிக்கவும், புரியவில்லை. கீழே உள்ளவற்றில் ஒன்றைத் தட்டுங்கள்.",
 };
+const COULDNT_USE: Record<"tanglish" | "ta" | "en", string> = {
+  en: "I couldn't use that. Please answer the question above.",
+  tanglish: "Puriyala. Mela irukkira kelviku badhil sollunga.",
+  ta: "அதை என்னால் பயன்படுத்த முடியவில்லை. மேலே உள்ள கேள்விக்கு பதில் சொல்லுங்கள்.",
+};
 
 let seq = 0;
 function mk(from: "bot" | "student", text: string, extra?: Partial<ChatMsg>): ChatMsg {
@@ -229,7 +234,8 @@ export default function Home() {
       const changed = data.changed_fields ?? [];
       addChangedNote(changed, data.profile, reg);
       if (changed.length === 0 && !data.side_answer) {
-        setMsgs((m) => [...m, mk("bot", NOT_UNDERSTOOD[reg])]);
+        const askedWithChips = (lastQ?.chips?.length ?? 0) > 0;
+        setMsgs((m) => [...m, mk("bot", askedWithChips ? NOT_UNDERSTOOD[reg] : COULDNT_USE[reg])]);
       }
       if (data.side_answer) setMsgs((m) => [...m, mk("bot", data.side_answer as string)]);
       const nq = data.next_question;

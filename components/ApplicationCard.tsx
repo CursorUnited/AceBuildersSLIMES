@@ -3,7 +3,9 @@
 // One tracked scheme on /applications. Parent owns storage: every change comes back through onChange / onRemove.
 // Also exports the reminder helpers used by /applications and /results (reminders are shown on screen only; nothing is sent).
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import DeadlineChip from "@/components/DeadlineChip";
+import { googleCalendarUrl, makeIcs, type IcsEvent } from "@/lib/calendar";
 import { filterDocuments, type Scheme } from "@/lib/engine";
 import { t, type StringKey } from "@/lib/i18n/strings";
 import type { Application, Lang, Profile } from "@/lib/storage";
@@ -87,13 +89,65 @@ type Props = {
 
 const TAP = "min-h-[44px] inline-flex items-center rounded-lg border border-accent-teal/30 bg-white px-3 text-base text-foreground";
 
+/** Calendar events for one tracked scheme: reminder date (alarm 9 h after start) and open deadline (alarm the evening before). */
+function buildCalendarEvents(app: Application, scheme: Scheme, lang: Lang, pageUrl: string): IcsEvent[] {
+  const title = `Urimai: ${scheme.name[lang]}`;
+  const events: IcsEvent[] = [];
+  if (app.reminder_on !== null) {
+    events.push({
+      uid: `${app.scheme_id}-reminder@urimai`,
+      title,
+      description: `${t("calendarReminderNote", lang)}\n${pageUrl}`,
+      date: app.reminder_on,
+      alarmHoursAfterStart: 9,
+    });
+  }
+  const closesOn = scheme.deadline?.closes_on ?? null;
+  if (scheme.deadline?.status === "open" && closesOn !== null) {
+    events.push({
+      uid: `${app.scheme_id}-deadline@urimai`,
+      title,
+      description: `${t("calendarDeadlineNote", lang)}\n${pageUrl}`,
+      date: closesOn,
+      alarmHoursAfterStart: -15,
+    });
+  }
+  return events;
+}
+
+/** Downloads the events as urimai-reminder.ics. Browser-only: call from a click handler. */
+function downloadIcs(events: IcsEvent[]) {
+  const blob = new Blob([makeIcs(events)], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "urimai-reminder.ics";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export default function ApplicationCard({ app, scheme, profile, lang, onChange, onRemove }: Props) {
   const total = filterDocuments(scheme, profile).length;
   const done = app.docs_checked.length;
   const progress = t("docsProgress", lang).replace("{done}", String(done)).replace("{total}", String(total));
 
+  // window is unavailable during SSR, so the page URL is read after mount.
+  const [origin, setOrigin] = useState<string | null>(null);
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+  const schemePage = origin === null ? "" : `${origin}/scheme/${scheme.id}`;
+  const events = buildCalendarEvents(app, scheme, lang, schemePage);
+  const primary = events[0];
+
   function handleRemove() {
     if (window.confirm(t("removeConfirm", lang))) onRemove();
+  }
+
+  function handleAddToCalendar() {
+    downloadIcs(buildCalendarEvents(app, scheme, lang, `${window.location.origin}/scheme/${scheme.id}`));
   }
 
   return (
@@ -104,7 +158,12 @@ export default function ApplicationCard({ app, scheme, profile, lang, onChange, 
 
       <h2 className="text-lg font-semibold text-accent-teal">{scheme.name[lang]}</h2>
 
-      <p className="text-base text-gray-700">{progress}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="text-base text-gray-700">{progress}</p>
+        <Link href={`/scheme/${scheme.id}#documents`} className="link inline-flex min-h-[44px] cursor-pointer items-center text-base font-medium">
+          {t("docsOpenChecklist", lang)}
+        </Link>
+      </div>
 
       <label className="flex flex-col gap-1 text-base text-gray-800">
         {t("statusLabel", lang)}
@@ -138,6 +197,24 @@ export default function ApplicationCard({ app, scheme, profile, lang, onChange, 
           )}
         </div>
       </div>
+
+      {events.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={handleAddToCalendar} className={`${TAP} cursor-pointer`}>
+            {t("addToCalendar", lang)}
+          </button>
+          {primary !== undefined && origin !== null && (
+            <a
+              href={googleCalendarUrl({ title: primary.title, description: primary.description, date: primary.date })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${TAP} cursor-pointer link`}
+            >
+              {t("googleCalendar", lang)}
+            </a>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-2">
         <Link href={`/scheme/${scheme.id}`} className="link inline-flex min-h-[44px] cursor-pointer items-center text-base font-medium">

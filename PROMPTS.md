@@ -637,3 +637,60 @@ Modify only: components/ProfilePanel.tsx, app/page.tsx, app/results/page.tsx, li
    Afterwards grep app/, components/ and lib/i18n for "Tanglish" and "தங்கிலிஷ்": the only remaining hits may be code identifiers like register names (e.g. "tanglish" lowercase in types and question templates), never visible text.
 
 Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 4 lines.
+
+prompt-p5g[17:45]: /caveman ultra
+STEP P5g: never guess the medium. Bundled enum answers need both facts.
+
+Read only: lib/llm/prompts.ts, eval/slang_testset.json (shape of one case).
+Modify only: lib/llm/prompts.ts, eval/slang_testset.json. No other file. Do not add examples (EXAMPLES) and never put a test message into the prompt.
+
+Bug (reproduced 2 of 3 times against /api/chat): asked_field = school_6_to_12, the student says only that they studied in a "govt aided school" without saying Tamil or English medium. The model sets school_6_to_12 = govt_aided_tamil_all. That value bundles school type AND medium, so the medium was guessed. Another run set current_school_type for a college student.
+
+1. FIELD_HINTS.school_6_to_12: append: "Each govt_aided value includes the medium. If the student does not say Tamil or English medium for govt-aided, do NOT set this field. Likewise do not set it if they do not say ALL of class 6 to 12."
+2. Add rule 13 to RULES: "13. Some values bundle two facts (for example a school type together with a medium). Set such a field only when the student gave BOTH facts. If only one is given, leave the field out and add it to ambiguous with a short reason."
+3. Rule 9 stays, but append: "When asked_field is school_6_to_12 the answer is about the past (classes 6 to 12), so it never sets current_school_type."
+4. eval/slang_testset.json: add case T41 (same shape as the others): message "govt aided school", asked_field "school_6_to_12", profile_before {"education_level":"ug","state":"TN"}, expect { updates: {}, must_not_set: ["school_6_to_12","current_school_type"] }, why: "govt-aided without a medium bundles two facts; never guess the medium". Add T42: message "govt aided tamil medium, all years", asked_field "school_6_to_12", expect updates { school_6_to_12: "govt_aided_tamil_all" }, must_not_set ["current_school_type"].
+
+Run: npx tsc --noEmit; npx vitest run. Reply max 3 lines.
+
+prompt-p17[18:06]: /caveman ultra
+STEP P17: real reminders via calendar. Creating the new files is approved.
+
+Read only: components/ApplicationCard.tsx, lib/i18n/strings.ts, lib/engine/types.ts (Scheme deadline fields).
+Create only: lib/calendar.ts, tests/calendar.test.ts. Modify only: components/ApplicationCard.tsx, lib/i18n/strings.ts.
+
+1. lib/calendar.ts (pure, no DOM): makeIcs(events: { uid, title, description, date /* YYYY-MM-DD */, alarmHoursAfterStart: number }[]) → string. VCALENDAR 2.0, PRODID "-//Urimai//EN", CRLF line endings, each event a VEVENT with UID, DTSTAMP (now UTC), DTSTART;VALUE=DATE, DTEND;VALUE=DATE (next day), SUMMARY, DESCRIPTION, and a VALARM (ACTION:DISPLAY, DESCRIPTION, TRIGGER:PT{h}H after start for positive h, or TRIGGER:-PT{h}H before for negative). Escape commas, semicolons, backslashes and newlines per RFC 5545. googleCalendarUrl({ title, description, date }) → https://calendar.google.com/calendar/render?action=TEMPLATE&text=...&details=...&dates=YYYYMMDD/YYYYMMDD(next day), all values URL-encoded.
+2. tests/calendar.test.ts: ics contains BEGIN:VEVENT, the right DTSTART, a VALARM, CRLF; commas in a title are escaped; google URL has the encoded title and the next-day end date.
+3. ApplicationCard: when reminder_on is set (or the scheme has an open deadline with closes_on) show a button "Add to calendar" (downloads urimai-reminder.ics via a Blob + temporary link, no new packages) and a link "Google Calendar". Events: the reminder date at 9 am (alarm +9 h), and the deadline day with an alarm the morning before (-15 h) when closes_on exists. Title "Urimai: <scheme name>", description with the scheme page URL (window.location.origin + /scheme/id). Texts en + ta in strings.ts. Existing in-page reminder banner stays.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. Reply max 4 lines.
+
+prompt-p5h[18:34]: /caveman ultra
+STEP P5h: finish P5g. Three more model fixes. Prompt text and eval cases only.
+
+Read only: lib/llm/prompts.ts, eval/slang_testset.json (shape of one case).
+Modify only: lib/llm/prompts.ts, eval/slang_testset.json. Do not put test messages into the prompt. Rule 13 and the school_6_to_12 hint already exist: leave them.
+
+1. Rule 8: replace "Always set education_level and course_type together, never one without the other." with "When education_level is NOT yet known, set education_level and course_type together. When education_level is already known in the current profile, an answer about the course sets ONLY course_type (and year_of_study if given) and never changes education_level unless the student says they changed level (e.g. 'actually I am in college')."
+2. EXAMPLES: delete the example whose side_answer is "Athu pathi ippo enakku solla theriyaadhu." (the model copies it verbatim). Do not add another side-question example.
+3. Rule 5: append: "side_answer is always in the language of the student's CURRENT message: an English message gets an English answer, Tamil script gets Tamil, Tanglish gets Tanglish. A general how-to question (where to get a certificate) may get one short, common-knowledge sentence; if unsure, say you are not sure."
+4. eval/slang_testset.json add (T41 and T42 already exist): T43 message "medical", asked_field "course_type", profile_before {"education_level":"class_10","state":"TN"}, expect { updates: { course_type: "medical" }, must_not_set: ["education_level"] }. T44 message "where do i get income certificate", expect { register: "en", side_answer: true, updates: {} }.
+
+Run: npx tsc --noEmit; npx vitest run. Reply max 3 lines.
+
+prompt-p16[18:41]: /caveman ultra
+STEP P16: layout and copy fixes. No logic changes.
+
+Read only: components/SchemeCard.tsx, components/ProfilePanel.tsx, components/ApplicationCard.tsx, components/admin/SchemeEditor.tsx, app/page.tsx, app/results/page.tsx, app/scheme/[id]/page.tsx, lib/i18n/questions.ts, lib/i18n/strings.ts, tests/questions.test.ts, data/schemes.seed.json (the two schemes below).
+Modify only those files. Do not touch lib/engine, lib/llm, app/api, lib/calendar.ts.
+
+1. SchemeCard: the <article> becomes `flex h-full flex-col`; the Track button wrapper gets `mt-auto pt-3` so Track sits at the bottom of every card and lines up across a grid row. The results grids stretch items (default) and keep 1/2/3 columns.
+2. Desktop panel (ProfilePanel at lg): same height as the chat card (`lg:h-[calc(100dvh-6rem)]`, flex-col, no sticky). Heading fixed at the top; the facts rows, counters and likely-scheme names go in a `flex-1 overflow-y-auto` area; the "See my schemes" and "Review answers" buttons are pinned at the bottom of the card (not scrolling). Both cards top-aligned in the grid (`lg:items-start`).
+3. ApplicationCard: replace "{n} of {m} documents ready" with "Documents ticked off: {n} of {m}" (ta equivalent) plus a link "Open checklist" to /scheme/{id}#documents; give the documents section on the scheme page `id="documents"`. Strings in strings.ts, en + ta. KEEP the "Add to calendar" button, the "Google Calendar" link and the reminder logic exactly as they are.
+4. The reply "Sorry, I didn't catch that. Please tap one of these." must only appear when the current question has chips. When it has none, show "I couldn't use that. Please answer the question above." (en + ta + tanglish equivalents in the same place the old text lives).
+5. questions.ts: first_graduate question wording in ta, en and tanglish becomes "Will you be the first graduate in your family?" (ta: "உங்கள் குடும்பத்தில் பட்டம் பெறும் முதல் ஆள் நீங்களா?"; tanglish: "Ungal kudumbathula degree vaanga pora mudhal aal neenga thaana?"). Chip meaning is unchanged (Yes = first_graduate true). Update tests/questions.test.ts only if it asserts the old text.
+6. data/schemes.seed.json: for ids first-graduate-concession and govt-school-7-5-quota insert as the FIRST item of "conditions" {"label":{"en":"Now in a college degree course","ta":"இப்போது கல்லூரிப் பட்டப்படிப்பில் உள்ளீர்கள்"},"field":"education_level","op":"in","value":["ug"]}. Keep all other fields. (The live database already has this rule; this keeps the seed file in sync.)
+7. components/admin/SchemeEditor.tsx header row: the Close button gets `shrink-0` (it must never be squeezed); the title keeps `min-w-0` and shows the scheme's English name when editing an existing scheme (fallback to the id) with `break-words`, not the raw id with `break-all`. "New scheme" stays as is.
+
+Run: npx tsc --noEmit; npx vitest run; npm run build. All must pass.
+Reply max 5 lines: files changed + results.

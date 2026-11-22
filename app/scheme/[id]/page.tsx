@@ -134,7 +134,7 @@ export default function SchemeDetailPage({ params }: Props) {
         </section>
       )}
 
-      <section className="flex flex-col gap-3" aria-labelledby="docs-heading">
+      <section id="documents" className="flex flex-col gap-3" aria-labelledby="docs-heading">
         <h2 id="docs-heading" className="text-xl font-semibold text-accent-teal">
           {t("docsTitle", lang)}
         </h2>

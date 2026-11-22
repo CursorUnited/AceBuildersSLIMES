@@ -34,76 +34,80 @@ export default function ProfilePanel({ profile, changedFields, results, schemes,
     .filter((s): s is Scheme => s !== undefined);
 
   return (
-    <aside className="hidden lg:flex sticky top-24 self-start w-full flex-col gap-4 rounded-2xl border border-black/10 bg-white p-5">
+    <aside className="hidden lg:flex lg:h-[calc(100dvh-6rem)] w-full flex-col gap-4 rounded-2xl border border-black/10 bg-white p-5">
       {knownFields.length === 0 ? (
         <>
           <h2 className="text-lg font-semibold text-accent-teal">{t("howTitle", lang)}</h2>
-          <ol className="flex list-decimal flex-col gap-2 pl-5 text-base text-foreground">
-            <li>{t("howStep1", lang)}</li>
-            <li>{t("howStep2", lang)}</li>
-            <li>{t("howStep3", lang)}</li>
-          </ol>
-          <p className="flex items-start gap-1.5 text-base text-gray-600">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="mt-1 shrink-0"
-            >
-              <rect x="4" y="11" width="16" height="10" rx="2" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-            </svg>
-            <span>{t("privacyNote", lang)}</span>
-          </p>
-          {results.length > 0 && (
-            <p className="text-base text-gray-600">
-              {t("schemesChecked", lang).replace("{n}", String(results.length))}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
+            <ol className="flex list-decimal flex-col gap-2 pl-5 text-base text-foreground">
+              <li>{t("howStep1", lang)}</li>
+              <li>{t("howStep2", lang)}</li>
+              <li>{t("howStep3", lang)}</li>
+            </ol>
+            <p className="flex items-start gap-1.5 text-base text-gray-600">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="mt-1 shrink-0"
+              >
+                <rect x="4" y="11" width="16" height="10" rx="2" />
+                <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+              </svg>
+              <span>{t("privacyNote", lang)}</span>
             </p>
-          )}
+            {results.length > 0 && (
+              <p className="text-base text-gray-600">
+                {t("schemesChecked", lang).replace("{n}", String(results.length))}
+              </p>
+            )}
+          </div>
         </>
       ) : (
         <>
           <h2 className="text-lg font-semibold text-accent-teal">{t("profileUnderstood", lang)}</h2>
-          <ul className="flex flex-col gap-2">
-            {knownFields.map((field) => {
-              const q = QUESTIONS[field];
-              const value = valuePart(describeFact(field, profile[field], lang)) || "—";
-              return (
-                <li key={field} className="flex items-start justify-between gap-3 text-base">
-                  <span className="flex items-start gap-2 text-accent-teal">
-                    {changedFields.includes(field) && (
-                      <span aria-hidden="true" className="mt-2 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-turmeric" />
-                    )}
-                    <span>{lang === "ta" ? q.ta : q.en}</span>
-                  </span>
-                  <span className="text-right font-medium text-foreground">{value}</span>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-green-100 px-3 py-1 text-base font-semibold text-green-800">
-              {t("chipLikely", lang).replace("{n}", String(likely.length))}
-            </span>
-            <span className="rounded-full bg-accent-turmeric/20 px-3 py-1 text-base font-semibold text-foreground">
-              {t("chipOneAway", lang).replace("{n}", String(oneAway.length))}
-            </span>
-          </div>
-
-          {likelyNames.length > 0 && (
-            <ul className="flex flex-col gap-1 text-base text-foreground">
-              {likelyNames.map((s) => (
-                <li key={s.id}>{s.name[lang]}</li>
-              ))}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
+            <ul className="flex flex-col gap-2">
+              {knownFields.map((field) => {
+                const q = QUESTIONS[field];
+                const value = valuePart(describeFact(field, profile[field], lang)) || "—";
+                return (
+                  <li key={field} className="flex items-start justify-between gap-3 text-base">
+                    <span className="flex items-start gap-2 text-accent-teal">
+                      {changedFields.includes(field) && (
+                        <span aria-hidden="true" className="mt-2 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-turmeric" />
+                      )}
+                      <span>{lang === "ta" ? q.ta : q.en}</span>
+                    </span>
+                    <span className="text-right font-medium text-foreground">{value}</span>
+                  </li>
+                );
+              })}
             </ul>
-          )}
+
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-green-100 px-3 py-1 text-base font-semibold text-green-800">
+                {t("chipLikely", lang).replace("{n}", String(likely.length))}
+              </span>
+              <span className="rounded-full bg-accent-turmeric/20 px-3 py-1 text-base font-semibold text-foreground">
+                {t("chipOneAway", lang).replace("{n}", String(oneAway.length))}
+              </span>
+            </div>
+
+            {likelyNames.length > 0 && (
+              <ul className="flex flex-col gap-1 text-base text-foreground">
+                {likelyNames.map((s) => (
+                  <li key={s.id}>{s.name[lang]}</li>
+                ))}
+              </ul>
+            )}
+          </div>
 
           <button
             type="button"

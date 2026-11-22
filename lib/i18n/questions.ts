@@ -106,9 +106,9 @@ export const QUESTIONS: Record<ProfileField, QuestionTemplate> = {
     ],
   },
   first_graduate: {
-    ta: "குடும்பத்தில் யாருக்கும் இதுவரை டிகிரி இல்லையா?",
-    en: "Is nobody in your family a graduate yet?",
-    tanglish: "Kudumbathula yaarukkum degree illaya?",
+    ta: "உங்கள் குடும்பத்தில் பட்டம் பெறும் முதல் ஆள் நீங்களா?",
+    en: "Will you be the first graduate in your family?",
+    tanglish: "Ungal kudumbathula degree vaanga pora mudhal aal neenga thaana?",
     chips: YES_NO,
   },
   institution_type: {

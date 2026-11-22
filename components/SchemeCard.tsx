@@ -70,7 +70,7 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
   const template = field ? QUESTIONS[field] : undefined;
 
   return (
-    <article className="relative rounded-xl border border-accent-teal/30 bg-white p-4 shadow-sm">
+    <article className="relative flex h-full flex-col rounded-xl border border-accent-teal/30 bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full bg-accent-teal/10 px-3 py-1 text-sm font-semibold text-accent-teal">{levelLabel}</span>
         <DeadlineChip deadline={scheme.deadline} lang={lang} />
@@ -111,7 +111,7 @@ export default function SchemeCard({ scheme, result, lang, onAnswer }: Props) {
         </div>
       )}
 
-      <div className="relative z-10 mt-3">
+      <div className="relative z-10 mt-auto pt-3">
         <button
           type="button"
           onClick={track}

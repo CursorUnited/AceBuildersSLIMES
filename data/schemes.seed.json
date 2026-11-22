@@ -1092,6 +1092,7 @@
       "ta": "கல்விக் கட்டணச் சலுகை; தொகை கல்லூரி வகையைப் பொறுத்தது"
     },
     "conditions": [
+      {"label":{"en":"Now in a college degree course","ta":"இப்போது கல்லூரிப் பட்டப்படிப்பில் உள்ளீர்கள்"},"field":"education_level","op":"in","value":["ug"]},
       {
         "label": {
           "en": "First graduate in your family",
@@ -1191,6 +1192,7 @@
       "ta": "முழுக் கல்விக் கட்டணத்தையும் அரசே செலுத்தும்"
     },
     "conditions": [
+      {"label":{"en":"Now in a college degree course","ta":"இப்போது கல்லூரிப் பட்டப்படிப்பில் உள்ளீர்கள்"},"field":"education_level","op":"in","value":["ug"]},
       {
         "label": {
           "en": "Class 6–12 in TN government school",

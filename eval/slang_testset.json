@@ -668,5 +668,58 @@
       "register": "en"
     },
     "why": "Asking what the term means is not answering yes, even though asked_field = first_graduate."
+  },
+  {
+    "id": "T41",
+    "category": "school_6_to_12",
+    "message": "govt aided school",
+    "profile_before": { "education_level": "ug", "state": "TN" },
+    "asked_field": "school_6_to_12",
+    "expect": {
+      "updates": {},
+      "must_not_set": ["school_6_to_12", "current_school_type"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "govt-aided without a medium bundles two facts; never guess the medium."
+  },
+  {
+    "id": "T42",
+    "category": "school_6_to_12",
+    "message": "govt aided tamil medium, all years",
+    "profile_before": { "education_level": "ug", "state": "TN" },
+    "asked_field": "school_6_to_12",
+    "expect": {
+      "updates": { "school_6_to_12": "govt_aided_tamil_all" },
+      "must_not_set": ["current_school_type"],
+      "side_answer": false,
+      "register": "en"
+    },
+    "why": "Govt-aided with Tamil medium across all years gives both facts, so the bundled value is set."
+  },
+  {
+    "id": "T43",
+    "category": "course_type",
+    "message": "medical",
+    "profile_before": { "education_level": "class_10", "state": "TN" },
+    "asked_field": "course_type",
+    "expect": {
+      "updates": { "course_type": "medical" },
+      "must_not_set": ["education_level"]
+    },
+    "why": "Known education_level must not change when a course answer arrives; only course_type is set."
+  },
+  {
+    "id": "T44",
+    "category": "side_question",
+    "message": "where do i get income certificate",
+    "profile_before": {},
+    "asked_field": null,
+    "expect": {
+      "register": "en",
+      "side_answer": true,
+      "updates": {}
+    },
+    "why": "General how-to side question in English: answered in English, no fields set."
   }
 ]

@@ -100,7 +100,8 @@ export const STRINGS = {
   reminderClosesToday: { en: "Closes today", ta: "இன்று முடிவடைகிறது" },
   reminderDue: { en: "Reminder", ta: "நினைவூட்டல்" },
   reminderViewAll: { en: "View my applications", ta: "என் விண்ணப்பங்களைப் பார்" },
-  docsProgress: { en: "{done} of {total} documents ready", ta: "{total} ஆவணங்களில் {done} தயாராக உள்ளன" },
+  docsProgress: { en: "Documents ticked off: {done} of {total}", ta: "டிக் செய்த ஆவணங்கள்: {total} இல் {done}" },
+  docsOpenChecklist: { en: "Open checklist", ta: "பட்டியலைத் திற" },
   statusLabel: { en: "Status", ta: "நிலை" },
   statusNotStarted: { en: "Not started", ta: "தொடங்கவில்லை" },
   statusDocsReady: { en: "Documents ready", ta: "ஆவணங்கள் தயார்" },
@@ -151,6 +152,16 @@ export const STRINGS = {
   chipOneAway: { en: "{n} need one more detail", ta: "{n} ஒரு விவரம் குறைவு" },
   seeMySchemes: { en: "See my schemes", ta: "என் திட்டங்களைப் பார்" },
   reviewAnswers: { en: "Review answers", ta: "பதில்களை மறுபரிசீலி" },
+  addToCalendar: { en: "Add to calendar", ta: "நாட்காட்டியில் சேர்" },
+  googleCalendar: { en: "Google Calendar", ta: "கூகுள் காலெண்டர்" },
+  calendarReminderNote: {
+    en: "Reminder for your scheme application.",
+    ta: "உங்கள் திட்ட விண்ணப்பத்துக்கான நினைவூட்டல்.",
+  },
+  calendarDeadlineNote: {
+    en: "Application deadline for this scheme. Check the official page.",
+    ta: "இந்தத் திட்டத்தின் விண்ணப்பக் கடைசி தேதி. அதிகாரப்பூர்வ பக்கத்தைச் சரிபார்க்கவும்.",
+  },
 } as const satisfies Record<string, { en: string; ta: string }>;
 
 export const FIELD_NAMES: Record<ProfileField, { en: string; ta: string }> = {
